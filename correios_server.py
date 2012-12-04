@@ -34,5 +34,3 @@ def verifica_cep(cep):
 		retorno = ceps.find_one({"cep":cep}, fields={'_id':False})
 
 	return retorno
-
-run(host="localhost", port=8080)
