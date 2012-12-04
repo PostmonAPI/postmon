@@ -1,4 +1,4 @@
 Postmon
 =======
 
-API para os Correios
+API para consulta de CEP's
