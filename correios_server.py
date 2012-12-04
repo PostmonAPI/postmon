@@ -15,7 +15,7 @@ import pymongo
 @route('/cep/<cep>')
 def verifica_cep(cep):
 
-	con = pymongo.MongoClient("192.168.122.43")
+	con = pymongo.MongoClient("localhost")
 
 	db = con.postmon
 
