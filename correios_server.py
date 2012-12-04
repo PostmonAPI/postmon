@@ -10,12 +10,29 @@
 from bottle import route, run, template
 from correios import CepTracker
 
-@route('/cep/<cep:int>')
-def cep(cep):
+import pymongo
 
-	tracker = CepTracker()
-	info = tracker.track(cep)
+@route('/cep/<cep>')
+def verifica_cep(cep):
 
-	return info
+	con = pymongo.MongoClient("192.168.122.43")
+
+	db = con.postmon
+
+	ceps = db.ceps
+	result = ceps.find_one({"cep":cep}, fields={'_id':False})
+
+	if result:
+		retorno = result
+
+	else:
+		tracker = CepTracker()
+		info = tracker.track(cep)
+
+		cep_id = ceps.insert(info)
+
+		retorno = ceps.find_one({"cep":cep}, fields={'_id':False})
+
+	return retorno
 
 run(host="localhost", port=8080)
