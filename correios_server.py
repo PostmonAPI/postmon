@@ -4,7 +4,7 @@
 # author: Alexandre Borba
 #         Igor Hercowitz
 #
-# v 1.1.0
+# v 1.1.1
 ####################################################################
 
 from bottle import route, run, error
@@ -12,11 +12,12 @@ from correios import CepTracker
 
 import pymongo, json, re
 
+
 @route('/cep/<cep>')
 def verifica_cep(cep):
 
 	if re.match("[0-9]{8}", cep):
-		con = pymongo.MongoClient("192.168.122.43")
+		con = pymongo.MongoClient("localhost")
 		db = con.postmon
 		ceps = db.ceps
 		result = ceps.find_one({"cep":cep}, fields={'_id':False})
@@ -37,10 +38,16 @@ def verifica_cep(cep):
 
 	return resultado
 
+
 @error(404)
-def error(code):
+def error404(code):
 	result_error = json.dumps({'error':'404'})
 
 	return result_error
 
-run(host="localhost", port=8080)
+
+@error(500)
+def error500(code):
+	result_error = json.dumps({'error':'500'})
+
+	return result_error
