@@ -10,30 +10,36 @@
 from bottle import route, run, error
 from correios import CepTracker
 
-import pymongo
-import json
+import pymongo, json, re
 
 @route('/cep/<cep>')
 def verifica_cep(cep):
 
-	con = pymongo.MongoClient("192.168.122.43")
-	db = con.postmon
-	ceps = db.ceps
-	result = ceps.find_one({"cep":cep}, fields={'_id':False})
-
-	if not result:
-		tracker = CepTracker()
-		info = tracker.track(cep)
-
-		cep_id = ceps.insert(info)
-
+	if re.match("[0-9]{8}", cep):
+		con = pymongo.MongoClient("192.168.122.43")
+		db = con.postmon
+		ceps = db.ceps
 		result = ceps.find_one({"cep":cep}, fields={'_id':False})
 
-	return result
+		if not result:
+			tracker = CepTracker()
+			info = tracker.track(cep)
+
+			cep_id = ceps.insert(info)
+
+			result = ceps.find_one({"cep":cep}, fields={'_id':False})
+
+		resultado = result
+	else:
+		result_error = json.dumps({'error':'404'})
+
+		resultado = result_error
+
+	return resultado
 
 @error(404)
 def error(code):
-	result_error = json.dumps({'error':"404"})
+	result_error = json.dumps({'error':'404'})
 
 	return result_error
 
