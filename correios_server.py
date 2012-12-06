@@ -4,7 +4,7 @@
 # author: Alexandre Borba
 #         Igor Hercowitz
 #
-# v 1.1.3
+# v 1.3.0
 ####################################################################
 
 from bottle import route, run, error
@@ -90,4 +90,3 @@ def error500(code):
 
 def _standalone(port=9876):
     run(host='localhost', port=port)
-    
