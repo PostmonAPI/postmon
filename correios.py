@@ -4,7 +4,7 @@
 # author: Alexandre Borba
 #         Igor Hercowitz
 #
-# v 1.1.0
+# v 1.2.0
 # usage:
 # >>> tracker = CepTracker()
 # >>> infos = tracker.track(cep)
@@ -35,14 +35,15 @@ class CepTracker():
 		itens = self._get_infos_(cep)
 
 		index=0
+		data = dict()
 		for item in itens:
 
 			if index % 4 == 0:
 				if index > 0:
 					index = 0
 					self.result.append(data)
-
-				data = dict()
+					data = dict()
+				
 				data["v_date"] = datetime.now()
 
 			text = re.sub('\s+',' ',item.text.strip())
@@ -55,6 +56,7 @@ class CepTracker():
 				
 			index +=1
 
-		self.result.append(data)
+		if  len(data) > 0:	
+			self.result.append(data)
 
 		return self.result

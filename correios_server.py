@@ -4,7 +4,7 @@
 # author: Alexandre Borba
 #         Igor Hercowitz
 #
-# v 1.2.0
+# v 1.3.0
 ####################################################################
 
 from bottle import route, run, error
@@ -25,57 +25,74 @@ def expired(record_date):
 
 def _get_info_from_correios(cep):
 	tracker = CepTracker()
-	return tracker.track(cep)
+	info = tracker.track(cep)
+
+	if len(info) == 0:
+		raise ValueError()
+
+	return info
+
 
 
 @route('/cep/<cep>')
 def verifica_cep(cep):
 
-	if re.match("[0-9]{8}", cep):
-		con = pymongo.MongoClient("localhost")
-		db = con.postmon
-		ceps = db.ceps
-		result = ceps.find_one({"cep":cep}, fields={"_id":False})
+	try:
+		if re.match('[0-9]{8}', cep):
+			con = pymongo.MongoClient('localhost')
+			db = con.postmon
+			ceps = db.ceps
+			result = ceps.find_one({'cep':cep}, fields={'_id':False})
 
-		from datetime import date
+			from datetime import date
 
-		#if not result or expired(date(2012, 4, 1)):
-		info = None
+			info = None
+			
+			if not result or not result.has_key('v_date'):
+				info = _get_info_from_correios(cep)
+				map(lambda x: ceps.save(x), info)
+				result = ceps.find_one({'cep':cep}, fields={'_id':False, 'v_date':False})
 
-		if not result or not result.has_key('v_date'):
-			info = _get_info_from_correios(cep)
-			map(lambda x: ceps.save(x), info)
-			result = ceps.find_one({"cep":cep}, fields={'_id':False, 'v_date':False})
-
-		elif expired(result):
-			info = _get_info_from_correios(cep)
-			map(lambda x: ceps.update({"cep": x['cep']}, {"$set":x}), info)
-			result = ceps.find_one({"cep":cep}, fields={"_id":False,'v_date':False})
-
+			elif expired(result):
+				info = _get_info_from_correios(cep)
+				map(lambda x: ceps.update({'cep': x['cep']}, {'$set':x}), info)
+				result = ceps.find_one({'cep':cep}, fields={'_id':False,'v_date':False})
+			else:
+				result = ceps.find_one({'cep':cep}, fields={'_id':False,'v_date':False})
 		else:
-			result = ceps.find_one({"cep":cep}, fields={"_id":False,'v_date':False})
+			raise ValueError()
 
-	else:
-		result = json.dumps({'error':'404'})
+	except ValueError:
+		result = dict(status='error',
+	        	      message='O Cep %s informado nao pode ser localizado' %cep)		
 
-	
+
+	if not result.has_key('status'):
+		tmp = {'status': 'ok',
+		       'data' : result}
+
+		result = tmp
+
 	return result
+
+
+def __return_error(code):
+	print('error: %s' %code)
 
 
 @error(404)
 def error404(code):
 	result_error = json.dumps({'error':'404'})
-
 	return result_error
-
 
 @error(500)
 def error500(code):
 	result_error = json.dumps({'error':'500'})
-
 	return result_error
 
-
-
 def _standalone(port=9876):
-    run(host='localhost', port=port)    	
+    run(host='localhost', port=port)
+
+
+if __name__=='__main__':
+    _standalone()        	
