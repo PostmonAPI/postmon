@@ -4,7 +4,7 @@
 # author: Alexandre Borba
 #         Igor Hercowitz
 #
-# v 1.2.0
+# v 1.1.3
 # usage:
 # >>> tracker = CepTracker()
 # >>> infos = tracker.track(cep)
