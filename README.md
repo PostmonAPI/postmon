@@ -28,7 +28,7 @@ Precisa ter instalado em seu ambiente o nosetests, depois é só deixa-lo execut
 Rodando a aplicação localmente na porta 9876
 --------------------------------
 
-	$ ipython -i correios_server.py
+	$ ipython -i PostmonServer.py
 	>> _standalone()
 
 Caso queira rodar em outra porta, basta passá-la como parametro no chamado do _standalone
