@@ -55,7 +55,11 @@ def verifica_cep(cep):
 		else:
 			result = ceps.find_one({"cep":cep}, fields={"_id":False,'v_date':False})
 
-		return result
+	else:
+		result = json.dumps({'error':'404'})
+
+	
+	return result
 
 
 @error(404)
