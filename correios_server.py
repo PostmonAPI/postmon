@@ -36,6 +36,7 @@ def _get_info_from_correios(cep):
 
 @route('/cep/<cep>')
 def verifica_cep(cep):
+	cep = cep.replace('-','')
 
 	try:
 		if re.match('[0-9]{8}', cep):
