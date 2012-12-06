@@ -43,17 +43,16 @@ class CepTracker():
 					self.result.append(data)
 
 				data = dict()
+				data["v_date"] = datetime.now()
 
 			text = re.sub('\s+',' ',item.text.strip())
 
 			if (index == 2):
 				for j, text in enumerate(text.split('/')):
 					data[self.fields[index][j]] = unicodedata.normalize('NFKD', text.strip()).encode('ascii','ignore') if isinstance(text, unicode) else text.strip()
-					data["v_date"] = datetime.now()
-
 			else:
 				data[self.fields[index]] = unicodedata.normalize('NFKD', text).encode('ascii','ignore') if isinstance(text, unicode) else text
-				data["v_date"] = datetime.now()
+				
 			index +=1
 
 		self.result.append(data)

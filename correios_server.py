@@ -74,3 +74,8 @@ def error500(code):
 	result_error = json.dumps({'error':'500'})
 
 	return result_error
+
+
+
+def _standalone(port=9876):
+    run(host='localhost', port=port)    	
