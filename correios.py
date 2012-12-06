@@ -4,6 +4,9 @@ import requests
 import unicodedata
 import re
 
+def _normalize_unicode(text):
+	return unicodedata.normalize('NFKD', text).encode('ascii','ignore') if isinstance(text, unicode) else text
+
 class CepTracker():
 	def __init__(self):
 		self.url = 'http://m.correios.com.br/movel/buscaCepConfirma.do'
@@ -38,9 +41,9 @@ class CepTracker():
 
 			if (index == 2):
 				for j, text in enumerate(text.split('/')):
-					data[self.fields[index][j]] = unicodedata.normalize('NFKD', text.strip()).encode('ascii','ignore') if isinstance(text, unicode) else text.strip()
+					data[self.fields[index][j]] = _normalize_unicode(text.strip())
 			else:
-				data[self.fields[index]] = unicodedata.normalize('NFKD', text).encode('ascii','ignore') if isinstance(text, unicode) else text
+				data[self.fields[index]] = _normalize_unicode(text)
 				
 			index +=1
 
