@@ -1,11 +1,8 @@
+# encoding: utf-8
 from datetime import datetime
 
 import requests
-import unicodedata
 import re
-
-def _normalize_unicode(text):
-	return unicodedata.normalize('NFKD', text).encode('ascii','ignore') if isinstance(text, unicode) else text
 
 class CepTracker():
 	def __init__(self):
@@ -25,7 +22,7 @@ class CepTracker():
 	def track(self, cep):
 		itens = self._get_infos_(cep)
 
-		index=0
+		index= 4 - len(itens)
 		data = dict()
 		for item in itens:
 
@@ -34,16 +31,18 @@ class CepTracker():
 					index = 0
 					self.result.append(data)
 					data = dict()
-				
-				data["v_date"] = datetime.now()
+
+			# TODO: definir v_date apenas uma vez
+			data["v_date"] = datetime.now()
 
 			text = re.sub('\s+',' ',item.text.strip())
 
 			if (index == 2):
-				for j, text in enumerate(text.split('/')):
-					data[self.fields[index][j]] = _normalize_unicode(text.strip())
+				cidade, estado = text.split('/', 1)
+				data['cidade'] = cidade.strip()
+				data['estado'] = estado.split('-')[0].strip()
 			else:
-				data[self.fields[index]] = _normalize_unicode(text)
+				data[self.fields[index]] = text
 				
 			index +=1
 
