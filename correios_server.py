@@ -29,7 +29,7 @@ def verifica_cep(cep):
 	response.headers['Access-Control-Allow-Origin'] = '*'
 	
 	try:
-		con = pymongo.MongoClient('192.168.122.43')
+		con = pymongo.MongoClient('localhost')
 		db = con.postmon
 		ceps = db.ceps
 		result = ceps.find_one({'cep':cep}, fields={'_id':False})
