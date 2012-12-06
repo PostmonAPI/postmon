@@ -82,12 +82,12 @@ def __return_error(code):
 
 @error(404)
 def error404(code):
-	result_error = json.dumps({'error':'404'})
+	result_error = json.dumps({'status':'404', 'message': 'Not Found'})
 	return result_error
 
 @error(500)
 def error500(code):
-	result_error = json.dumps({'error':'500'})
+	result_error = json.dumps({'status':'500', 'message': 'Internal Server Error'})
 	return result_error
 
 def _standalone(port=9876):
