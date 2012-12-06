@@ -3,7 +3,6 @@ from correios import CepTracker
 
 import pymongo, json, re
 
-
 def expired(record_date):
 	from datetime import datetime, timedelta
 
@@ -23,11 +22,11 @@ def _get_info_from_correios(cep):
 
 	return info
 
-
-
 @route('/cep/<cep:re:\d{5}-?\d{3}>')
 def verifica_cep(cep):
 	cep = cep.replace('-','')
+
+	response.headers['Access-Control-Allow-Origin'] = '*'
 	
 	try:
 		con = pymongo.MongoClient('localhost')
