@@ -16,6 +16,10 @@ Requisitos do ambiente Python
 * pymongo
 * bottle
 
+Rodando testes
+----------------
+Precisa ter instalado em seu ambiente o nosetests, depois é só deixa-lo executando na raiz do projeto.
+
 Rodando a aplicação localmente na porta 9876
 --------------------------------
 
