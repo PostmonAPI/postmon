@@ -37,7 +37,6 @@ def _get_info_from_correios(cep):
 @route('/cep/<cep:re:\d{5}-?\d{3}>')
 def verifica_cep(cep):
 	cep = cep.replace('-','')
-	
 	try:
 		con = pymongo.MongoClient('localhost')
 		db = con.postmon
