@@ -1,5 +1,5 @@
 from bottle import route, run, error, response
-from correios import CepTracker
+from CepTracker import CepTracker
 
 import pymongo, json, re
 

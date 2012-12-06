@@ -1,10 +1,10 @@
 # encoding: utf-8
 import unittest
 
-import correios
+import CepTracker
 
 
-class CorreiosTest(unittest.TestCase):
+class PostmonTest(unittest.TestCase):
 
 	def test_cep_com_rua(self):
 
@@ -15,7 +15,7 @@ class CorreiosTest(unittest.TestCase):
 		CEP: 01330000
 		'''
 
-		tracker = correios.CepTracker()
+		tracker = CepTracker.CepTracker()
 		result = tracker.track('01330000')
 
 		self.assertTrue(len(result) == 1)
@@ -32,7 +32,7 @@ class CorreiosTest(unittest.TestCase):
 		CEP: 85100000
 		'''
 
-		tracker = correios.CepTracker()
+		tracker = CepTracker.CepTracker()
 		result = tracker.track('85100000')
 
 		self.assertTrue(len(result) == 1)
@@ -47,7 +47,7 @@ class CorreiosTest(unittest.TestCase):
 		CEP: 99999999
 		'''
 
-		tracker = correios.CepTracker()
+		tracker = CepTracker.CepTracker()
 		result = tracker.track('99999999')
 
 		self.assertTrue(len(result) == 0)
