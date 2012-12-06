@@ -46,7 +46,7 @@ def verifica_cep(cep):
 
 	except ValueError:
 		result = dict(status='404',
-	        	      message='O Cep %s informado nao pode ser localizado' %cep)		
+	        	      message='O CEP %s informado nao pode ser localizado' %cep)		
 
 
 	if not result.has_key('status'):
