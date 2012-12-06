@@ -14,10 +14,7 @@ Requisitos do ambiente Python
 * requests
 * lxml
 * pymongo
-* unicodedata
-* re
 * bottle
-* json
 
 Rodando a aplicação localmente na porta 9876
 --------------------------------
