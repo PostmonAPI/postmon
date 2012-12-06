@@ -1,15 +1,3 @@
-####################################################################
-# A simple Correios site wrapper to get the CEP informations 
-#
-# author: Alexandre Borba
-#         Igor Hercowitz
-#
-# v 1.2.0
-# usage:
-# >>> tracker = CepTracker()
-# >>> infos = tracker.track(cep)
-####################################################################
-
 from datetime import datetime
 
 import requests

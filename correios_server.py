@@ -1,12 +1,3 @@
-####################################################################
-# A simple Correios API to get the CEP informations 
-#
-# author: Alexandre Borba
-#         Igor Hercowitz
-#
-# v 1.3.0
-####################################################################
-
 from bottle import route, run, error
 from correios import CepTracker
 
