@@ -35,21 +35,15 @@ def verifica_cep(cep):
 		ceps = db.ceps
 		result = ceps.find_one({'cep':cep}, fields={'_id':False})
 
-		from datetime import date
-
-		info = None
-		
 		if not result or not result.has_key('v_date'):
 			info = _get_info_from_correios(cep)
 			map(lambda x: ceps.save(x), info)
-			result = ceps.find_one({'cep':cep}, fields={'_id':False, 'v_date':False})
 
 		elif expired(result):
 			info = _get_info_from_correios(cep)
 			map(lambda x: ceps.update({'cep': x['cep']}, {'$set':x}), info)
-			result = ceps.find_one({'cep':cep}, fields={'_id':False,'v_date':False})
-		else:
-			result = ceps.find_one({'cep':cep}, fields={'_id':False,'v_date':False})
+
+		result = ceps.find_one({'cep':cep}, fields={'_id':False,'v_date':False})
 
 	except ValueError:
 		result = dict(status='404',
