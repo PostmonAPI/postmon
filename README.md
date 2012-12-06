@@ -2,6 +2,11 @@ Postmon
 ==========
 API para consulta de CEP's
 
+	Stable - Branch master
+	Unstable - Branch dev
+
+Caso queira ajudar no desenvolvimento do projeto, utilize sempre o branch dev, a não ser que seja um Bugfix! o/
+
 
 Requisitos do ambiente de desenvolvimento
 ---------------------------------------------
