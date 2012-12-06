@@ -29,7 +29,7 @@ def verifica_cep(cep):
 	response.headers['Access-Control-Allow-Origin'] = '*'
 	
 	try:
-		con = pymongo.MongoClient('localhost')
+		con = pymongo.MongoClient('192.168.122.43')
 		db = con.postmon
 		ceps = db.ceps
 		result = ceps.find_one({'cep':cep}, fields={'_id':False})
@@ -47,8 +47,6 @@ def verifica_cep(cep):
 	except ValueError:
 		result = dict(status='404',
 	        	      message='O CEP %s informado nao pode ser localizado' %cep)
-		response.status_code = 404
-		response.status_line = '404 - O CEP %s informado nao pode ser localizado' %cep
 
 
 	if not result.has_key('status'):
