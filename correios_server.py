@@ -92,7 +92,4 @@ def error500(code):
 
 def _standalone(port=9876):
     run(host='localhost', port=port)
-
-
-if __name__=='__main__':
-    _standalone()        	
+    	
