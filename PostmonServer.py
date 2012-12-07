@@ -45,32 +45,10 @@ def verifica_cep(cep):
 		result = ceps.find_one({'cep':cep}, fields={'_id':False,'v_date':False})
 
 	except ValueError:
-		result = dict(status='404',
-	        	      message='O CEP %s informado nao pode ser localizado' %cep)
-
-
-	if not result.has_key('status'):
-		tmp = {'status': '200',
-		       'data' : result}
-
-		result = tmp
+		response.status = '404 O CEP %s informado nao pode ser localizado' %cep
 
 	return result
 
-
-def __return_error(code):
-	print('error: %s' %code)
-
-
-@error(404)
-def error404(code):
-	result_error = json.dumps({'status':'404', 'message': 'Not Found'})
-	return result_error
-
-@error(500)
-def error500(code):
-	result_error = json.dumps({'status':'500', 'message': 'Internal Server Error'})
-	return result_error
 
 def _standalone(port=9876):
     run(host='localhost', port=port)
