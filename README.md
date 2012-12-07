@@ -20,10 +20,15 @@ Requisitos do ambiente Python
 * lxml
 * pymongo
 * bottle
+* nosetests
 
 Rodando testes
 ----------------
-Precisa ter instalado em seu ambiente o nosetests, depois é só deixa-lo executando na raiz do projeto.
+Executar o comando:
+
+	nosetests
+
+na raiz do projeto.
 
 Rodando a aplicação localmente na porta 9876
 --------------------------------
