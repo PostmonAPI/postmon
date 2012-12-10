@@ -44,6 +44,8 @@ def verifica_cep(cep):
 
 		result = ceps.find_one({'cep':cep}, fields={'_id':False,'v_date':False})
 
+		response.headers['Cache-Control'] = 'public, max-age=2592000'
+
 	except ValueError:
 		response.status = '404 O CEP %s informado nao pode ser localizado' %cep
 
