@@ -5,48 +5,48 @@ import requests
 import re
 
 class CepTracker():
+
 	def __init__(self):
 		self.url = 'http://m.correios.com.br/movel/buscaCepConfirma.do'
-		self.result = []
 
-		self.fields = ['logradouro', 'bairro', ['cidade', 'estado'], 'cep']
-
-	def _get_infos_(self, cep, csspattern='div .respostadestaque'):
+	def _get_infos_(self, cep):
 		from lxml.html import fromstring
 		response = requests.post(self.url, 
 			                 data={'cepEntrada': cep, 'tipoCep':'', 'cepTemp':'', 'metodo':'buscarCep'})
 
 		html = fromstring(response.text)
-		return html.cssselect(csspattern)
+		registro_csspattern = '.caixacampobranco, .caixacampoazul'
+		registros = html.cssselect(registro_csspattern)
+
+		resultado = []
+		for item in registros:
+			item_csspattern = '.resposta, .respostadestaque'
+			resultado.append([a.text for a in item.cssselect(item_csspattern)])
+
+		return resultado
 
 	def track(self, cep):
 		itens = self._get_infos_(cep)
+		result = []
 
-		index= 4 - len(itens)
-		data = dict()
 		for item in itens:
 
-			if index % 4 == 0:
-				if index > 0:
-					index = 0
-					self.result.append(data)
-					data = dict()
-
-			# TODO: definir v_date apenas uma vez
+			data = dict()
 			data["v_date"] = datetime.now()
 
-			text = re.sub('\s+',' ',item.text.strip())
+			for label, value in zip(item[0::2], item[1::2]):
 
-			if (index == 2):
-				cidade, estado = text.split('/', 1)
-				data['cidade'] = cidade.strip()
-				data['estado'] = estado.split('-')[0].strip()
-			else:
-				data[self.fields[index]] = text
+				label = label.lower().strip(' :')
+				value = re.sub('\s+', ' ', value.strip())
 				
-			index +=1
+				if 'localidade' in label:
+					cidade, estado = value.split('/', 1)
+					data['cidade'] = cidade.strip()
+					data['estado'] = estado.split('-')[0].strip()
 
-		if  len(data) > 0:	
-			self.result.append(data)
+				else:
+					data[label] = value
 
-		return self.result
+			result.append(data)
+
+		return result
