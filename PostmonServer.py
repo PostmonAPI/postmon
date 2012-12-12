@@ -34,13 +34,9 @@ def verifica_cep(cep):
 		ceps = db.ceps
 		result = ceps.find_one({'cep':cep}, fields={'_id':False})
 
-		if not result or not result.has_key('v_date'):
-			info = _get_info_from_correios(cep)
-			map(lambda x: ceps.save(x), info)
-
-		elif expired(result):
-			info = _get_info_from_correios(cep)
-			map(lambda x: ceps.update({'cep': x['cep']}, {'$set':x}), info)
+		if not result or not result.has_key('v_date') or expired(result):
+			for item in _get_info_from_correios(cep):
+				ceps.update({'cep': item['cep']}, {'$set': item}, upsert=True)
 
 		result = ceps.find_one({'cep':cep}, fields={'_id':False,'v_date':False})
 
