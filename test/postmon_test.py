@@ -52,4 +52,36 @@ class PostmonTest(unittest.TestCase):
 
 		self.assertTrue(len(result) == 0)
 
-	# TODO: existe CEP com mais de um resultado?
+	def test_cep_com_mais_de_um_resultado(self):
+
+		'''
+		A busca pelo CEP 75064590 retorna dois resultados
+
+		Logradouro: Rua A 
+		Bairro: Vila Jaiara
+		Localidade / UF: Anápolis /GO 
+		CEP: 75064590
+
+		Logradouro: Rua A 
+		Bairro: Vila Jaiara Setor Leste
+		Localidade / UF: Anápolis /GO 
+		CEP: 75064379
+		'''
+
+		tracker = CepTracker.CepTracker()
+		result = tracker.track('75064590')
+
+		self.assertTrue(len(result) == 2)
+		self.assertEqual(result[0]['cep'], '75064590')
+		self.assertEqual(result[0]['logradouro'], 'Rua A')
+		self.assertEqual(result[0]['bairro'], 'Vila Jaiara')
+		self.assertEqual(result[0]['cidade'], u'Anápolis')
+		self.assertEqual(result[0]['estado'], 'GO')
+		self.assertIsNotNone(result[0]['v_date'])
+
+		self.assertEqual(result[1]['cep'], '75064379')
+		self.assertEqual(result[1]['logradouro'], 'Rua A')
+		self.assertEqual(result[1]['bairro'], 'Vila Jaiara Setor Leste')
+		self.assertEqual(result[1]['cidade'], u'Anápolis')
+		self.assertEqual(result[1]['estado'], 'GO')
+		self.assertIsNotNone(result[1]['v_date'])
