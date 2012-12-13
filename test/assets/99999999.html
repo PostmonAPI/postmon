@@ -1,0 +1,98 @@
+
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<!-- Meta usado no site da globo: <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> -->
+		
+		<script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
+		
+		<script language="JavaScript" src="scripts/template.js" type="text/javascript"></script> 
+		<script language="JavaScript" src="scripts/aplicacao.js" type="text/javascript"></script>
+		 
+		 
+		<link rel="stylesheet" type="text/css" href="css/template.css">
+		<link rel="stylesheet" type="text/css" href="css/aplicacao.css">
+		<title>Correios Mobile</title>
+		<link rel="icon" href="images/template/icon.png" type="image/png"/>		
+	</head>
+	<body>
+		<div id="divTelaAguarde">
+	<center>
+		<span class="style1"><br><br><br><br><br><br><br><br><br><img src="images/template/62x62.gif" /><br></span>
+		<span class="item">&nbsp;&nbsp;Aguarde...</span>
+	</center>
+</div>
+
+		<div class="container">
+			<div class="fundo">
+				<div>
+					<a href="index.do" class="logo"></a>
+				</div>
+				
+
+
+
+
+
+<div class="conteudo">
+    <div class="secao">Busca CEP - Endere&ccedil;o</div>
+    <div class="orientacao">N&atilde;o utilizar n&deg; casa/apto/lote/pr&eacute;dio ou abrevia&ccedil;&atilde;o.</div>
+    <br/>
+    <form name="buscaCepForm" method="post" action="/movel/buscaCepConfirma.do">
+
+        
+        
+            <div class="erro">
+                Dados nao encontrados         <br>
+            </div>
+        
+
+
+        
+        <div class="campo">
+			Endere&ccedil;o ou CEP:<br>
+            <input type="text" name="cepEntrada" value="99999999" class="comptotal">
+            <input type="hidden" name="tipoCep" value="" id="tipoCep">
+            <input type="hidden" name="cepTemp" value="" id="cepTemp">
+        </div>
+        
+        <br class="clr"/>
+
+        <div class="botoes">
+            <div class="iconeesq">
+                
+                    <a href="index.do"><img src="images/template/seta-esquerda.gif"><span class="nav">&nbsp;Voltar</span></a>
+                    
+                    
+            </div>
+            <input type="submit" value="Buscar" onclick="_mostraTelaAguarde();document.forms['buscaCepForm'].metodo.value='buscarCep'" class="botao">
+            <br class="clr">
+            <input type="hidden" name="metodo" value="buscarCep">
+        </div>
+    </form>
+</div>
+
+				<br/>
+			</div>
+			<div class="rodape">
+				&nbsp;
+<a href="/movel/faleCorreios.do">
+    <img src="images/template/fcc.gif" align="absmiddle">
+    <span class="orientacao">&nbsp;Fale com os Correios</span>
+</a> | 
+<a href="http://www.correios.com.br/">
+    <span class="orientacao">&nbsp;Versão clássica</span>
+</a><br>
+
+<div class="textorodape">&copy; Copyright 2012 Correios - Todos os direitos reservados</div>
+			</div>
+		</div>
+	</body>
+</html>

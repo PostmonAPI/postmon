@@ -9,11 +9,18 @@ class CepTracker():
 	def __init__(self):
 		self.url = 'http://m.correios.com.br/movel/buscaCepConfirma.do'
 
+	def _request(self, cep):
+		response = requests.post(self.url, data={
+			'cepEntrada': cep,
+			'tipoCep': '',
+			'cepTemp': '',
+			'metodo': 'buscarCep'
+		})
+		return response.text
+
 	def _get_infos_(self, cep):
 		from lxml.html import fromstring
-		response = requests.post(self.url, 
-			                 data={'cepEntrada': cep, 'tipoCep':'', 'cepTemp':'', 'metodo':'buscarCep'})
-
+		response = self._request(cep)
 		html = fromstring(response.text)
 		registro_csspattern = '.caixacampobranco, .caixacampoazul'
 		registros = html.cssselect(registro_csspattern)

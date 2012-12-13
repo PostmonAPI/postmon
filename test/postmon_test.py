@@ -4,7 +4,10 @@ import unittest
 import CepTracker
 
 
-class PostmonTest(unittest.TestCase):
+class CepTrackerTest(unittest.TestCase):
+
+	def setUp(self):
+		self.tracker = CepTracker.CepTracker()
 
 	def test_cep_com_rua(self):
 
@@ -15,8 +18,7 @@ class PostmonTest(unittest.TestCase):
 		CEP: 01330000
 		'''
 
-		tracker = CepTracker.CepTracker()
-		result = tracker.track('01330000')
+		result = self.tracker.track('01330000')
 
 		self.assertTrue(len(result) == 1)
 		self.assertEqual(result[0]['cep'], '01330000')
@@ -32,8 +34,7 @@ class PostmonTest(unittest.TestCase):
 		CEP: 85100000
 		'''
 
-		tracker = CepTracker.CepTracker()
-		result = tracker.track('85100000')
+		result = self.tracker.track('85100000')
 
 		self.assertTrue(len(result) == 1)
 		self.assertEqual(result[0]['cep'], '85100000')
@@ -47,8 +48,7 @@ class PostmonTest(unittest.TestCase):
 		CEP: 99999999
 		'''
 
-		tracker = CepTracker.CepTracker()
-		result = tracker.track('99999999')
+		result = self.tracker.track('99999999')
 
 		self.assertTrue(len(result) == 0)
 
@@ -68,8 +68,7 @@ class PostmonTest(unittest.TestCase):
 		CEP: 75064379
 		'''
 
-		tracker = CepTracker.CepTracker()
-		result = tracker.track('75064590')
+		result = self.tracker.track('75064590')
 
 		self.assertTrue(len(result) == 2)
 		self.assertEqual(result[0]['cep'], '75064590')
@@ -85,3 +84,21 @@ class PostmonTest(unittest.TestCase):
 		self.assertEqual(result[1]['cidade'], u'Anápolis')
 		self.assertEqual(result[1]['estado'], 'GO')
 		self.assertIsNotNone(result[1]['v_date'])
+
+
+class CepTrackerMockTest(CepTrackerTest):
+
+	'''
+	O CepTrackerMockTest usa arquivos locais com os resultados
+	obtidos nos Correios. Assim é possível saber se os testes do
+	CepTrackerTest quebraram por problemas no código ou por alteração
+	nos Correios.
+	'''
+
+	def setUp(self):
+		self.tracker = CepTracker.CepTracker()
+		self.tracker._request = self._request_mock
+
+	def _request_mock(self, cep):
+		with open('test/assets/' + cep + '.html') as f:
+			return f.read().decode('latin-1')
