@@ -1,89 +1,72 @@
 # encoding: utf-8
 import unittest
 
+import webtest
+import bottle
+
 import CepTracker
+import PostmonServer
+
+class PostmonBaseTest(object):
+
+	expected = {
+		'01330000': [{
+			'logradouro': 'Rua Rocha',
+			'bairro': 'Bela Vista',
+			'cidade': u'São Paulo',
+			'estado': 'SP'
+		}],
+		'85100000': [{
+			'cidade': u'Jordão (Guarapuava)',
+			'estado': 'PR'
+		}],
+		'75064590': [{
+			'logradouro': 'Rua A',
+			'bairro': 'Vila Jaiara',
+			'cidade': u'Anápolis',
+			'estado': 'GO'
+		}, {
+			'logradouro': 'Rua A',
+			'bairro': 'Vila Jaiara Setor Leste',
+			'cidade': u'Anápolis',
+			'estado': 'GO'
+		}]
+	}
+
+	def test_cep_com_rua(self):
+		self.assertCep('01330000')
+
+	def test_cep_sem_rua(self):
+		self.assertCep('85100000')
+
+	def test_cep_inexistente(self):
+		self.assertCep('99999999')
+
+	def test_cep_com_mais_de_um_resultado(self):
+		self.assertCep('75064590')
 
 
-class CepTrackerTest(unittest.TestCase):
+class CepTrackerTest(unittest.TestCase, PostmonBaseTest):
 
 	def setUp(self):
 		self.tracker = CepTracker.CepTracker()
 
-	def test_cep_com_rua(self):
+	def get_cep(self, cep):
+		return self.tracker.track(cep)
 
-		'''
-		Logradouro: Rua Rocha 
-		Bairro: Bela Vista
-		Localidade / UF: São Paulo /SP 
-		CEP: 01330000
-		'''
+	def assertCep(self, cep):
 
-		result = self.tracker.track('01330000')
+		result = self.get_cep(cep)
+		expected = self.expected.get(cep, [])
 
-		self.assertTrue(len(result) == 1)
-		self.assertEqual(result[0]['cep'], '01330000')
-		self.assertEqual(result[0]['logradouro'], 'Rua Rocha')
-		self.assertEqual(result[0]['cidade'], u'São Paulo')
-		self.assertEqual(result[0]['estado'], 'SP')
-		self.assertIsNotNone(result[0]['v_date'])
+		self.assertEqual(len(expected), len(result))
 
-	def test_cep_sem_rua(self):
+		for e, r in zip(expected, result):
+			for key, value in e.items():
+				self.assertIn(key, r)
+				self.assertEqual(value, r[key])
 
-		'''
-		Localidade / UF: Jordão (Guarapuava) /PR  -  - Povoado 
-		CEP: 85100000
-		'''
-
-		result = self.tracker.track('85100000')
-
-		self.assertTrue(len(result) == 1)
-		self.assertEqual(result[0]['cep'], '85100000')
-		self.assertEqual(result[0]['cidade'], u'Jordão (Guarapuava)')
-		self.assertEqual(result[0]['estado'], 'PR')
-		self.assertIsNotNone(result[0]['v_date'])
-
-	def test_cep_inexistente(self):
-
-		'''
-		CEP: 99999999
-		'''
-
-		result = self.tracker.track('99999999')
-
-		self.assertTrue(len(result) == 0)
-
-	def test_cep_com_mais_de_um_resultado(self):
-
-		'''
-		A busca pelo CEP 75064590 retorna dois resultados
-
-		Logradouro: Rua A 
-		Bairro: Vila Jaiara
-		Localidade / UF: Anápolis /GO 
-		CEP: 75064590
-
-		Logradouro: Rua A 
-		Bairro: Vila Jaiara Setor Leste
-		Localidade / UF: Anápolis /GO 
-		CEP: 75064379
-		'''
-
-		result = self.tracker.track('75064590')
-
-		self.assertTrue(len(result) == 2)
-		self.assertEqual(result[0]['cep'], '75064590')
-		self.assertEqual(result[0]['logradouro'], 'Rua A')
-		self.assertEqual(result[0]['bairro'], 'Vila Jaiara')
-		self.assertEqual(result[0]['cidade'], u'Anápolis')
-		self.assertEqual(result[0]['estado'], 'GO')
-		self.assertIsNotNone(result[0]['v_date'])
-
-		self.assertEqual(result[1]['cep'], '75064379')
-		self.assertEqual(result[1]['logradouro'], 'Rua A')
-		self.assertEqual(result[1]['bairro'], 'Vila Jaiara Setor Leste')
-		self.assertEqual(result[1]['cidade'], u'Anápolis')
-		self.assertEqual(result[1]['estado'], 'GO')
-		self.assertIsNotNone(result[1]['v_date'])
+			self.assertIn('v_date', r)
 
 
 class CepTrackerMockTest(CepTrackerTest):
@@ -102,3 +85,30 @@ class CepTrackerMockTest(CepTrackerTest):
 	def _request_mock(self, cep):
 		with open('test/assets/' + cep + '.html') as f:
 			return f.read().decode('latin-1')
+
+
+class PostmonWebTest(unittest.TestCase, PostmonBaseTest):
+
+	'''
+	Teste do servidor do Postmon
+	'''
+
+	def setUp(self):
+		self.app = webtest.TestApp(bottle.app())
+
+	def get_cep(self, cep):
+		response = self.app.get('/cep/' + cep)
+		return response.json
+
+	def assertCep(self, cep):
+		expected = self.expected.get(cep, None)
+		try:
+			result = self.get_cep(cep)
+		except webtest.AppError as ex:
+			if not expected and '404' in ex.message and cep in ex.message:
+				return
+
+		for k, v in expected[0].items():
+			self.assertEqual(v, result[k])
+
+		self.assertNotIn('v_date', result)
