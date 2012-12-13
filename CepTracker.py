@@ -21,7 +21,7 @@ class CepTracker():
 	def _get_infos_(self, cep):
 		from lxml.html import fromstring
 		response = self._request(cep)
-		html = fromstring(response.text)
+		html = fromstring(response)
 		registro_csspattern = '.caixacampobranco, .caixacampoazul'
 		registros = html.cssselect(registro_csspattern)
 
