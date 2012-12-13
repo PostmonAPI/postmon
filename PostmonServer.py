@@ -1,5 +1,6 @@
 from bottle import route, run, error, response
 from CepTracker import CepTracker
+from requests import ConnectionError
 
 import pymongo, json, re
 
@@ -35,8 +36,12 @@ def verifica_cep(cep):
 		result = ceps.find_one({'cep':cep}, fields={'_id':False})
 
 		if not result or not result.has_key('v_date') or expired(result):
-			for item in _get_info_from_correios(cep):
-				ceps.update({'cep': item['cep']}, {'$set': item}, upsert=True)
+			try:
+				for item in _get_info_from_correios(cep):
+					ceps.update({'cep': item['cep']}, {'$set': item}, upsert=True)
+
+			except ConnectionError:
+				response.status = '503 Servico Temporariamente Indisponivel'
 
 		result = ceps.find_one({'cep':cep}, fields={'_id':False,'v_date':False})
 
