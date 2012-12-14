@@ -1,8 +1,8 @@
-from bottle import route, run, error, response
+from bottle import route, run, response
 from CepTracker import CepTracker
 from requests import ConnectionError
 
-import pymongo, json, re
+from database import MongoDb as Database
 
 def expired(record_date):
 	from datetime import datetime, timedelta
@@ -23,27 +23,26 @@ def _get_info_from_correios(cep):
 
 	return info
 
+
 @route('/cep/<cep:re:\d{5}-?\d{3}>')
 def verifica_cep(cep):
 	cep = cep.replace('-','')
+	db = Database()
 
 	response.headers['Access-Control-Allow-Origin'] = '*'
-	
+
 	try:
-		con = pymongo.MongoClient('localhost')
-		db = con.postmon
-		ceps = db.ceps
-		result = ceps.find_one({'cep':cep}, fields={'_id':False})
+		result = db.get_one(cep, fields={ '_id': False })
 
 		if not result or not result.has_key('v_date') or expired(result):
 			try:
 				for item in _get_info_from_correios(cep):
-					ceps.update({'cep': item['cep']}, {'$set': item}, upsert=True)
+					db.insert_or_update(item)
 
 			except ConnectionError:
 				response.status = '503 Servico Temporariamente Indisponivel'
 
-		result = ceps.find_one({'cep':cep}, fields={'_id':False,'v_date':False})
+		result = db.get_one(cep, fields={ '_id': False, 'v_date': False })
 
 		response.headers['Cache-Control'] = 'public, max-age=2592000'
 

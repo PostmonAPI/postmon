@@ -107,6 +107,7 @@ class PostmonWebTest(unittest.TestCase, PostmonBaseTest):
 		except webtest.AppError as ex:
 			if not expected and '404' in ex.message and cep in ex.message:
 				return
+			raise ex
 
 		for k, v in expected[0].items():
 			self.assertEqual(v, result[k])
