@@ -14,7 +14,7 @@ def expired(record_date):
 	return ( now - record_date['v_date'] >= timedelta(weeks=WEEKS))
 
 
-def _get_info_from_correios(cep):
+def _get_info_from_source(cep):
 	tracker = CepTracker()
 	info = tracker.track(cep)
 
@@ -36,7 +36,7 @@ def verifica_cep(cep):
 
 		if not result or not result.has_key('v_date') or expired(result):
 			try:
-				for item in _get_info_from_correios(cep):
+				for item in _get_info_from_source(cep):
 					db.insert_or_update(item)
 
 			except ConnectionError:
