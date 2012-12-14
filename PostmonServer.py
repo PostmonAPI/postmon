@@ -1,5 +1,6 @@
 from bottle import route, run, response
 from CepTracker import CepTracker
+from requests import ConnectionError
 
 from database import MongoDb as Database
 
@@ -34,8 +35,12 @@ def verifica_cep(cep):
 		result = db.get_one(cep, fields={ '_id': False })
 
 		if not result or not result.has_key('v_date') or expired(result):
-			for item in _get_info_from_correios(cep):
-				db.insert_or_update(item)
+			try:
+				for item in _get_info_from_correios(cep):
+					db.insert_or_update(item)
+
+			except ConnectionError:
+				response.status = '503 Servico Temporariamente Indisponivel'
 
 		result = db.get_one(cep, fields={ '_id': False, 'v_date': False })
 
