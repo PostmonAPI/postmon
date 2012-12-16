@@ -13,7 +13,7 @@ class EctTracker():
 		from lxml.html import fromstring
 
 		response = requests.get(self.url+cod)
-		html = fromstring(response)
+		html = fromstring(response.text)
 
 		form = html.body.getchildren()
 
