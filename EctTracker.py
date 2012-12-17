@@ -14,10 +14,7 @@ class EctTracker():
 
 		response = requests.get(self.url+cod)
 		html = fromstring(response.text)
+		tree = html.iter(tag='table')
+		table = tree.next()
 
-		form = html.body.getchildren()
-
-		for item in form:
-			resultado = item.find('center')
-
-		return resultado.text_content()
+		return table.text_content()
