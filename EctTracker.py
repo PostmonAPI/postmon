@@ -6,6 +6,8 @@ import re
 
 class EctTracker():
 
+	#codigo de rastreio usado = JL346245759BR
+
 	def __init__(self):
 		self.url = 'http://websro.correios.com.br/sro_bin/txect01$.Inexistente?P_LINGUA=001&P_TIPO=002&P_COD_LIS='
 
