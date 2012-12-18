@@ -1,8 +1,11 @@
 from bottle import route, run, response
 from CepTracker import CepTracker
 from requests import ConnectionError
+from correios import Correios
 
 from database import MongoDb as Database
+
+import json
 
 def expired(record_date):
 	from datetime import datetime, timedelta
@@ -51,6 +54,23 @@ def verifica_cep(cep):
 
 	return result
 
+@route('/v1/track/ect/<track>')
+def track_ect(track):
+	encomenda = Correios.encomenda(track)
+
+	result = []
+
+	for status in encomenda.status:
+		resposta = dict()
+		
+		resposta['data'] = status.data
+		resposta['local'] = status.local
+		resposta['situacao'] = status.situacao
+		resposta['detalhes'] = status.detalhes
+
+		result.append(resposta)
+
+	return json.dumps(result)
 
 def _standalone(port=9876):
     run(host='localhost', port=port)
