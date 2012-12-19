@@ -1,7 +1,9 @@
 import bottle
+import json
 from bottle import route, run, response
 from CepTracker import CepTracker
 from requests import ConnectionError
+from correios import Correios
 
 from database import MongoDb as Database
 
@@ -54,6 +56,32 @@ def verifica_cep(cep):
 		response.status = '404 O CEP %s informado nao pode ser localizado' %cep
 
 	return result
+
+
+@app_v1.route('/track/<provider>/<track>')
+def track_pack(provider, track):
+	if provider == 'ect':
+		try:
+			encomenda = Correios.encomenda(track)
+
+			result = []
+
+			for status in encomenda.status:
+				resposta = dict()
+				
+				resposta['data'] = status.data
+				resposta['local'] = status.local
+				resposta['situacao'] = status.situacao
+				resposta['detalhes'] = status.detalhes
+
+				result.append(resposta)
+
+			return json.dumps(result)
+
+		except AttributeError:
+			response.status = '404 O pacote %s informado nao pode ser localizado' %track
+	else:
+		response.status = '404 O Servico %s nao pode ser encontrado' %provider
 
 bottle.mount('/v1', app_v1)
 
