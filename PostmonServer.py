@@ -54,7 +54,7 @@ def verifica_cep(cep):
 
 	return result
 
-@route('/v1/track/ect/<track>')
+@route('/track/ect/<track>')
 def track_ect(track):
 	try:
 		encomenda = Correios.encomenda(track)
@@ -74,7 +74,7 @@ def track_ect(track):
 		return json.dumps(result)
 
 	except AttributeError:
-		response.status = '404 O pacote %s informado não pode ser localizado' %track
+		response.status = '404 O pacote %s informado nao pode ser localizado'
 
 def _standalone(port=9876):
     run(host='localhost', port=port)
