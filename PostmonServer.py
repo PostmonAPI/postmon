@@ -1,3 +1,5 @@
+import bottle
+import json
 from bottle import route, run, response
 from CepTracker import CepTracker
 from requests import ConnectionError
@@ -5,7 +7,7 @@ from correios import Correios
 
 from database import MongoDb as Database
 
-import json
+app_v1 = bottle.Bottle()
 
 def expired(record_date):
 	from datetime import datetime, timedelta
@@ -28,6 +30,7 @@ def _get_info_from_source(cep):
 
 
 @route('/cep/<cep:re:\d{5}-?\d{3}>')
+@app_v1.route('/cep/<cep:re:\d{5}-?\d{3}>')
 def verifica_cep(cep):
 	cep = cep.replace('-','')
 	db = Database()
@@ -54,6 +57,7 @@ def verifica_cep(cep):
 
 	return result
 
+
 @route('/track/ect/<track>')
 def track_ect(track):
 	try:
@@ -75,6 +79,9 @@ def track_ect(track):
 
 	except AttributeError:
 		response.status = '404 O pacote %s informado nao pode ser localizado'
+
+
+bottle.mount('/v1', app_v1)
 
 def _standalone(port=9876):
     run(host='localhost', port=port)
