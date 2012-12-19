@@ -58,28 +58,30 @@ def verifica_cep(cep):
 	return result
 
 
-@route('/track/ect/<track>')
-def track_ect(track):
-	try:
-		encomenda = Correios.encomenda(track)
+@app_v1.route('/track/<provider>/<track>')
+def track_pack(provider, track):
+	if provider == 'ect':
+		try:
+			encomenda = Correios.encomenda(track)
 
-		result = []
+			result = []
 
-		for status in encomenda.status:
-			resposta = dict()
-			
-			resposta['data'] = status.data
-			resposta['local'] = status.local
-			resposta['situacao'] = status.situacao
-			resposta['detalhes'] = status.detalhes
+			for status in encomenda.status:
+				resposta = dict()
+				
+				resposta['data'] = status.data
+				resposta['local'] = status.local
+				resposta['situacao'] = status.situacao
+				resposta['detalhes'] = status.detalhes
 
-			result.append(resposta)
+				result.append(resposta)
 
-		return json.dumps(result)
+			return json.dumps(result)
 
-	except AttributeError:
-		response.status = '404 O pacote %s informado nao pode ser localizado'
-
+		except AttributeError:
+			response.status = '404 O pacote %s informado nao pode ser localizado' %track
+	else:
+		response.status = '404 O Servico %s nao pode ser encontrado' %provider
 
 bottle.mount('/v1', app_v1)
 
