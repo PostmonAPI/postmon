@@ -113,3 +113,13 @@ class PostmonWebTest(unittest.TestCase, PostmonBaseTest):
 			self.assertEqual(v, result[k])
 
 		self.assertNotIn('v_date', result)
+
+class PostmonV1WebTest(PostmonWebTest):
+
+	'''
+	Teste do servidor do Postmon no /v1
+	'''
+
+	def get_cep(self, cep):
+		response = self.app.get('/v1/cep/' + cep)
+		return response.json
