@@ -1,4 +1,4 @@
-Postmon
+Postmon [<img src="https://api.travis-ci.org/CodingForChange/postmon.png" />](http://travis-ci.org/CodingForChange/postmon)
 ==========
 API para consulta de CEP's
 
