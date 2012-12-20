@@ -50,7 +50,10 @@ class CepTracker():
 					cidade, estado = value.split('/', 1)
 					data['cidade'] = cidade.strip()
 					data['estado'] = estado.split('-')[0].strip()
-
+				elif 'logradouro' in label and ' - ' in value:
+					logradouro, complemento = value.split(' - ', 1)
+					data['logradouro'] = logradouro.strip()
+					data['complemento'] = complemento.strip(' -')
 				else:
 					data[label] = value
 
