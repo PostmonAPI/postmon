@@ -64,19 +64,24 @@ def track_pack(provider, track):
 		try:
 			encomenda = Correios.encomenda(track)
 
+			resposta = dict()
 			result = []
 
 			for status in encomenda.status:
-				resposta = dict()
+				historico = dict()
 				
-				resposta['data'] = status.data
-				resposta['local'] = status.local
-				resposta['situacao'] = status.situacao
-				resposta['detalhes'] = status.detalhes
+				historico['data'] = status.data
+				historico['local'] = status.local
+				historico['situacao'] = status.situacao
+				historico['detalhes'] = status.detalhes
 
-				result.append(resposta)
+				result.append(historico)
 
-			return json.dumps(result)
+			resposta['servico'] = provider
+			resposta['codigo'] = track
+			resposta['historico'] = result
+
+			return json.dumps(resposta)
 
 		except AttributeError:
 			response.status = '404 O pacote %s informado nao pode ser localizado' %track
