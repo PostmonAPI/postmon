@@ -30,6 +30,20 @@ class PostmonBaseTest(object):
 			'bairro': 'Vila Jaiara Setor Leste',
 			'cidade': u'Anápolis',
 			'estado': 'GO'
+		}],
+		'87075150': [{
+			'logradouro': 'Rua Bem-te-vi',
+			'complemento': 'de 1181/1182 ao fim',
+			'bairro': 'Conjunto Residencial Ney Braga',
+			'cidade': u'Maringá',
+			'estado': 'PR'
+		}],
+		'69908768': [{
+			'logradouro': 'Rodovia BR-364 (Rio Branco-Porto Velho)',
+			'complemento': u'até 5014 - lado par',
+			'bairro': 'Loteamento Santa Helena',
+			'cidade': 'Rio Branco',
+			'estado': 'AC'
 		}]
 	}
 
@@ -44,6 +58,10 @@ class PostmonBaseTest(object):
 
 	def test_cep_com_mais_de_um_resultado(self):
 		self.assertCep('75064590')
+
+	def test_ceps_com_complemento(self):
+		self.assertCep('87075150')
+		self.assertCep('69908768')
 
 
 class CepTrackerTest(unittest.TestCase, PostmonBaseTest):

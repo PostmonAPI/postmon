@@ -6,7 +6,8 @@ class MongoDb(object):
 		'logradouro',
 		'bairro',
 		'cidade',
-		'estado'
+		'estado',
+		'complemento'
 	]
 
 	def __init__(self, address='localhost'):
