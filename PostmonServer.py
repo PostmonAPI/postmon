@@ -58,7 +58,7 @@ def verifica_cep(cep):
 	return result
 
 
-@app_v1.route('/track/<provider>/<track>')
+@app_v1.route('/rastreio/<provider>/<track>')
 def track_pack(provider, track):
 	if provider == 'ect':
 		try:
