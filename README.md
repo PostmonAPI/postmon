@@ -19,7 +19,7 @@ As dependências estão listadas no arquivo requirements.txt.
 * bottle
 * nosetests
 * webtest
-* correios-api-py
+* packtrack
 
 Rodando testes
 ----------------
