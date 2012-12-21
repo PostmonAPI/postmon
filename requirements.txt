@@ -4,4 +4,4 @@ nose==1.2.1
 pymongo==2.4
 requests==0.14.2
 webtest==1.4.3
-correios-api-py==0.1.1
+packtrack==0.1.0
