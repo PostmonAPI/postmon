@@ -7,35 +7,35 @@
 <!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
 
 <html lang="en">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-		<!-- Meta usado no site da globo: <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> -->
-		
-		<script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
-		
-		<script language="JavaScript" src="scripts/template.js" type="text/javascript"></script> 
-		<script language="JavaScript" src="scripts/aplicacao.js" type="text/javascript"></script>
-		 
-		 
-		<link rel="stylesheet" type="text/css" href="css/template.css">
-		<link rel="stylesheet" type="text/css" href="css/aplicacao.css">
-		<title>Correios Mobile</title>
-		<link rel="icon" href="images/template/icon.png" type="image/png"/>		
-	</head>
-	<body>
-		<div id="divTelaAguarde">
-	<center>
-		<span class="style1"><br><br><br><br><br><br><br><br><br><img src="images/template/62x62.gif" /><br></span>
-		<span class="item">&nbsp;&nbsp;Aguarde...</span>
-	</center>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <!-- Meta usado no site da globo: <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> -->
+        
+        <script type="text/javascript" src="scripts/jquery-1.4.2.min.js"></script>
+        
+        <script language="JavaScript" src="scripts/template.js" type="text/javascript"></script> 
+        <script language="JavaScript" src="scripts/aplicacao.js" type="text/javascript"></script>
+         
+         
+        <link rel="stylesheet" type="text/css" href="css/template.css">
+        <link rel="stylesheet" type="text/css" href="css/aplicacao.css">
+        <title>Correios Mobile</title>
+        <link rel="icon" href="images/template/icon.png" type="image/png"/>     
+    </head>
+    <body>
+        <div id="divTelaAguarde">
+    <center>
+        <span class="style1"><br><br><br><br><br><br><br><br><br><img src="images/template/62x62.gif" /><br></span>
+        <span class="item">&nbsp;&nbsp;Aguarde...</span>
+    </center>
 </div>
 
-		<div class="container">
-			<div class="fundo">
-				<div>
-					<a href="index.do" class="logo"></a>
-				</div>
-				
+        <div class="container">
+            <div class="fundo">
+                <div>
+                    <a href="index.do" class="logo"></a>
+                </div>
+                
 
 
 
@@ -59,7 +59,7 @@
 
     <form name="buscaCepForm" method="post" action="/movel/buscaCepConfirma.do" id="frmCep">
 
-		Logradouro <b>1 - 1</b> de <b>1</b>
+        Logradouro <b>1 - 1</b> de <b>1</b>
         
         
             
@@ -71,18 +71,18 @@
                         
                             <span class="resposta">Logradouro: </span>
                             <span class="respostadestaque">
-                                Rua Bem-te-vi - de 1181/1182 ao fim
+                                Avenida Tivoli - lado ímpar
                                 
                             </span><br/>
-                            <span class="resposta">Bairro: </span><span class="respostadestaque">Conjunto Residencial Ney Braga</span><br/>
+                            <span class="resposta">Bairro: </span><span class="respostadestaque">Vila Betânia</span><br/>
                             <span class="resposta">Localidade / UF: </span>
                             <span class="respostadestaque">
-                                Maringá
+                                São José dos Campos
                                 
-								/PR
+                                /SP
                                 
                             </span><br/>
-                            <span class="resposta">CEP: </span><span class="respostadestaque">87075150</span><br/>
+                            <span class="resposta">CEP: </span><span class="respostadestaque">12245230</span><br/>
                         
 
                         
@@ -98,13 +98,13 @@
                     <div class="divopcoes">
                         
                             <!-- Para usuários originários do Busca CEP -->
-                            <div> Simule um envio utilizando <br/> o CEP <strong>87075150</strong> como:</div>
+                            <div> Simule um envio utilizando <br/> o CEP <strong>12245230</strong> como:</div>
                             <ul>
                                 <li>
-                                    <a onclick="retornarParaPrecos('87075150','1');">CEP Origem <img src="images/template/cep_r.png"/></a>
+                                    <a onclick="retornarParaPrecos('12245230','1');">CEP Origem <img src="images/template/cep_r.png"/></a>
                                 </li>
                                 <li>
-                                    <a onclick="retornarParaPrecos('87075150','2');"><img src="images/template/cep_d.png"/>CEP Destino</a>
+                                    <a onclick="retornarParaPrecos('12245230','2');"><img src="images/template/cep_d.png"/>CEP Destino</a>
                                 </li>
                             </ul>
                         
@@ -127,7 +127,7 @@
                 <input type="hidden" name="metodo" value="buscarCep" id="metodo">
                 <input type="hidden" name="numPagina" value="1">
                 <input type="hidden" name="regTotal" value="1">
-                <input type="hidden" name="cepEntrada" value="87075150" id="cepEntrada">
+                <input type="hidden" name="cepEntrada" value="12245230" id="cepEntrada">
                 <input type="hidden" name="tipoCep" value="" id="tipoCep">
                 <input type="hidden" name="cepTemp" value="" id="cepTemp">
             </div>
@@ -136,7 +136,7 @@
 
     </div>
     <script>
-	
+    
         $('document').ready(function(){
             $('div div.mopcoes span').click(function(){
                 $(this).parents().next('div.divopcoes').slideToggle(500);
@@ -165,7 +165,7 @@
                         cepOrigem=pCepSelecionado;
                         cepDestino=$('#cepTemp').val();
                         break;
-					
+                    
                     case "2":
                         cepOrigem=$('#cepTemp').val();
                         cepDestino=pCepSelecionado;
@@ -187,16 +187,16 @@
         <input type="hidden" name="cepDestino" value="" id="cepDestino">
     </form>
     <form name="buscaCepForm" method="post" action="/movel/buscaCep.do" id="buscaCepInicio">
-        <input type="hidden" name="cepEntrada" value="87075150" class="comptotal">
+        <input type="hidden" name="cepEntrada" value="12245230" class="comptotal">
         <input type="hidden" name="tipoCep" value="" id="tipoCep">
         <input type="hidden" name="cepTemp" value="" id="cepTemp">
     </form>
 
 
-				<br/>
-			</div>
-			<div class="rodape">
-				&nbsp;
+                <br/>
+            </div>
+            <div class="rodape">
+                &nbsp;
 <a href="/movel/faleCorreios.do">
     <img src="images/template/fcc.gif" align="absmiddle">
     <span class="orientacao">&nbsp;Fale com os Correios</span>
@@ -205,8 +205,8 @@
     <span class="orientacao">&nbsp;Versão clássica</span>
 </a><br>
 
-<div class="textorodape">&copy; Copyright 2012 Correios - Todos os direitos reservados</div>
-			</div>
-		</div>
-	</body>
+<div class="textorodape">&copy; Copyright 2013 Correios - Todos os direitos reservados</div>
+            </div>
+        </div>
+    </body>
 </html>

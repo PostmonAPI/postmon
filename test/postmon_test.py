@@ -31,12 +31,12 @@ class PostmonBaseTest(object):
 			'cidade': u'Anápolis',
 			'estado': 'GO'
 		}],
-		'87075150': [{
-			'logradouro': 'Rua Bem-te-vi',
-			'complemento': 'de 1181/1182 ao fim',
-			'bairro': 'Conjunto Residencial Ney Braga',
-			'cidade': u'Maringá',
-			'estado': 'PR'
+		'12245230': [{
+			'logradouro': u'Avenida Tivoli',
+			'complemento': u'lado ímpar',
+			'bairro': u'Vila Betânia',
+			'cidade': u'São José dos Campos',
+			'estado': 'SP'
 		}],
 		'69908768': [{
 			'logradouro': 'Rodovia BR-364 (Rio Branco-Porto Velho)',
@@ -60,7 +60,7 @@ class PostmonBaseTest(object):
 		self.assertCep('75064590')
 
 	def test_ceps_com_complemento(self):
-		self.assertCep('87075150')
+		self.assertCep('12245230')
 		self.assertCep('69908768')
 
 
