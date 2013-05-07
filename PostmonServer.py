@@ -3,7 +3,7 @@ import json
 from bottle import route, run, response
 from CepTracker import CepTracker
 from requests import ConnectionError
-
+from correios import Correios
 from database import MongoDb as Database
 
 app_v1 = bottle.Bottle()
