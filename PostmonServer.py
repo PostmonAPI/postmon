@@ -21,10 +21,8 @@ def expired(record_date):
 def _get_info_from_source(cep):
 	tracker = CepTracker()
 	info = tracker.track(cep)
-
 	if len(info) == 0:
 		raise ValueError()
-
 	return info
 
 
@@ -33,27 +31,25 @@ def _get_info_from_source(cep):
 def verifica_cep(cep):
 	cep = cep.replace('-','')
 	db = Database()
-
 	response.headers['Access-Control-Allow-Origin'] = '*'
 
-	try:
-		result = db.get_one(cep, fields={ '_id': False })
-
-		if not result or not result.has_key('v_date') or expired(result):
-			try:
-				for item in _get_info_from_source(cep):
-					db.insert_or_update(item)
-
-			except ConnectionError:
-				response.status = '503 Servico Temporariamente Indisponivel'
-
+	result = db.get_one(cep, fields={ '_id': False })
+	if result and result.has_key('v_date') and not expired(result):
+		result.pop('v_date')
+	else:
+		try:
+			info = _get_info_from_source(cep)
+		except ValueError:
+			response.status = '404 O CEP %s informado nao pode ser localizado' % cep
+			return
+		except ConnectionError:
+			response.status = '503 Servico Temporariamente Indisponivel'
+			return
+		for item in info:
+			db.insert_or_update(item)
 		result = db.get_one(cep, fields={ '_id': False, 'v_date': False })
 
-		response.headers['Cache-Control'] = 'public, max-age=2592000'
-
-	except ValueError:
-		response.status = '404 O CEP %s informado nao pode ser localizado' %cep
-
+	response.headers['Cache-Control'] = 'public, max-age=2592000'
 	return result
 
 
