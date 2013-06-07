@@ -49,8 +49,13 @@ def verifica_cep(cep):
 			db.insert_or_update(item)
 		result = db.get_one(cep, fields={ '_id': False, 'v_date': False })
 
-	response.headers['Cache-Control'] = 'public, max-age=2592000'
-	return result
+	if result:
+
+		response.headers['Cache-Control'] = 'public, max-age=2592000'
+		return result
+	else:
+		response.status = '404 O CEP %s informado nao pode ser localizado' % cep
+		return
 
 
 @app_v1.route('/rastreio/<provider>/<track>')
