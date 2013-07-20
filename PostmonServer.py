@@ -2,7 +2,7 @@ import bottle
 import json
 from bottle import route, run, response
 from CepTracker import CepTracker
-from requests import ConnectionError
+import requests
 from correios import Correios
 from database import MongoDb as Database
 
@@ -42,7 +42,7 @@ def verifica_cep(cep):
 		except ValueError:
 			response.status = '404 O CEP %s informado nao pode ser localizado' % cep
 			return
-		except ConnectionError:
+		except requests.exceptions.RequestException:
 			response.status = '503 Servico Temporariamente Indisponivel'
 			return
 		for item in info:
