@@ -16,6 +16,7 @@ class CepTracker():
 			'cepTemp': '',
 			'metodo': 'buscarCep'
 		})
+		response.raise_for_status()
 		return response.text
 
 	def _get_infos_(self, cep):
