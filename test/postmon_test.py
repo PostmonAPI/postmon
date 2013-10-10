@@ -1,4 +1,6 @@
 # encoding: utf-8
+import json
+import re
 import unittest
 
 import webtest
@@ -131,6 +133,27 @@ class PostmonWebTest(unittest.TestCase, PostmonBaseTest):
 			self.assertEqual(v, result[k])
 
 		self.assertNotIn('v_date', result)
+
+
+class PostmonWebJSONPTest(PostmonWebTest):
+	'''
+	Teste de requisições JSONP no servidor do Postmon
+	'''
+
+	def setUp(self):
+		self.jsonp_query_key = PostmonServer.jsonp_query_key
+		self.jsonp_func_name = 'func_name'
+		super(PostmonWebJSONPTest, self).setUp()
+
+	def get_cep(self, cep):
+		response = self.app.get('/cep/%s?%s=%s' %
+					(cep, self.jsonp_query_key, self.jsonp_func_name))
+
+		regexp = re.compile('^%s\((.*)\);$' % self.jsonp_func_name)
+		json_data = re.findall(regexp, response.body)[0]
+
+		return json.loads(json_data)
+
 
 class PostmonV1WebTest(PostmonWebTest):
 
