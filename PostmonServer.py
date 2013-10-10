@@ -7,6 +7,7 @@ from correios import Correios
 from database import MongoDb as Database
 
 app_v1 = bottle.Bottle()
+jsonp_query_key = 'callback'
 
 def expired(record_date):
 	from datetime import datetime, timedelta
@@ -24,6 +25,20 @@ def _get_info_from_source(cep):
 	if len(info) == 0:
 		raise ValueError()
 	return info
+
+
+def format_result(result):
+	# checa se foi solicitada resposta em JSONP
+	js_func_name = bottle.request.query.get(jsonp_query_key)
+
+	if js_func_name:
+		# se a resposta vai ser JSONP, o content type deve ser js e seu
+		# conteudo deve ser JSON
+		response.content_type = 'application/javascript'
+		result = json.dumps(result)
+
+		result = '%s(%s);' % (js_func_name, result)
+	return result
 
 
 @route('/cep/<cep:re:\d{5}-?\d{3}>')
@@ -52,7 +67,7 @@ def verifica_cep(cep):
 	if result:
 
 		response.headers['Cache-Control'] = 'public, max-age=2592000'
-		return result
+		return format_result(result)
 	else:
 		response.status = '404 O CEP %s informado nao pode ser localizado' % cep
 		return
@@ -81,7 +96,7 @@ def track_pack(provider, track):
 			resposta['codigo'] = track
 			resposta['historico'] = result
 
-			return json.dumps(resposta)
+			return format_result(resposta)
 
 		except AttributeError:
 			response.status = '404 O pacote %s informado nao pode ser localizado' %track
