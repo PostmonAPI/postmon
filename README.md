@@ -40,3 +40,23 @@ ou
 	>> _standalone()
 
 Caso queira rodar em outra porta, basta passá-la como parametro no chamado do _standalone
+
+
+MongoDB com autenticação
+------------------------
+
+Se o seu MongoDB possui autenticação habilitada você deverá configurar o banco do postmon
+e também exportar duas variavéis de ambiente.
+
+```javascript
+mongo
+> use postmon
+> db.addUser('admin', '123456')
+```
+
+Agora que seu Mongo está com password exporte as variaveis de ambiente.
+
+```bash
+export POSTMON_DB_USER=admin
+export POSTMON_DB_PASSWORD=123456
+```
