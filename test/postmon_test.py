@@ -183,12 +183,12 @@ class PostmonXMLTest(unittest.TestCase):
         return response
 
     def test_xml_return(self):
-        expected = ('<?xml version="1.0" encoding="utf-8"?>\n'
-                    '<result><bairro>Parque S\xc3\xa3o George</bairro>'
-                    '<cidade>Cotia</cidade>'
-                    '<cep>06708070</cep>'
-                    '<logradouro>Avenida Eid Mansur</logradouro>'
-                    '<estado>SP</estado></result>')
-
+        import xmltodict
         response = self.get_cep('06708070')
-        self.assertEqual(response.body.strip(), expected.strip())
+        parsed = xmltodict.parse(response.body)
+        result = parsed.get('result')
+        self.assertEqual(result['bairro'], u'Parque S\xe3o George')
+        self.assertEqual(result['cidade'], u'Cotia')
+        self.assertEqual(result['cep'], u'06708070')
+        self.assertEqual(result['estado'], u'SP')
+        self.assertEqual(result['logradouro'], u'Avenida Eid Mansur')
