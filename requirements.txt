@@ -5,4 +5,5 @@ pymongo==2.4
 requests==0.14.2
 webtest==1.4.3
 packtrack==0.1.0
+xmltodict
 flake8
