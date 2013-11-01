@@ -32,6 +32,10 @@ na raiz do projeto.
 Rodando a aplicação localmente na porta 9876
 --------------------------------
 
+	$ python PostmonServer.py
+
+ou
+
 	$ ipython -i PostmonServer.py
 	>> _standalone()
 

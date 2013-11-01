@@ -116,9 +116,12 @@ def track_pack(provider, track):
     else:
         response.status = '404 O Servico %s nao pode ser encontrado' % provider
 
-
 bottle.mount('/v1', app_v1)
 
 
 def _standalone(port=9876):
-    run(host='localhost', port=port)
+    run(host='0.0.0.0', port=port)
+
+
+if __name__ == "__main__":
+    _standalone()
