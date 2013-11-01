@@ -60,8 +60,8 @@ def verifica_cep(cep):
         try:
             info = _get_info_from_source(cep)
         except ValueError:
-            response.status = '404 O CEP %s informado nao pode '
-            'ser localizado' % cep
+            response.status = "404 O CEP {0} informado nao pode ser "
+            "localizado".format(cep)
             return
         except requests.exceptions.RequestException:
             response.status = '503 Servico Temporariamente Indisponivel'
@@ -105,8 +105,8 @@ def track_pack(provider, track):
             return format_result(resposta)
 
         except AttributeError:
-            response.status = '404 O pacote %s informado nao pode ser '
-            'localizado' % track
+            response.status = "404 O pacote {0} informado nao pode ser "
+            "localizado".format(track)
     else:
         response.status = '404 O Servico %s nao pode ser encontrado' % provider
 
