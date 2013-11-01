@@ -1,4 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import pymongo
+
 
 class MongoDb(object):
 
@@ -15,15 +18,15 @@ class MongoDb(object):
         self._db = self._client.postmon
 
     def get_one(self, cep, **kwargs):
-        return self._db.ceps.find_one({ 'cep': cep }, **kwargs)
+        return self._db.ceps.find_one({'cep': cep}, **kwargs)
 
     def insert_or_update(self, obj, **kwargs):
 
-        update = { '$set': obj }
+        update = {'$set': obj}
         empty_fields = set(self._fields) - set(obj)
         update['$unset'] = dict((x, 1) for x in empty_fields)
 
-        self._db.ceps.update({ 'cep': obj['cep'] }, update, upsert=True)
+        self._db.ceps.update({'cep': obj['cep']}, update, upsert=True)
 
     def remove(self, cep):
-        self._db.ceps.remove({ 'cep': cep })
+        self._db.ceps.remove({'cep': cep})
