@@ -25,7 +25,7 @@ Rodando testes
 ----------------
 Executar o comando:
 
-	nosetests
+	make test
 
 na raiz do projeto.
 
