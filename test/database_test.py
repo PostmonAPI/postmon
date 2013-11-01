@@ -1,7 +1,9 @@
-# encoding: utf-8
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import unittest
 
 from database import MongoDb
+
 
 class MongoDbTest(unittest.TestCase):
 

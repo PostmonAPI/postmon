@@ -1,4 +1,5 @@
-# encoding: utf-8
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import json
 import re
 import unittest
@@ -8,6 +9,7 @@ import bottle
 
 import CepTracker
 import PostmonServer
+
 
 class PostmonBaseTest(object):
 
@@ -146,8 +148,10 @@ class PostmonWebJSONPTest(PostmonWebTest):
         super(PostmonWebJSONPTest, self).setUp()
 
     def get_cep(self, cep):
-        response = self.app.get('/cep/%s?%s=%s' %
-                    (cep, self.jsonp_query_key, self.jsonp_func_name))
+        response = self.app.get(
+            '/cep/%s?%s=%s' % (cep,
+                               self.jsonp_query_key,
+                               self.jsonp_func_name))
 
         regexp = re.compile('^%s\((.*)\);$' % self.jsonp_func_name)
         json_data = re.findall(regexp, response.body)[0]
