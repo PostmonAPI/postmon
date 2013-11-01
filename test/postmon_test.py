@@ -168,3 +168,27 @@ class PostmonV1WebTest(PostmonWebTest):
     def get_cep(self, cep):
         response = self.app.get('/v1/cep/' + cep)
         return response.json
+
+
+class PostmonXMLTest(unittest.TestCase):
+    """ testa requisições XML """
+
+    def setUp(self):
+        self.app = webtest.TestApp(bottle.app())
+
+    def get_cep(self, cep):
+        response = self.app.get(
+            '/cep/%s?format=xml' % cep
+        )
+        return response
+
+    def test_xml_return(self):
+        expected = ('<?xml version="1.0" encoding="utf-8"?>\n'
+                    '<result><bairro>Parque S\xc3\xa3o George</bairro>'
+                    '<cidade>Cotia</cidade>'
+                    '<cep>06708070</cep>'
+                    '<logradouro>Avenida Eid Mansur</logradouro>'
+                    '<estado>SP</estado></result>')
+
+        response = self.get_cep('06708070')
+        self.assertEqual(response.body.strip(), expected.strip())
