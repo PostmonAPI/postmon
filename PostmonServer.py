@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import bottle
 import json
+import xmltodict
 from bottle import route, run, response
 from CepTracker import CepTracker
 import requests
@@ -35,6 +36,12 @@ def _get_info_from_source(cep):
 def format_result(result):
     # checa se foi solicitada resposta em JSONP
     js_func_name = bottle.request.query.get(jsonp_query_key)
+
+    #checa se foi solicitado xml
+    format = bottle.request.query.get('format')
+    if format == 'xml':
+        response.content_type = 'application/xml'
+        return xmltodict.unparse({'result': result})
 
     if js_func_name:
         # se a resposta vai ser JSONP, o content type deve ser js e seu
@@ -71,7 +78,6 @@ def verifica_cep(cep):
         result = db.get_one(cep, fields={'_id': False, 'v_date': False})
 
     if result:
-
         response.headers['Cache-Control'] = 'public, max-age=2592000'
         return format_result(result)
     else:
