@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import os
 import pymongo
 
 
@@ -15,6 +16,10 @@ class MongoDb(object):
 
     def __init__(self, address='localhost'):
         self._client = pymongo.MongoClient(address)
+        USERNAME = os.environ.get('POSTMON_DB_USER')
+        PASSWORD = os.environ.get('POSTMON_DB_PASSWORD')
+        if all((USERNAME, PASSWORD)):
+            self._client.postmon.authenticate(USERNAME, PASSWORD)
         self._db = self._client.postmon
 
     def get_one(self, cep, **kwargs):
