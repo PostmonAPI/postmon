@@ -85,6 +85,17 @@ def verifica_cep(cep):
         'localizado' % cep
         return
 
+@app_v1.route('/uf/<sigla>')
+def uf(sigla):
+    sigla = sigla.lower()
+    db = Database()
+    result = db.get_one_uf(sigla, fields={'_id': False})
+    if result:
+        response.headers['Cache-Control'] = 'public, max-age=2592000'
+        return format_result(result)
+    else:
+        response.status = '404 A sigla %s informada nao pode ser localizada'.format(sigla)
+        return
 
 @app_v1.route('/rastreio/<provider>/<track>')
 def track_pack(provider, track):

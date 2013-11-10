@@ -25,6 +25,9 @@ class MongoDb(object):
     def get_one(self, cep, **kwargs):
         return self._db.ceps.find_one({'cep': cep}, **kwargs)
 
+    def get_one_uf(self, sigla, **kwargs):
+        return self._db.ufs.find_one({'sigla': sigla}, **kwargs)
+
     def insert_or_update(self, obj, **kwargs):
 
         update = {'$set': obj}
