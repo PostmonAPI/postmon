@@ -53,6 +53,11 @@ def format_result(result):
     return result
 
 
+def _get_estado_info(db, sigla):
+    sigla = sigla.lower()
+    return db.get_one_uf(sigla, fields={'_id': False, 'sigla': False})
+
+
 @route('/cep/<cep:re:\d{5}-?\d{3}>')
 @app_v1.route('/cep/<cep:re:\d{5}-?\d{3}>')
 def verifica_cep(cep):
@@ -79,23 +84,30 @@ def verifica_cep(cep):
 
     if result:
         response.headers['Cache-Control'] = 'public, max-age=2592000'
+        estado_info = _get_estado_info(db, result['estado'])
+        if estado_info:
+            result['estado_info'] = estado_info
         return format_result(result)
     else:
         response.status = '404 O CEP %s informado nao pode ser '
         'localizado' % cep
         return
 
+
 @app_v1.route('/uf/<sigla>')
 def uf(sigla):
-    sigla = sigla.lower()
     db = Database()
-    result = db.get_one_uf(sigla, fields={'_id': False})
+    result = _get_estado_info(db, sigla)
     if result:
         response.headers['Cache-Control'] = 'public, max-age=2592000'
         return format_result(result)
     else:
-        response.status = '404 A sigla %s informada nao pode ser localizada'.format(sigla)
+        message = '404 A sigla %s informada ' \
+                  'nao pode ser localizada'
+        response.status = message % sigla
+        print response.status
         return
+
 
 @app_v1.route('/rastreio/<provider>/<track>')
 def track_pack(provider, track):
