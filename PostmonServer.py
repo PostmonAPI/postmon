@@ -54,7 +54,7 @@ def format_result(result):
 
 
 def _get_estado_info(db, sigla):
-    sigla = sigla.lower()
+    sigla = sigla.upper()
     return db.get_one_uf(sigla, fields={'_id': False, 'sigla': False})
 
 
