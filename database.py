@@ -29,7 +29,8 @@ class MongoDb(object):
         return self._db.ufs.find_one({'sigla': sigla}, **kwargs)
 
     def get_one_cidade(self, sigla_uf_nome_cidade, **kwargs):
-        return self._db.cidades.find_one({'sigla_uf_nome_cidade': sigla_uf_nome_cidade}, **kwargs)
+        spec = {'sigla_uf_nome_cidade': sigla_uf_nome_cidade}
+        return self._db.cidades.find_one(spec, **kwargs)
 
     def get_one_uf_by_nome(self, nome, **kwargs):
         return self._db.ufs.find_one({'nome': nome}, **kwargs)

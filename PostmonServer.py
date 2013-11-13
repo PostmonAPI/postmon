@@ -127,6 +127,21 @@ def uf(sigla):
         return
 
 
+@app_v1.route('/cidade/<sigla_uf>/<nome>')
+def cidade(sigla_uf, nome):
+    db = Database()
+    result = _get_cidade_info(db, sigla_uf, nome)
+    if result:
+        response.headers['Cache-Control'] = 'public, max-age=2592000'
+        return format_result(result)
+    else:
+        message = '404 A cidade %s (%s) informada ' \
+                  'nao pode ser localizada'
+        response.status = message % (sigla_uf, nome)
+        print response.status
+        return
+
+
 @app_v1.route('/rastreio/<provider>/<track>')
 def track_pack(provider, track):
     if provider == 'ect':
