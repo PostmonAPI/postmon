@@ -57,8 +57,8 @@ class IbgeTracker():
             infos.append({
                 'codigo_ibge_uf': celulas[0].text_content(),
                 'sigla_uf': celulas[1].text_content(),
-                'codigo_ibge_cidade': celulas[2].text_content(),
-                'nome_cidade': celulas[3].text_content(),
+                'codigo_ibge': celulas[2].text_content(),
+                'nome': celulas[3].text_content(),
                 'area_km2': celulas[4].text_content()
             })
         return infos
@@ -74,7 +74,7 @@ class IbgeTracker():
         for info in infos:
             codigo_ibge_uf = info['codigo_ibge_uf']
             sigla_uf = info['sigla_uf']
-            nome_cidade = info['nome_cidade']
+            nome = info['nome']
             if codigo_ibge_uf not in siglas:
                 siglas[codigo_ibge_uf] = sigla_uf
 
@@ -82,7 +82,7 @@ class IbgeTracker():
             # pode ser só o nome, pois
             # existem cidades com mesmo nome
             # em estados diferentes
-            info['sigla_uf_nome_cidade'] = '%s_%s' % (sigla_uf, nome_cidade)
+            info['sigla_uf_nome_cidade'] = '%s_%s' % (sigla_uf, nome)
 
             db.insert_or_update_cidade(info)
 

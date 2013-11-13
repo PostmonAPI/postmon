@@ -58,6 +58,19 @@ def _get_estado_info(db, sigla):
     return db.get_one_uf(sigla, fields={'_id': False, 'sigla': False})
 
 
+def _get_cidade_info(db, sigla_uf, nome_cidade):
+    sigla_uf = sigla_uf.upper()
+    sigla_uf_nome_cidade = '%s_%s' % (sigla_uf, nome_cidade)
+    fields = {
+        '_id': False,
+        'sigla_uf': False,
+        'codigo_ibge_uf': False,
+        'sigla_uf_nome_cidade': False,
+        'nome': False
+    }
+    return db.get_one_cidade(sigla_uf_nome_cidade, fields=fields)
+
+
 @route('/cep/<cep:re:\d{5}-?\d{3}>')
 @app_v1.route('/cep/<cep:re:\d{5}-?\d{3}>')
 def verifica_cep(cep):
@@ -84,9 +97,14 @@ def verifica_cep(cep):
 
     if result:
         response.headers['Cache-Control'] = 'public, max-age=2592000'
-        estado_info = _get_estado_info(db, result['estado'])
+        sigla_uf = result['estado']
+        estado_info = _get_estado_info(db, sigla_uf)
         if estado_info:
             result['estado_info'] = estado_info
+        nome_cidade = result['cidade']
+        cidade_info = _get_cidade_info(db, sigla_uf, nome_cidade)
+        if cidade_info:
+            result['cidade_info'] = cidade_info
         return format_result(result)
     else:
         response.status = '404 O CEP %s informado nao pode ser '
