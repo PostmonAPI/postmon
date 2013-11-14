@@ -14,15 +14,17 @@ app.conf.update(
     CELERY_RESULT_SERIALIZER='json',
     CELERY_TIMEZONE='America/Sao_Paulo',
     CELERY_ENABLE_UTC=True,
-    CELERYBEAT_SCHEDULE = {
+    CELERYBEAT_SCHEDULE={
         'track_ibge_daily': {
             'task': 'PostmonTaskScheduler.track_ibge',
-            'schedule': timedelta(days=1) #  útil para testes: timedelta(minutes=1)
+            'schedule': timedelta(days=1)  # útil para
+                                           # testes: timedelta(minutes=1)
         }
     }
 )
 
 logger = get_task_logger(__name__)
+
 
 @app.task
 def track_ibge():
