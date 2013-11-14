@@ -3,3 +3,4 @@
 *.swp
 run.py
 build
+celerybeat-schedule
