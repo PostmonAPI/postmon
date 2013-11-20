@@ -5,8 +5,19 @@ from celery import Celery
 from celery.utils.log import get_task_logger
 from IbgeTracker import IbgeTracker
 from database import MongoDb as Database
+import os
 
-app = Celery('postmon', broker='mongodb://localhost:27017')
+USERNAME = os.environ.get('POSTMON_DB_USER')
+PASSWORD = os.environ.get('POSTMON_DB_PASSWORD')
+if all((USERNAME, PASSWORD)):
+    broker_conn_string = 'mongodb://%s:%s@localhost:27017' \
+        % (USERNAME, PASSWORD)
+else:
+    broker_conn_string = 'mongodb://localhost:27017'
+
+print(broker_conn_string)
+
+app = Celery('postmon', broker=broker_conn_string)
 
 app.conf.update(
     CELERY_TASK_SERIALIZER='json',
