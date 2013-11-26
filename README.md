@@ -20,6 +20,7 @@ As dependências estão listadas no arquivo requirements.txt.
 * nosetests
 * webtest
 * packtrack
+* celery
 
 Rodando testes
 ----------------
@@ -41,6 +42,9 @@ ou
 
 Caso queira rodar em outra porta, basta passá-la como parametro no chamado do _standalone
 
+Para rodar o [Scheduler](#Scheduler):
+
+	$ celery worker -B -A PostmonTaskScheduler -l info
 
 MongoDB com autenticação
 ------------------------
@@ -60,3 +64,38 @@ Agora que seu Mongo está com password exporte as variaveis de ambiente.
 export POSTMON_DB_USER=admin
 export POSTMON_DB_PASSWORD=123456
 ```
+
+Scheduler
+---------
+
+O Postmon conta com um scheduler baseado na ferramenta [Celery](http://www.celeryproject.org/). Até o momento, a única funcionalidade implementada nessa estrutura é a rotina de coleta de dados do [IBGE](#IBGE).
+
+O Celery usa, como Broker, a mesma instância do MongoDB utilizada no módulo de CEP.
+
+O comando apresentado na seção [rodando a aplicação](#rodando-a-aplicação-localmente-na-porta-9876) pode ser quebrado em dois caso seja necessário rodar o Celery Worker separado do Celery Beat. Para mais informações sobre essa questão leia a [documentação do Celery](http://docs.celeryproject.org/en/latest/).
+
+Além do Broker, o Celery Beat depende internamente de uma base de dados, criada automaticamente na primeira execução, onde são armazenadas informações sobre os schedules. Por padrão essa base fica em um arquivo chamado _celerybeat_schedule_, criado no diretório onde o Celery Beat foi executado. Esse local pode ser alterado através do switch -s, conforme exemplo abaixo:
+
+	$ celery worker -B -A PostmonTaskScheduler -l info -s /novo/caminho/para/arquivo/celerybeat_schedule
+
+IBGE
+-------------
+
+O Postmon fornece as seguintes informações extraídas do site do IBGE:
+
+* Código do município/UF
+* Área territorial (em km²)
+
+Essas informações estão presentes nos atributos _estado_info_ e _cidade_info_ da rota de busca de _cep_, bem como nas seguintes rotas:
+
+* /uf/{sigla-uf}
+* /cidade/{sigla-uf}/{nome-cidade}
+
+Exemplos:
+
+* /uf/SP
+* /cidade/SP/São Paulo
+* /cidade/SP/Araraquara
+* /cidade/RJ/Macaé
+
+A rotina de atualização desses dados está configurada para rodar diariamente.
