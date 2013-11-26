@@ -42,7 +42,7 @@ ou
 
 Caso queira rodar em outra porta, basta passá-la como parametro no chamado do _standalone
 
-Para rodar o [Scheduler](#Scheduler):
+Para rodar o [Scheduler](#scheduler):
 
 	$ celery worker -B -A PostmonTaskScheduler -l info
 
@@ -68,7 +68,7 @@ export POSTMON_DB_PASSWORD=123456
 Scheduler
 ---------
 
-O Postmon conta com um scheduler baseado na ferramenta [Celery](http://www.celeryproject.org/). Até o momento, a única funcionalidade implementada nessa estrutura é a rotina de coleta de dados do [IBGE](#IBGE).
+O Postmon conta com um scheduler baseado na ferramenta [Celery](http://www.celeryproject.org/). Até o momento, a única funcionalidade implementada nessa estrutura é a rotina de coleta de dados do [IBGE](#ibge).
 
 O Celery usa, como Broker, a mesma instância do MongoDB utilizada no módulo de CEP.
 
@@ -86,7 +86,7 @@ O Postmon fornece as seguintes informações extraídas do site do IBGE:
 * Código do município/UF
 * Área territorial (em km²)
 
-Essas informações estão presentes nos atributos _estado_info_ e _cidade_info_ da rota de busca de _cep_, bem como nas seguintes rotas:
+Essas informações estão presentes nos atributos *estado_info* e *cidade_info* da rota de busca de _cep_, bem como nas seguintes rotas:
 
 * /uf/{sigla-uf}
 * /cidade/{sigla-uf}/{nome-cidade}
