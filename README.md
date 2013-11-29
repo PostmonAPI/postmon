@@ -46,6 +46,18 @@ Para rodar o [Scheduler](#scheduler):
 
 	$ celery worker -B -A PostmonTaskScheduler -l info
 
+Recomenda-se a utilização do [Supervisord](http://supervisord.org/) para manter o Celery rodando. Exemplo de configuração para o _supervisord.conf_:
+
+	[program:celeryd]
+	command=celery worker -B -A PostmonTaskScheduler -l info 
+	directory=POSTMON_HOME/repositorio
+	stdout_logfile=POSTMON_LOG_DIR/celeryd.log
+	stderr_logfile=POSTMON_LOG_DIR/celeryd_err.log
+	autostart=true
+	autorestart=true
+	startsecs=10
+	stopwaitsecs=600
+
 MongoDB com autenticação
 ------------------------
 
