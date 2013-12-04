@@ -25,6 +25,16 @@ class MongoDb(object):
     def get_one(self, cep, **kwargs):
         return self._db.ceps.find_one({'cep': cep}, **kwargs)
 
+    def get_one_uf(self, sigla, **kwargs):
+        return self._db.ufs.find_one({'sigla': sigla}, **kwargs)
+
+    def get_one_cidade(self, sigla_uf_nome_cidade, **kwargs):
+        spec = {'sigla_uf_nome_cidade': sigla_uf_nome_cidade}
+        return self._db.cidades.find_one(spec, **kwargs)
+
+    def get_one_uf_by_nome(self, nome, **kwargs):
+        return self._db.ufs.find_one({'nome': nome}, **kwargs)
+
     def insert_or_update(self, obj, **kwargs):
 
         update = {'$set': obj}
@@ -32,6 +42,15 @@ class MongoDb(object):
         update['$unset'] = dict((x, 1) for x in empty_fields)
 
         self._db.ceps.update({'cep': obj['cep']}, update, upsert=True)
+
+    def insert_or_update_uf(self, obj, **kwargs):
+        update = {'$set': obj}
+        self._db.ufs.update({'sigla': obj['sigla']}, update, upsert=True)
+
+    def insert_or_update_cidade(self, obj, **kwargs):
+        update = {'$set': obj}
+        chave = 'sigla_uf_nome_cidade'
+        self._db.cidades.update({chave: obj[chave]}, update, upsert=True)
 
     def remove(self, cep):
         self._db.ceps.remove({'cep': cep})

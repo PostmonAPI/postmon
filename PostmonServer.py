@@ -53,6 +53,24 @@ def format_result(result):
     return result
 
 
+def _get_estado_info(db, sigla):
+    sigla = sigla.upper()
+    return db.get_one_uf(sigla, fields={'_id': False, 'sigla': False})
+
+
+def _get_cidade_info(db, sigla_uf, nome_cidade):
+    sigla_uf = sigla_uf.upper()
+    sigla_uf_nome_cidade = '%s_%s' % (sigla_uf, nome_cidade)
+    fields = {
+        '_id': False,
+        'sigla_uf': False,
+        'codigo_ibge_uf': False,
+        'sigla_uf_nome_cidade': False,
+        'nome': False
+    }
+    return db.get_one_cidade(sigla_uf_nome_cidade, fields=fields)
+
+
 @route('/cep/<cep:re:\d{5}-?\d{3}>')
 @app_v1.route('/cep/<cep:re:\d{5}-?\d{3}>')
 def verifica_cep(cep):
@@ -79,10 +97,48 @@ def verifica_cep(cep):
 
     if result:
         response.headers['Cache-Control'] = 'public, max-age=2592000'
+        sigla_uf = result['estado']
+        estado_info = _get_estado_info(db, sigla_uf)
+        if estado_info:
+            result['estado_info'] = estado_info
+        nome_cidade = result['cidade']
+        cidade_info = _get_cidade_info(db, sigla_uf, nome_cidade)
+        if cidade_info:
+            result['cidade_info'] = cidade_info
         return format_result(result)
     else:
         response.status = '404 O CEP %s informado nao pode ser '
         'localizado' % cep
+        return
+
+
+@app_v1.route('/uf/<sigla>')
+def uf(sigla):
+    db = Database()
+    result = _get_estado_info(db, sigla)
+    if result:
+        response.headers['Cache-Control'] = 'public, max-age=2592000'
+        return format_result(result)
+    else:
+        message = '404 A sigla %s informada ' \
+                  'nao pode ser localizada'
+        response.status = message % sigla
+        print response.status
+        return
+
+
+@app_v1.route('/cidade/<sigla_uf>/<nome>')
+def cidade(sigla_uf, nome):
+    db = Database()
+    result = _get_cidade_info(db, sigla_uf, nome)
+    if result:
+        response.headers['Cache-Control'] = 'public, max-age=2592000'
+        return format_result(result)
+    else:
+        message = '404 A cidade %s (%s) informada ' \
+                  'nao pode ser localizada'
+        response.status = message % (sigla_uf, nome)
+        print response.status
         return
 
 
