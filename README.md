@@ -111,3 +111,6 @@ Exemplos:
 * /cidade/RJ/Macaé
 
 A rotina de atualização desses dados está configurada para rodar diariamente.
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/CodingForChange/postmon/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
