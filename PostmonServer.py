@@ -175,7 +175,7 @@ def track_pack(provider, track):
 bottle.mount('/v1', app_v1)
 
 
-@app_v1.route('/crossdomain.xml')
+@route('/crossdomain.xml')
 def crossdomain():
     response.content_type = 'application/xml'
     return template('crossdomain')
