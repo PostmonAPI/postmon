@@ -3,7 +3,7 @@
 import bottle
 import json
 import xmltodict
-from bottle import route, run, response
+from bottle import route, run, response, template
 from CepTracker import CepTracker
 import requests
 from correios import Correios
@@ -173,6 +173,12 @@ def track_pack(provider, track):
         response.status = '404 O Servico %s nao pode ser encontrado' % provider
 
 bottle.mount('/v1', app_v1)
+
+
+@app_v1.route('/crossdomain.xml')
+def crossdomain():
+    response.content_type = 'application/xml'
+    return template('crossdomain')
 
 
 def _standalone(port=9876):
