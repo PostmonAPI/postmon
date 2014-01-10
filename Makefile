@@ -5,4 +5,4 @@ test: pep8
 
 .PHONY: pep8
 pep8:
-	@flake8 * --ignore=F403,F401 --exclude=requirements.txt,*.pyc,*.md,COPYING,Makefile,*.wsgi,*celerybeat-schedule*
+	@flake8 * --ignore=F403,F401 --exclude=requirements.txt,*.pyc,*.md,COPYING,Makefile,*.wsgi,*celerybeat-schedule*,*.yaml,*.log

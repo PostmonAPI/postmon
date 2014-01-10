@@ -8,3 +8,4 @@ packtrack==0.1.0
 xmltodict
 flake8
 celery[mongodb]
+PyYAML==3.10
