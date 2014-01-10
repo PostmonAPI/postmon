@@ -22,8 +22,10 @@ class CepTracker():
         try:
             response.raise_for_status()
         except requests.exceptions.HTTPError as erro:
-            text_error = 'URL: {0} -- CEP: {1} -- ERRO: {2}'.format(self.url, cep, erro)
-            Log().cep_log_write(text_error)                         
+            text_error = 'URL: {0} -- CEP: {1} -- ERRO: {2}'.format(
+                self.url, cep, erro)
+
+            Log().cep_log_write(text_error)
         return response.text
 
     def _get_infos_(self, cep):
@@ -68,3 +70,4 @@ class CepTracker():
             result.append(data)
 
         return result
+
