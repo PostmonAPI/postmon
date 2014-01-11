@@ -19,4 +19,3 @@ class Log():
                 today.minute, text)
 
             log_file.write(text_line)
-

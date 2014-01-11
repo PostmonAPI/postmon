@@ -70,4 +70,3 @@ class CepTracker():
             result.append(data)
 
         return result
-
