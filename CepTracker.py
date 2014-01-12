@@ -4,12 +4,24 @@ from datetime import datetime
 
 import requests
 import re
+import logging.config
+import os
+import yaml
 
 
 class CepTracker():
 
     def __init__(self):
+        self.log_path = 'log.yaml'
+        self._config_log_file()
+        self.logger = logging.getLogger(__name__)
+
         self.url = 'http://m.correios.com.br/movel/buscaCepConfirma.do'
+
+    def _config_log_file(self):
+        with open(self.log_path, 'rt') as f:
+            config = yaml.load(f.read())
+        logging.config.dictConfig(config)
 
     def _request(self, cep):
         response = requests.post(self.url, data={
@@ -18,7 +30,11 @@ class CepTracker():
             'cepTemp': '',
             'metodo': 'buscarCep'
         })
-        response.raise_for_status()
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as ex:
+            logging.error('Erro request site Correios', exc_info=True)
+            raise ex
         return response.text
 
     def _get_infos_(self, cep):

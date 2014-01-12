@@ -1,0 +1,23 @@
+version: 1
+formatters:
+    simple:
+        format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        
+handlers:
+    info_file_handler:
+        class: logging.handlers.RotatingFileHandler
+        level: ERROR
+        formatter: simple
+        filename: errors.log
+        maxBytes: 10485760
+        backupCount: 20
+        encoding: utf-8 
+        
+loggers:
+    __name__:
+        level: ERROR
+        handlers: [info_file_handler]
+        propagate: no
+            
+root:
+    handlers: [info_file_handler]
