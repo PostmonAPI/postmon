@@ -9,6 +9,7 @@ import os
 
 logger = logging.getLogger(__name__)
 
+
 class CepTracker():
 
     def __init__(self):
