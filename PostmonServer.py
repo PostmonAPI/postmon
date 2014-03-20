@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import bottle
 import json
+import logging
 import xmltodict
 from bottle import route, run, response, template
 from CepTracker import CepTracker
@@ -9,6 +10,8 @@ import requests
 from correios import Correios
 from database import MongoDb as Database
 
+
+logger = logging.getLogger(__name__)
 
 app_v1 = bottle.Bottle()
 jsonp_query_key = 'callback'
@@ -85,11 +88,14 @@ def verifica_cep(cep):
         try:
             info = _get_info_from_source(cep)
         except ValueError:
-            response.status = "404 O CEP {0} informado nao pode ser "
-            "localizado".format(cep)
+            message = "404 CEP %s nao encontrado" % cep
+            logger.exception(message)
+            response.status = message
             return
         except requests.exceptions.RequestException:
-            response.status = '503 Servico Temporariamente Indisponivel'
+            message = '503 Servico Temporariamente Indisponivel'
+            logger.exception(message)
+            response.status = message
             return
         for item in info:
             db.insert_or_update(item)
@@ -107,8 +113,9 @@ def verifica_cep(cep):
             result['cidade_info'] = cidade_info
         return format_result(result)
     else:
-        response.status = '404 O CEP %s informado nao pode ser '
-        'localizado' % cep
+        message = '404 CEP %s nao encontrado' % cep
+        logger.warning(message)
+        response.status = message
         return
 
 
@@ -120,10 +127,9 @@ def uf(sigla):
         response.headers['Cache-Control'] = 'public, max-age=2592000'
         return format_result(result)
     else:
-        message = '404 A sigla %s informada ' \
-                  'nao pode ser localizada'
-        response.status = message % sigla
-        print response.status
+        message = '404 Estado %s nao encontrado' % sigla
+        logger.warning(message)
+        response.status = message
         return
 
 
@@ -135,10 +141,9 @@ def cidade(sigla_uf, nome):
         response.headers['Cache-Control'] = 'public, max-age=2592000'
         return format_result(result)
     else:
-        message = '404 A cidade %s (%s) informada ' \
-                  'nao pode ser localizada'
-        response.status = message % (sigla_uf, nome)
-        print response.status
+        message = '404 Cidade %s-%s nao encontrada' % (nome, sigla_uf)
+        logger.warning(message)
+        response.status = message
         return
 
 
@@ -167,10 +172,13 @@ def track_pack(provider, track):
             return format_result(resposta)
 
         except AttributeError:
-            response.status = "404 O pacote {0} informado nao pode ser "
-            "localizado".format(track)
+            message = "404 Pacote %s nao encontrado" % track
+            logger.exception(message)
+            response.status = message
     else:
-        response.status = '404 O Servico %s nao pode ser encontrado' % provider
+        message = '404 Servico %s nao encontrado' % provider
+        logger.warning(message)
+        response.status = message
 
 bottle.mount('/v1', app_v1)
 
