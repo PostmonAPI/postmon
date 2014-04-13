@@ -82,7 +82,7 @@ def verifica_cep(cep):
     response.headers['Access-Control-Allow-Origin'] = '*'
 
     result = db.get_one(cep, fields={'_id': False})
-    if result and 'v_date' and 'geolocation' in result and not expired(result):
+    if result and 'v_date' in result and 'geolocation' in result and not expired(result):
         result.pop('v_date')
     else:
         try:
