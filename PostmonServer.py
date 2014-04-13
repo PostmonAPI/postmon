@@ -40,7 +40,7 @@ def format_result(result):
     # checa se foi solicitada resposta em JSONP
     js_func_name = bottle.request.query.get(jsonp_query_key)
 
-    #checa se foi solicitado xml
+    # checa se foi solicitado xml
     format = bottle.request.query.get('format')
     if format == 'xml':
         response.content_type = 'application/xml'
@@ -82,7 +82,7 @@ def verifica_cep(cep):
     response.headers['Access-Control-Allow-Origin'] = '*'
 
     result = db.get_one(cep, fields={'_id': False})
-    if result and 'v_date' in result and not expired(result):
+    if result and 'v_date' and 'geolocation' in result and not expired(result):
         result.pop('v_date')
     else:
         try:

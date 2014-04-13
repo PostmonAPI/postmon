@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from geopy.geocoders import GoogleV3
 
 import requests
 import re
@@ -46,6 +47,7 @@ class CepTracker():
     def track(self, cep):
         itens = self._get_infos_(cep)
         result = []
+        geolocator = GoogleV3()
 
         for item in itens:
 
@@ -67,6 +69,28 @@ class CepTracker():
                     data['complemento'] = complemento.strip(' -')
                 else:
                     data[label] = value
+
+            if 'logradouro' in data:
+                logradouro = data['logradouro']
+                complemento = ''
+                cidade = data['cidade']
+                if 'complemento' in data:
+                    complemento = data['complemento']
+                endereco, (latitude,
+                           longitude) = geolocator.geocode(logradouro +
+                                                           ', ' +
+                                                           complemento +
+                                                           ' - ' +
+                                                           cidade +
+                                                           ' ' +
+                                                           data['estado'])
+                data['geolocation'] = {'lat': latitude, 'long': longitude}
+            else:
+                endereco, (latitude,
+                           longitude) = geolocator.geocode(data['cidade'] +
+                                                           ' ' +
+                                                           data['estado'])
+                data['geolocation'] = {'lat': latitude, 'long': longitude}
 
             result.append(data)
 
