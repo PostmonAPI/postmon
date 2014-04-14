@@ -72,15 +72,10 @@ class CepTracker():
 
             if 'logradouro' in data:
                 logradouro = data['logradouro']
-                complemento = ''
                 cidade = data['cidade']
-                if 'complemento' in data:
-                    complemento = data['complemento']
                 endereco, (latitude,
                            longitude) = geolocator.geocode(logradouro +
-                                                           ', ' +
-                                                           complemento +
-                                                           ' - ' +
+                                                           ' ' +
                                                            cidade +
                                                            ' ' +
                                                            data['estado'])
