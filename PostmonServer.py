@@ -40,7 +40,7 @@ def format_result(result):
     # checa se foi solicitada resposta em JSONP
     js_func_name = bottle.request.query.get(jsonp_query_key)
 
-    #checa se foi solicitado xml
+    # checa se foi solicitado xml
     format = bottle.request.query.get('format')
     if format == 'xml':
         response.content_type = 'application/xml'
