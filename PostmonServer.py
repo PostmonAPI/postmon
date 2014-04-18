@@ -4,7 +4,7 @@ import bottle
 import json
 import logging
 import xmltodict
-from bottle import route, run, response, template
+from bottle import route, run, response, template, HTTPResponse
 from CepTracker import CepTracker
 import requests
 from correios import Correios
@@ -59,6 +59,16 @@ def format_result(result):
     return result
 
 
+def make_error(message):
+    formats = {
+        'json': 'application/json',
+        'xml': 'application/xml',
+        'jsonp': 'application/javascript',
+    }
+    format_ = bottle.request.query.get('format', 'json')
+    return HTTPResponse(status=message, content_type=formats[format_])
+
+
 def _get_estado_info(db, sigla):
     sigla = sigla.upper()
     return db.get_one_uf(sigla, fields={'_id': False, 'sigla': False})
@@ -92,8 +102,10 @@ def verifica_cep(cep):
             info = _get_info_from_source(cep)
         except ValueError:
             message = '404 CEP %s nao encontrado' % cep
+            logger.exception(message)
         except requests.exceptions.RequestException:
             message = '503 Servico Temporariamente Indisponivel'
+            logger.exception(message)
         else:
             for item in info:
                 db.insert_or_update(item)
@@ -102,9 +114,8 @@ def verifica_cep(cep):
         if not result:
             if not message:
                 message = '404 CEP %s nao encontrado' % cep
-            logger.exception(message)
-            response.status = message
-            return format_result({"erro": message})
+                logger.warning(message)
+            return make_error(message)
 
     result.pop('v_date', None)
     response.headers['Cache-Control'] = 'public, max-age=2592000'
@@ -129,8 +140,7 @@ def uf(sigla):
     else:
         message = '404 Estado %s nao encontrado' % sigla
         logger.warning(message)
-        response.status = message
-        return {"erro": message}
+        return make_error(message)
 
 
 @app_v1.route('/cidade/<sigla_uf>/<nome>')
@@ -143,8 +153,7 @@ def cidade(sigla_uf, nome):
     else:
         message = '404 Cidade %s-%s nao encontrada' % (nome, sigla_uf)
         logger.warning(message)
-        response.status = message
-        return {"erro": message}
+        return make_error(message)
 
 
 @app_v1.route('/rastreio/<provider>/<track>')
@@ -174,12 +183,10 @@ def track_pack(provider, track):
         except AttributeError:
             message = "404 Pacote %s nao encontrado" % track
             logger.exception(message)
-            response.status = message
     else:
         message = '404 Servico %s nao encontrado' % provider
         logger.warning(message)
-        response.status = message
-    return {"erro": message}
+    return make_error(message)
 
 bottle.mount('/v1', app_v1)
 
