@@ -18,6 +18,9 @@ jsonp_query_key = 'callback'
 
 
 def expired(record_date):
+    if 'v_date' not in record_date:
+        True
+
     from datetime import datetime, timedelta
 
     # 6 months
@@ -32,7 +35,7 @@ def _get_info_from_source(cep):
     tracker = CepTracker()
     info = tracker.track(cep)
     if len(info) == 0:
-        raise ValueError()
+        raise ValueError('CEP %s nao encontrado' % cep)
     return info
 
 
@@ -80,43 +83,40 @@ def verifica_cep(cep):
     cep = cep.replace('-', '')
     db = Database()
     response.headers['Access-Control-Allow-Origin'] = '*'
+    message = None
 
     result = db.get_one(cep, fields={'_id': False})
-    if result and 'v_date' in result and not expired(result):
-        result.pop('v_date')
-    else:
+    if not result or expired(result):
+        result = None
         try:
             info = _get_info_from_source(cep)
         except ValueError:
-            message = "404 CEP %s nao encontrado" % cep
-            logger.exception(message)
-            response.status = message
-            return
+            message = '404 CEP %s nao encontrado' % cep
         except requests.exceptions.RequestException:
             message = '503 Servico Temporariamente Indisponivel'
+        else:
+            for item in info:
+                db.insert_or_update(item)
+            result = db.get_one(cep, fields={'_id': False, 'v_date': False})
+
+        if not result:
+            if not message:
+                message = '404 CEP %s nao encontrado' % cep
             logger.exception(message)
             response.status = message
-            return
-        for item in info:
-            db.insert_or_update(item)
-        result = db.get_one(cep, fields={'_id': False, 'v_date': False})
+            return format_result({"erro": message})
 
-    if result:
-        response.headers['Cache-Control'] = 'public, max-age=2592000'
-        sigla_uf = result['estado']
-        estado_info = _get_estado_info(db, sigla_uf)
-        if estado_info:
-            result['estado_info'] = estado_info
-        nome_cidade = result['cidade']
-        cidade_info = _get_cidade_info(db, sigla_uf, nome_cidade)
-        if cidade_info:
-            result['cidade_info'] = cidade_info
-        return format_result(result)
-    else:
-        message = '404 CEP %s nao encontrado' % cep
-        logger.warning(message)
-        response.status = message
-        return
+    result.pop('v_date', None)
+    response.headers['Cache-Control'] = 'public, max-age=2592000'
+    sigla_uf = result['estado']
+    estado_info = _get_estado_info(db, sigla_uf)
+    if estado_info:
+        result['estado_info'] = estado_info
+    nome_cidade = result['cidade']
+    cidade_info = _get_cidade_info(db, sigla_uf, nome_cidade)
+    if cidade_info:
+        result['cidade_info'] = cidade_info
+    return format_result(result)
 
 
 @app_v1.route('/uf/<sigla>')
@@ -130,7 +130,7 @@ def uf(sigla):
         message = '404 Estado %s nao encontrado' % sigla
         logger.warning(message)
         response.status = message
-        return
+        return {"erro": message}
 
 
 @app_v1.route('/cidade/<sigla_uf>/<nome>')
@@ -144,7 +144,7 @@ def cidade(sigla_uf, nome):
         message = '404 Cidade %s-%s nao encontrada' % (nome, sigla_uf)
         logger.warning(message)
         response.status = message
-        return
+        return {"erro": message}
 
 
 @app_v1.route('/rastreio/<provider>/<track>')
@@ -179,6 +179,7 @@ def track_pack(provider, track):
         message = '404 Servico %s nao encontrado' % provider
         logger.warning(message)
         response.status = message
+    return {"erro": message}
 
 bottle.mount('/v1', app_v1)
 

@@ -3,12 +3,16 @@
 import json
 import re
 import unittest
+import mock
 
 import webtest
 import bottle
+from requests import RequestException
 
 import CepTracker
 import PostmonServer
+
+bottle.DEBUG = True
 
 
 class PostmonBaseTest(object):
@@ -192,3 +196,47 @@ class PostmonXMLTest(unittest.TestCase):
         self.assertEqual(result['cep'], u'06708070')
         self.assertEqual(result['estado'], u'SP')
         self.assertEqual(result['logradouro'], u'Avenida Eid Mansur')
+
+
+class PostmonErrors(unittest.TestCase):
+
+    def setUp(self):
+        self.app = webtest.TestApp(bottle.app())
+
+    def get_cep(self, cep, format='json', expect_errors=False):
+        endpoint = '/cep/%s' % cep
+        if format == 'xml':
+            endpoint += '?format=xml'
+        response = self.app.get(endpoint, expect_errors=expect_errors)
+        return response
+
+    @mock.patch('PostmonServer._get_info_from_source')
+    def test_404_status(self, _mock):
+        _mock.side_effect = ValueError('test')
+        response = self.get_cep('99999999', expect_errors=True)
+        self.assertEqual("404 CEP 99999999 nao encontrado", response.status)
+        self.assertEqual('application/json', response.headers['Content-Type'])
+
+    @mock.patch('PostmonServer._get_info_from_source')
+    def test_404_status_with_xml_format(self, _mock):
+        _mock.side_effect = ValueError('test')
+        response = self.get_cep('99999999', format='xml', expect_errors=True)
+        self.assertEqual("404 CEP 99999999 nao encontrado", response.status)
+        self.assertEqual('application/xml', response.headers['Content-Type'])
+
+    @mock.patch('PostmonServer._get_info_from_source')
+    def test_503_status(self, _mock):
+        _mock.side_effect = RequestException
+        response = self.get_cep('99999999', expect_errors=True)
+        self.assertEqual("503 Servico Temporariamente Indisponivel",
+                         response.status)
+        self.assertEqual('application/json', response.headers['Content-Type'])
+
+    @mock.patch('PostmonServer._get_info_from_source')
+    def test_503_status_with_xml_format(self, _mock):
+        _mock.side_effect = RequestException
+        # _mock.track('123')
+        response = self.get_cep('99999999', format='xml', expect_errors=True)
+        self.assertEqual("503 Servico Temporariamente Indisponivel",
+                         response.status)
+        self.assertEqual('application/xml', response.headers['Content-Type'])

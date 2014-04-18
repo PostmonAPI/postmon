@@ -9,3 +9,4 @@ xmltodict
 flake8
 celery[mongodb]
 PyYAML==3.10
+mock==1.0.1
