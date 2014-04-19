@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from geopy.geocoders import GoogleV3
+from geopy.geocoders import Nominatim
 
 import requests
 import re
@@ -47,7 +47,7 @@ class CepTracker():
     def track(self, cep):
         itens = self._get_infos_(cep)
         result = []
-        geolocator = GoogleV3()
+        geolocator = Nominatim()
 
         for item in itens:
 
@@ -73,19 +73,19 @@ class CepTracker():
             if 'logradouro' in data:
                 logradouro = data['logradouro']
                 cidade = data['cidade']
-                endereco, (latitude,
-                           longitude) = geolocator.geocode(logradouro +
-                                                           ' ' +
-                                                           cidade +
-                                                           ' ' +
-                                                           data['estado'])
-                data['geolocation'] = {'lat': latitude, 'long': longitude}
+                info = geolocator.geocode(logradouro +
+                                          ' ' +
+                                          cidade +
+                                          ' ' +
+                                          data['estado'])
+                data['geolocation'] = {'lat': info.latitude,
+                                       'long': info.longitude}
             else:
-                endereco, (latitude,
-                           longitude) = geolocator.geocode(data['cidade'] +
-                                                           ' ' +
-                                                           data['estado'])
-                data['geolocation'] = {'lat': latitude, 'long': longitude}
+                info = geolocator.geocode(data['cidade'] +
+                                          ' ' +
+                                          data['estado'])
+                data['geolocation'] = {'lat': info.latitude,
+                                       'long': info.longitude}
 
             result.append(data)
 
