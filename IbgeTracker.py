@@ -94,8 +94,9 @@ class IbgeTracker():
         com os dados mais recentes do IBGE
         referente a ufs e cidades
         """
-        # siglas é um dict cod_ibge -> sigla: { '35': 'SP', '35': 'RJ', ... }
         siglas = self._track_cidades(db)
+        # siglas é um dict cod_ibge -> sigla:
+        # { '35': 'SP', '35': 'RJ', ... }
         self._track_ufs(db, siglas)
 
 
