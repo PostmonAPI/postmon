@@ -11,6 +11,9 @@ class MongoDb(object):
         'bairro',
         'cidade',
         'estado',
+        'geolocation',
+        'lat',
+        'long',
         'complemento'
     ]
 

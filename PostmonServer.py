@@ -96,7 +96,7 @@ def verifica_cep(cep):
     message = None
 
     result = db.get_one(cep, fields={'_id': False})
-    if not result or expired(result):
+    if not result or 'geolocation' not in result or expired(result):
         result = None
         try:
             info = _get_info_from_source(cep)

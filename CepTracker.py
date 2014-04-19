@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from datetime import datetime
+from geopy.geocoders import Nominatim
 
 import requests
 import re
@@ -46,6 +47,7 @@ class CepTracker():
     def track(self, cep):
         itens = self._get_infos_(cep)
         result = []
+        geolocator = Nominatim()
 
         for item in itens:
 
@@ -67,6 +69,23 @@ class CepTracker():
                     data['complemento'] = complemento.strip(' -')
                 else:
                     data[label] = value
+
+            if 'logradouro' in data:
+                logradouro = data['logradouro']
+                cidade = data['cidade']
+                info = geolocator.geocode(logradouro +
+                                          ' ' +
+                                          cidade +
+                                          ' ' +
+                                          data['estado'])
+                data['geolocation'] = {'lat': info.latitude,
+                                       'long': info.longitude}
+            else:
+                info = geolocator.geocode(data['cidade'] +
+                                          ' ' +
+                                          data['estado'])
+                data['geolocation'] = {'lat': info.latitude,
+                                       'long': info.longitude}
 
             result.append(data)
 
