@@ -24,3 +24,4 @@ wsgiref==0.1.2
 xmltodict==0.8.7
 celery[mongodb]
 mock==1.0.1
+geopy==0.99
