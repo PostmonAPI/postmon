@@ -4,7 +4,7 @@ nose==1.2.1
 pymongo==2.4
 requests==0.14.2
 webtest==1.4.3
-packtrack==0.1.0
+packtrack==1.0.2
 xmltodict
 flake8
 celery[mongodb]
