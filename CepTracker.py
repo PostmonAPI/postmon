@@ -65,6 +65,10 @@ class CepTracker():
                     logradouro, complemento = value.split(' - ', 1)
                     data['logradouro'] = logradouro.strip()
                     data['complemento'] = complemento.strip(' -')
+                elif label == u'endereço':
+                    # Use sempre a key `endereco`. O `endereço` existe para não
+                    # quebrar clientes existentes. #92
+                    data['endereco'] = data[label] = value
                 else:
                     data[label] = value
 
