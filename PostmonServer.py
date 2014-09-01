@@ -19,7 +19,7 @@ jsonp_query_key = 'callback'
 
 def expired(record_date):
     if 'v_date' not in record_date:
-        True
+        return True
 
     from datetime import datetime, timedelta
 
