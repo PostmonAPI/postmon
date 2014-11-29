@@ -160,7 +160,7 @@ def cidade(sigla_uf, nome):
 def track_pack(provider, track):
     if provider == 'ect':
         try:
-            encomenda = Correios.encomenda(track)
+            encomenda = Correios.track(track)
 
             resposta = dict()
             result = []
