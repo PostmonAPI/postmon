@@ -203,8 +203,11 @@ class PostmonErrors(unittest.TestCase):
     def setUp(self):
         self.app = webtest.TestApp(bottle.app())
 
-    def get_cep(self, cep, format='json', expect_errors=False):
-        endpoint = '/cep/%s' % cep
+    def get_cep(self, cep, format='json', expect_errors=False, use_v1=False):
+        endpoint = ''
+        if use_v1:
+            endpoint += '/v1'
+        endpoint += '/cep/%s' % cep
         if format == 'xml':
             endpoint += '?format=xml'
         response = self.app.get(endpoint, expect_errors=expect_errors)
@@ -243,3 +246,10 @@ class PostmonErrors(unittest.TestCase):
                          response.status)
         self.assertEqual('application/xml', response.headers['Content-Type'])
         self.assertEqual('', response.body)
+
+
+class PostmonV1Errors(PostmonErrors):
+
+    def get_cep(self, cep, format='json', expect_errors=False, use_v1=True):
+        return super(PostmonV1Errors, self).get_cep(cep, format,
+                                                    expect_errors, use_v1)
