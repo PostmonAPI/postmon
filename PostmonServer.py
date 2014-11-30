@@ -66,7 +66,9 @@ def make_error(message):
         'jsonp': 'application/javascript',
     }
     format_ = bottle.request.query.get('format', 'json')
-    return HTTPResponse(status=message, content_type=formats[format_])
+    response = HTTPResponse(status=message, content_type=formats[format_])
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
 
 
 def _get_estado_info(db, sigla):

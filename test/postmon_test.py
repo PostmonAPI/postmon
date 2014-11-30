@@ -219,6 +219,7 @@ class PostmonErrors(unittest.TestCase):
         response = self.get_cep('99999999', expect_errors=True)
         self.assertEqual("404 CEP 99999999 nao encontrado", response.status)
         self.assertEqual('application/json', response.headers['Content-Type'])
+        self.assertEqual('*', response.headers['Access-Control-Allow-Origin'])
         self.assertEqual('', response.body)
 
     @mock.patch('PostmonServer._get_info_from_source')
@@ -227,6 +228,7 @@ class PostmonErrors(unittest.TestCase):
         response = self.get_cep('99999999', format='xml', expect_errors=True)
         self.assertEqual("404 CEP 99999999 nao encontrado", response.status)
         self.assertEqual('application/xml', response.headers['Content-Type'])
+        self.assertEqual('*', response.headers['Access-Control-Allow-Origin'])
         self.assertEqual('', response.body)
 
     @mock.patch('PostmonServer._get_info_from_source')
@@ -236,6 +238,7 @@ class PostmonErrors(unittest.TestCase):
         self.assertEqual("503 Servico Temporariamente Indisponivel",
                          response.status)
         self.assertEqual('application/json', response.headers['Content-Type'])
+        self.assertEqual('*', response.headers['Access-Control-Allow-Origin'])
         self.assertEqual('', response.body)
 
     @mock.patch('PostmonServer._get_info_from_source')
@@ -245,6 +248,7 @@ class PostmonErrors(unittest.TestCase):
         self.assertEqual("503 Servico Temporariamente Indisponivel",
                          response.status)
         self.assertEqual('application/xml', response.headers['Content-Type'])
+        self.assertEqual('*', response.headers['Access-Control-Allow-Origin'])
         self.assertEqual('', response.body)
 
 
