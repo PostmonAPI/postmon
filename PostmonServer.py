@@ -7,7 +7,7 @@ import xmltodict
 from bottle import route, run, response, template, HTTPResponse
 from CepTracker import CepTracker
 import requests
-from packtrack import Correios, Royal
+from packtrack import Correios
 from database import MongoDb as Database
 
 
@@ -33,10 +33,7 @@ def expired(record_date):
 
 def _get_info_from_source(cep):
     tracker = CepTracker()
-    info = tracker.track(cep)
-    if len(info) == 0:
-        raise ValueError('CEP %s nao encontrado' % cep)
-    return info
+    return tracker.track(cep)
 
 
 def format_result(result):
@@ -102,9 +99,6 @@ def verifica_cep(cep):
         result = None
         try:
             info = _get_info_from_source(cep)
-        except ValueError:
-            message = '404 CEP %s nao encontrado' % cep
-            logger.exception(message)
         except requests.exceptions.RequestException:
             message = '503 Servico Temporariamente Indisponivel'
             logger.exception(message)

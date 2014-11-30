@@ -215,7 +215,7 @@ class PostmonErrors(unittest.TestCase):
 
     @mock.patch('PostmonServer._get_info_from_source')
     def test_404_status(self, _mock):
-        _mock.side_effect = ValueError('test')
+        _mock.return_value = []
         response = self.get_cep('99999999', expect_errors=True)
         self.assertEqual("404 CEP 99999999 nao encontrado", response.status)
         self.assertEqual('application/json', response.headers['Content-Type'])
@@ -224,7 +224,7 @@ class PostmonErrors(unittest.TestCase):
 
     @mock.patch('PostmonServer._get_info_from_source')
     def test_404_status_with_xml_format(self, _mock):
-        _mock.side_effect = ValueError('test')
+        _mock.return_value = []
         response = self.get_cep('99999999', format='xml', expect_errors=True)
         self.assertEqual("404 CEP 99999999 nao encontrado", response.status)
         self.assertEqual('application/xml', response.headers['Content-Type'])
