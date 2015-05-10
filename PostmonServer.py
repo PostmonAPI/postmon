@@ -157,6 +157,8 @@ def track_pack(provider, track):
     if provider == 'ect':
         try:
             encomenda = Correios.track(track)
+            if not encomenda.status:
+                raise ValueError(u"A encomenda ainda nao tem historico.")
 
             resposta = dict()
             result = []
@@ -176,7 +178,7 @@ def track_pack(provider, track):
 
             return format_result(resposta)
 
-        except AttributeError:
+        except (AttributeError, ValueError):
             message = "404 Pacote %s nao encontrado" % track
             logger.exception(message)
     else:
