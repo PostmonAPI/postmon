@@ -5,7 +5,6 @@ from datetime import datetime
 import requests
 import re
 import logging
-import os
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +20,7 @@ class CepTracker():
             'tipoCep': '',
             'cepTemp': '',
             'metodo': 'buscarCep'
-        })
+        }, timeout=10)
         try:
             response.raise_for_status()
         except requests.exceptions.HTTPError as ex:
