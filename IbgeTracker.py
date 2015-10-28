@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import requests
+
 from lxml.html import fromstring
 from database import MongoDb as Database
 
@@ -34,7 +35,7 @@ class IbgeTracker():
                 infos.append({
                     'sigla': sigla,
                     'codigo_ibge': codigo_ibge,
-                    'nome': celulas[1].text_content(),
+                    'nome': celulas[1].text_content().strip(' (*)'),
                     'area_km2': celulas[2].text_content()
                 })
 
