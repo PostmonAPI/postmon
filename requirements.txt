@@ -9,4 +9,4 @@ flake8
 celery[mongodb]
 PyYAML==3.10
 mock==1.0.1
-requests==2.8.1
+requests==0.14.2
