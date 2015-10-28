@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import re
+
 import requests
+
 from lxml.html import fromstring
 from database import MongoDb as Database
 
@@ -19,6 +22,7 @@ class IbgeTracker():
         return response.text
 
     def _get_info_ufs(self, siglas):
+        word_re = re.compile('\w+')
         texto = self._request(self.url_ufs)
         html = fromstring(texto)
         seletorcss_linhas = "div#miolo_interno > table > tr"
@@ -34,7 +38,8 @@ class IbgeTracker():
                 infos.append({
                     'sigla': sigla,
                     'codigo_ibge': codigo_ibge,
-                    'nome': celulas[1].text_content(),
+                    'nome': ' '.join(word_re.findall(
+                        celulas[1].text_content())),
                     'area_km2': celulas[2].text_content()
                 })
 
