@@ -58,6 +58,19 @@ Recomenda-se a utilização do [Supervisord](http://supervisord.org/) para mante
 	startsecs=10
 	stopwaitsecs=600
 
+Executando a aplicação no Docker
+------------------------
+
+Se você tem o Docker instalado, pode fazer o build da imagem e rodar o Postmon em um container.
+
+```bash
+$ docker build -t postmon .
+$ docker run -d -p 80:9876 postmon
+```
+
+Acesse o endereço `http://<endereço-do-servidor-docker>/v1/cep/<cep-a-consultar>`, por exemplo `http://127.0.0.1/v1/cep/01311940`.
+
+
 MongoDB com autenticação
 ------------------------
 
