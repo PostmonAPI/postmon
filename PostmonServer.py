@@ -5,6 +5,7 @@ import json
 import logging
 import xmltodict
 from bottle import route, run, response, template, HTTPResponse
+from bottle.ext.healthcheck import HealthCheck
 from CepTracker import CepTracker
 import requests
 from packtrack import Correios
@@ -12,6 +13,7 @@ from database import MongoDb as Database
 
 
 logger = logging.getLogger(__name__)
+HealthCheck(bottle, "/__health__")
 
 app_v1 = bottle.Bottle()
 jsonp_query_key = 'callback'
