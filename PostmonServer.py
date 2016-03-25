@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import os
 import bottle
 import json
 import logging
 import xmltodict
-from bottle import route, run, response, template, HTTPResponse
+from bottle import run, request, response, template, HTTPResponse
 from bottle.ext.healthcheck import HealthCheck
+from raven import Client
+from raven.contrib.bottle import Sentry
+
 from CepTracker import CepTracker
 import requests
 from packtrack import Correios
@@ -15,7 +19,10 @@ from database import MongoDb as Database
 logger = logging.getLogger(__name__)
 HealthCheck(bottle, "/__health__")
 
+app = bottle.default_app()
+app.catchall = False
 app_v1 = bottle.Bottle()
+app_v1.catchall = False
 jsonp_query_key = 'callback'
 
 
@@ -88,7 +95,7 @@ def _get_cidade_info(db, sigla_uf, nome_cidade):
     return db.get_one_cidade(sigla_uf_nome_cidade, fields=fields)
 
 
-@route('/cep/<cep:re:\d{5}-?\d{3}>')
+@app.route('/cep/<cep:re:\d{5}-?\d{3}>')
 @app_v1.route('/cep/<cep:re:\d{5}-?\d{3}>')
 def verifica_cep(cep):
     cep = cep.replace('-', '')
@@ -188,17 +195,23 @@ def track_pack(provider, track):
         logger.warning(message)
     return make_error(message)
 
-bottle.mount('/v1', app_v1)
 
-
-@route('/crossdomain.xml')
+@app.route('/crossdomain.xml')
 def crossdomain():
     response.content_type = 'application/xml'
     return template('crossdomain')
 
+app.mount('/v1', app_v1)
+
+SENTRY_DSN = os.getenv('SENTRY_DSN')
+if SENTRY_DSN:
+    sentry_client = Client(SENTRY_DSN)
+    app = Sentry(app, sentry_client)
+    app_v1 = Sentry(app_v1, sentry_client)
+
 
 def _standalone(port=9876):
-    run(host='0.0.0.0', port=port)
+    run(app=app, host='0.0.0.0', port=port)
 
 
 if __name__ == "__main__":

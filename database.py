@@ -44,7 +44,8 @@ class MongoDb(object):
 
         update = {'$set': obj}
         empty_fields = set(self._fields) - set(obj)
-        update['$unset'] = dict((x, 1) for x in empty_fields)
+        if empty_fields:
+            update['$unset'] = dict((x, 1) for x in empty_fields)
 
         self._db.ceps.update({'cep': obj['cep']}, update, upsert=True)
 
