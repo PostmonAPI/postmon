@@ -253,7 +253,8 @@ class PostmonErrors(unittest.TestCase):
 
     def test_invalid_format(self):
         response = self.get_cep('99999999', format='xxx', expect_errors=True)
-        self.assertEqual("400 Parametro format='xxx' invalido.", response.status)
+        self.assertEqual("400 Parametro format='xxx' invalido.",
+                         response.status)
         self.assertEqual('application/json', response.headers['Content-Type'])
         self.assertEqual('*', response.headers['Access-Control-Allow-Origin'])
         self.assertEqual('', response.body)
