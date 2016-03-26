@@ -208,8 +208,8 @@ class PostmonErrors(unittest.TestCase):
         if use_v1:
             endpoint += '/v1'
         endpoint += '/cep/%s' % cep
-        if format == 'xml':
-            endpoint += '?format=xml'
+        if format != 'json':
+            endpoint += '?format=' + format
         response = self.app.get(endpoint, expect_errors=expect_errors)
         return response
 
@@ -248,6 +248,13 @@ class PostmonErrors(unittest.TestCase):
         self.assertEqual("503 Servico Temporariamente Indisponivel",
                          response.status)
         self.assertEqual('application/xml', response.headers['Content-Type'])
+        self.assertEqual('*', response.headers['Access-Control-Allow-Origin'])
+        self.assertEqual('', response.body)
+
+    def test_invalid_format(self):
+        response = self.get_cep('99999999', format='xxx', expect_errors=True)
+        self.assertEqual("400 Parametro format='xxx' invalido.", response.status)
+        self.assertEqual('application/json', response.headers['Content-Type'])
         self.assertEqual('*', response.headers['Access-Control-Allow-Origin'])
         self.assertEqual('', response.body)
 

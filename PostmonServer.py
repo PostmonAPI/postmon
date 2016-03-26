@@ -26,6 +26,16 @@ app_v1.catchall = False
 jsonp_query_key = 'callback'
 
 
+def validate_format(callback):
+    def wrapper(*args, **kwargs):
+        output_format = request.query.format
+        if output_format and output_format not in {'json', 'jsonp', 'xml'}:
+            message = "400 Parametro format='%s' invalido." % output_format
+            return make_error(message, output_format='json')
+        return callback(*args, **kwargs)
+    return wrapper
+
+
 def expired(record_date):
     if 'v_date' not in record_date:
         return True
@@ -65,13 +75,13 @@ def format_result(result):
     return result
 
 
-def make_error(message):
+def make_error(message, output_format=None):
     formats = {
         'json': 'application/json',
         'xml': 'application/xml',
         'jsonp': 'application/javascript',
     }
-    format_ = bottle.request.query.get('format', 'json')
+    format_ = output_format or bottle.request.query.get('format', 'json')
     response = HTTPResponse(status=message, content_type=formats[format_])
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
@@ -201,6 +211,8 @@ def crossdomain():
     response.content_type = 'application/xml'
     return template('crossdomain')
 
+app.install(validate_format)
+app_v1.install(validate_format)
 app.mount('/v1', app_v1)
 
 SENTRY_DSN = os.getenv('SENTRY_DSN')
