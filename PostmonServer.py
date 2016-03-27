@@ -176,6 +176,8 @@ def track_pack(provider, track):
     if provider == 'ect':
         try:
             encomenda = Correios.track(track)
+            if not encomenda:
+                raise ValueError(u"Encomenda nao encontrada.")
             if not encomenda.status:
                 raise ValueError(u"A encomenda ainda nao tem historico.")
 
