@@ -79,7 +79,7 @@ class CepTracker():
 class CepTracker2(object):
 
     def __init__(self):
-        self.url = "http://www.buscacep.correios.com.br/sistemas/buscacep/resultadoBuscaCepEndereco.cfm?t"
+        self.url = "http://www.buscacep.correios.com.br/sistemas/buscacep/resultadoBuscaCepEndereco.cfm?t"  # NOQA
 
     def _request(self, cep):
         response = requests.post(self.url, data={
