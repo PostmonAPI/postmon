@@ -74,3 +74,79 @@ class CepTracker():
             result.append(data)
 
         return result
+
+
+class CepTracker2(object):
+
+    def __init__(self):
+        self.url = "http://www.buscacep.correios.com.br/sistemas/buscacep/resultadoBuscaCepEndereco.cfm?t"
+
+    def _request(self, cep):
+        response = requests.post(self.url, data={
+            "relaxation": cep,
+            "Metodo": "listaLogradouro",
+            "TipoConsulta": "relaxation",
+            "StartRow": 1,
+            "EndRow": 10,
+        }, timeout=10)
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as ex:
+            logger.exception('Erro no site dos Correios')
+            raise ex
+        return response.text
+
+    def _get_infos_(self, cep):
+        from lxml.html import fromstring
+        response = self._request(cep)
+        html = fromstring(response)
+        registros = html.cssselect('.tmptabela tr')
+
+        header = [h.text.strip(':') for h in registros[0].cssselect('th')]
+        registros = registros[1:]
+        resultado = []
+        for item in registros:
+            resultado.append([a.text for a in item.cssselect('td')])
+
+        return header, resultado
+
+    def track(self, cep):
+        header, resultado = self._get_infos_(cep)
+        result = []
+
+        for item in resultado:
+
+            data = dict()
+            data["v_date"] = datetime.now()
+
+            for label, value in zip(header, item):
+
+                label = label.lower().strip()
+                value = re.sub('\s+', ' ', value.strip())
+
+                if 'localidade' in label:
+                    cidade, estado = value.split('/', 1)
+                    data['cidade'] = cidade.strip()
+                    data['estado'] = estado.split('-')[0].strip()
+                elif 'logradouro' in label:
+                    if ' - ' in value:
+                        logradouro, complemento = value.split(' - ', 1)
+                        data['complemento'] = complemento.strip(' -')
+                    else:
+                        logradouro = value
+                    logradouro = logradouro.strip()
+                    if logradouro:
+                        data['logradouro'] = logradouro
+                elif label == u'endereço':
+                    # Use sempre a key `endereco`. O `endereço` existe para não
+                    # quebrar clientes existentes. #92
+                    data['endereco'] = data[label] = value
+                elif 'bairro' in label:
+                    data['bairro'] = value
+                elif 'cep' in label:
+                    data['cep'] = value.replace('-', '')
+                else:
+                    data[label] = value
+
+            result.append(data)
+        return result
