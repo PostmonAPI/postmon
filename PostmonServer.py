@@ -10,7 +10,7 @@ from bottle.ext.healthcheck import HealthCheck
 from raven import Client
 from raven.contrib.bottle import Sentry
 
-from CepTracker import CepTracker2 as CepTracker
+from CepTracker import CepTracker
 import requests
 from packtrack import Correios
 from database import MongoDb as Database
