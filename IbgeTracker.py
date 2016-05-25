@@ -50,7 +50,10 @@ class IbgeTracker():
         html = fromstring(texto)
         seletorcss_linhas = "div#miolo_interno > table > tr"
         linhas = html.cssselect(seletorcss_linhas)
-        linhas.pop()  # a primeira é o cabeçalho
+        try:
+            linhas.pop(0)  # a primeira é o cabeçalho
+        except IndexError:
+            pass
         infos = []
         for linha in linhas:
             seletorcss_celulas = "td"
