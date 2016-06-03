@@ -94,6 +94,7 @@ def _get_estado_info(db, sigla):
 
 def _get_cidade_info(db, sigla_uf, nome_cidade):
     sigla_uf = sigla_uf.upper()
+    nome_cidade = nome_cidade.upper()
     sigla_uf_nome_cidade = '%s_%s' % (sigla_uf, nome_cidade)
     fields = {
         '_id': False,
