@@ -46,10 +46,13 @@ class CepTracker():
         itens = self._get_infos_(cep)
         result = []
 
-        for item in itens:
+        found = False
+        now = datetime.now()
 
-            data = dict()
-            data["v_date"] = datetime.now()
+        for item in itens:
+            data = {
+                "v_date": now,
+            }
 
             for label, value in zip(item[0::2], item[1::2]):
 
@@ -69,10 +72,18 @@ class CepTracker():
                     # quebrar clientes existentes. #92
                     data['endereco'] = data[label] = value
                 else:
+                    if label == 'cep' and value == cep:
+                        found = True
                     data[label] = value
 
             result.append(data)
 
+        if not found:
+            result.append({
+                'cep': cep,
+                "v_date": now,
+                '__notfound__': True,
+            })
         return result
 
 
