@@ -1,8 +1,14 @@
+try:
+    import newrelic.agent
+except ImportError:
+    pass
+else:
+    newrelic.agent.initialize()
+
 import logging.config
 import sys, os, bottle
 
 import yaml
-
 
 sys.path = ['/var/www/'] + sys.path
 os.chdir(os.path.dirname(__file__))
