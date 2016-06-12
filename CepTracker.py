@@ -114,10 +114,13 @@ class CepTracker2(object):
         header, resultado = self._get_infos_(cep)
         result = []
 
-        for item in resultado:
+        found = False
+        now = datetime.now()
 
-            data = dict()
-            data["v_date"] = datetime.now()
+        for item in resultado:
+            data = {
+                "v_date": now,
+            }
 
             for label, value in zip(header, item):
 
@@ -144,9 +147,19 @@ class CepTracker2(object):
                 elif 'bairro' in label:
                     data['bairro'] = value
                 elif 'cep' in label:
-                    data['cep'] = value.replace('-', '')
+                    _cep = value.replace('-', '')
+                    if _cep == cep:
+                        found = True
+                    data['cep'] = _cep
                 else:
                     data[label] = value
 
             result.append(data)
+
+        if not found:
+            result.append({
+                'cep': cep,
+                "v_date": now,
+                '__notfound__': True,
+            })
         return result

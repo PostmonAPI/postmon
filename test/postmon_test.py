@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from datetime import datetime
 import json
 import re
 import unittest
@@ -258,6 +259,23 @@ class PostmonErrors(unittest.TestCase):
         self.assertEqual('application/json', response.headers['Content-Type'])
         self.assertEqual('*', response.headers['Access-Control-Allow-Origin'])
         self.assertEqual('', response.body)
+
+    @mock.patch('PostmonServer.Database')
+    def test_404_cache_hit(self, _db):
+        cep = '99999999'
+        _db_instance = mock.Mock()
+        _db.return_value = _db_instance
+        _db_instance.get_one.return_value = {
+            'cep': cep,
+            '__notfound__':  True,
+            'v_date': datetime.now(),
+        }
+        response = self.get_cep(cep, expect_errors=True)
+        self.assertEqual("404 CEP %s nao encontrado" % cep, response.status)
+        self.assertEqual('application/json', response.headers['Content-Type'])
+        self.assertEqual('*', response.headers['Access-Control-Allow-Origin'])
+        self.assertEqual('', response.body)
+        _db_instance.get_one.assert_called_with(cep, fields={'_id': False})
 
 
 class PostmonV1Errors(PostmonErrors):

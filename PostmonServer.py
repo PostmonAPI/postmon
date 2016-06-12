@@ -113,7 +113,6 @@ def verifica_cep(cep):
     db = Database()
     response.headers['Access-Control-Allow-Origin'] = '*'
     message = None
-
     result = db.get_one(cep, fields={'_id': False})
     if not result or expired(result):
         result = None
@@ -122,16 +121,15 @@ def verifica_cep(cep):
         except requests.exceptions.RequestException:
             message = '503 Servico Temporariamente Indisponivel'
             logger.exception(message)
+            return make_error(message)
         else:
             for item in info:
                 db.insert_or_update(item)
             result = db.get_one(cep, fields={'_id': False, 'v_date': False})
 
-        if not result:
-            if not message:
-                message = '404 CEP %s nao encontrado' % cep
-                logger.warning(message)
-            return make_error(message)
+    if not result or '__notfound__' in result:
+        message = '404 CEP %s nao encontrado' % cep
+        return make_error(message)
 
     result.pop('v_date', None)
     response.headers['Cache-Control'] = 'public, max-age=2592000'
