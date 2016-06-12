@@ -267,7 +267,7 @@ class PostmonErrors(unittest.TestCase):
         _db.return_value = _db_instance
         _db_instance.get_one.return_value = {
             'cep': cep,
-            '__notfound__':  True,
+            '__notfound__': True,
             'v_date': datetime.now(),
         }
         response = self.get_cep(cep, expect_errors=True)
