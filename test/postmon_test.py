@@ -53,7 +53,10 @@ class PostmonBaseTest(object):
             'bairro': 'Loteamento Santa Helena',
             'cidade': 'Rio Branco',
             'estado': 'AC'
-        }]
+        }],
+        '99999999': [{
+            '__notfound__': True,
+        }],
     }
 
     def test_cep_com_rua(self):
@@ -132,7 +135,8 @@ class PostmonWebTest(unittest.TestCase, PostmonBaseTest):
         try:
             result = self.get_cep(cep)
         except webtest.AppError as ex:
-            if not expected and '404' in ex.message and cep in ex.message:
+            if '__notfound__' in expected[0] and '404' in ex.message \
+                    and cep in ex.message:
                 return
             raise ex
 
@@ -235,7 +239,7 @@ class PostmonErrors(unittest.TestCase):
     @mock.patch('PostmonServer._get_info_from_source')
     def test_503_status(self, _mock):
         _mock.side_effect = RequestException
-        response = self.get_cep('99999999', expect_errors=True)
+        response = self.get_cep('88888888', expect_errors=True)
         self.assertEqual("503 Servico Temporariamente Indisponivel",
                          response.status)
         self.assertEqual('application/json', response.headers['Content-Type'])
@@ -245,7 +249,7 @@ class PostmonErrors(unittest.TestCase):
     @mock.patch('PostmonServer._get_info_from_source')
     def test_503_status_with_xml_format(self, _mock):
         _mock.side_effect = RequestException
-        response = self.get_cep('99999999', format='xml', expect_errors=True)
+        response = self.get_cep('88888888', format='xml', expect_errors=True)
         self.assertEqual("503 Servico Temporariamente Indisponivel",
                          response.status)
         self.assertEqual('application/xml', response.headers['Content-Type'])
