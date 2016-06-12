@@ -12,3 +12,4 @@ PyYAML==3.10
 mock==1.0.1
 requests==0.14.2
 raven==5.11.1
+newrelic==2.66.0.49
