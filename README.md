@@ -125,9 +125,6 @@ Exemplos:
 
 A rotina de atualização desses dados está configurada para rodar diariamente.
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/CodingForChange/postmon/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
-
     Postmon - The Mongo Postman API
     Copyright (C) 2013  Coding For Change
 
