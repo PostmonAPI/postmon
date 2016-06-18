@@ -11,8 +11,8 @@ from raven import Client
 from raven.contrib.bottle import Sentry
 
 from CepTracker import CepTracker
+import PackTracker
 import requests
-from packtrack import Correios
 from database import MongoDb as Database
 
 
@@ -174,33 +174,16 @@ def cidade(sigla_uf, nome):
 def track_pack(provider, track):
     if provider == 'ect':
         try:
-            encomenda = Correios.track(track)
-            if not encomenda:
-                raise ValueError(u"Encomenda nao encontrada.")
-            if not encomenda.status:
-                raise ValueError(u"A encomenda ainda nao tem historico.")
-
-            resposta = dict()
-            result = []
-
-            for status in encomenda.status:
-                historico = dict()
-                historico['data'] = status.data
-                historico['local'] = status.local
-                historico['situacao'] = status.situacao
-                historico['detalhes'] = status.detalhes
-
-                result.append(historico)
-
-            resposta['servico'] = provider
-            resposta['codigo'] = track
-            resposta['historico'] = result
-
-            return format_result(resposta)
-
+            historico = PackTracker.correios(track)
         except (AttributeError, ValueError):
             message = "404 Pacote %s nao encontrado" % track
             logger.exception(message)
+        else:
+            return format_result({
+                'servico': provider,
+                'codigo': track,
+                'historico': historico,
+            })
     else:
         message = '404 Servico %s nao encontrado' % provider
         logger.warning(message)
