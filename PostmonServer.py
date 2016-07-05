@@ -146,6 +146,7 @@ def verifica_cep(cep):
 
 @app_v1.route('/uf/<sigla>')
 def uf(sigla):
+    response.headers['Access-Control-Allow-Origin'] = '*'
     db = Database()
     result = _get_estado_info(db, sigla)
     if result:
@@ -159,6 +160,7 @@ def uf(sigla):
 
 @app_v1.route('/cidade/<sigla_uf>/<nome>')
 def cidade(sigla_uf, nome):
+    response.headers['Access-Control-Allow-Origin'] = '*'
     db = Database()
     result = _get_cidade_info(db, sigla_uf, nome)
     if result:
@@ -172,6 +174,7 @@ def cidade(sigla_uf, nome):
 
 @app_v1.route('/rastreio/<provider>/<track>')
 def track_pack(provider, track):
+    response.headers['Access-Control-Allow-Origin'] = '*'
     if provider == 'ect':
         try:
             historico = PackTracker.correios(track)
