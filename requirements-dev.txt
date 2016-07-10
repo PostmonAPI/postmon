@@ -1,0 +1,5 @@
+-r requirements.txt
+nose==1.2.1
+nosexcover==1.0.10
+webtest==1.4.3
+mock==1.0.1
