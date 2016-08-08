@@ -39,3 +39,61 @@ class MongoDbTest(unittest.TestCase):
 
     def tearDown(self):
         self.db.remove('UNIQUE_KEY')
+
+
+class UFTest(unittest.TestCase):
+    uf_sp = {
+        'sigla': 'SP',
+        'codigo_ibge': '35',
+        'nome': u'São Paulo',
+    }
+
+    def setUp(self):
+        self.db = MongoDb()
+        self.db.insert_or_update_uf(self.uf_sp)
+
+    def tearDown(self):
+        self.db._db.ufs.remove()
+
+    def test_get(self):
+        result = self.db.get_one_uf_by_nome(u'São Paulo')
+        for key, expected in self.uf_sp.items():
+            self.assertEqual(expected, result[key])
+
+    def test_update(self):
+        self.db.insert_or_update_uf({
+            'sigla': u'SP',
+            'codigo_ibge': '36'
+        })
+
+        result = self.db.get_one_uf_by_nome(u'São Paulo')
+        self.assertEqual('36', result['codigo_ibge'])
+        self.assertEqual('SP', result['sigla'])
+
+
+class CidadeTest(unittest.TestCase):
+    cidade_sp = {
+        'sigla_uf_nome_cidade': u'SP/São Paulo',
+        'area_km2': '1099',
+    }
+
+    def setUp(self):
+        self.db = MongoDb()
+        self.db.insert_or_update_cidade(self.cidade_sp)
+
+    def tearDown(self):
+        self.db._db.ufs.remove()
+
+    def test_get(self):
+        result = self.db.get_one_cidade(u'SP/São Paulo')
+        for key, expected in self.cidade_sp.items():
+            self.assertEqual(expected, result[key])
+
+    def test_update(self):
+        self.db.insert_or_update_cidade({
+            'sigla_uf_nome_cidade': u'SP/São Paulo',
+            'area_km2': '2000',
+        })
+
+        result = self.db.get_one_cidade(u'SP/São Paulo')
+        self.assertEqual('2000', result['area_km2'])
