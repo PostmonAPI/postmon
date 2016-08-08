@@ -12,6 +12,7 @@ from requests import RequestException
 
 import CepTracker
 import PostmonServer
+from database import MongoDb
 
 bottle.DEBUG = True
 
@@ -197,10 +198,48 @@ class PostmonV1WebTest(PostmonWebTest):
     '''
     Teste do servidor do Postmon no /v1
     '''
+    @classmethod
+    def setUpClass(cls):
+        cls.db = MongoDb()
+        cls.db.insert_or_update_uf({
+            'sigla': 'SP',
+            'campo': 'valor',
+        })
+        cls.db.insert_or_update_cidade({
+            'sigla_uf_nome_cidade': u'SP_SÃO PAULO',
+            'area_km2': '1099',
+        })
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.db._db.cidades.remove()
+        cls.db._db.ufs.remove()
+
+    def setUp(self):
+        super(PostmonV1WebTest, self).setUp()
 
     def get_cep(self, cep):
         response = self.app.get('/v1/cep/' + cep)
         return response.json
+
+    def test_uf(self):
+        response = self.app.get('/v1/uf/sp')
+        jr = json.loads(response.body)
+        self.assertEqual({'campo': 'valor'}, jr)
+
+    def test_uf_404(self):
+        self.db = MongoDb()
+        response = self.app.get('/v1/uf/xx', expect_errors=True)
+        self.assertEqual('404 Estado xx nao encontrado', response.status)
+
+    def test_cidade(self):
+        response = self.app.get('/v1/cidade/SP/SÃO PAULO')
+        jr = json.loads(response.body)
+        self.assertEqual({'area_km2': '1099'}, jr)
+
+    def test_cidade_404(self):
+        response = self.app.get('/v1/cidade/SP/XX', expect_errors=True)
+        self.assertEqual('404 Cidade XX-SP nao encontrada', response.status)
 
 
 class PostmonXMLTest(unittest.TestCase):
