@@ -14,13 +14,14 @@ sys.path = ['/var/www/'] + sys.path
 os.chdir(os.path.dirname(__file__))
 
 
-def _config_log(config_file='log.yaml'):
+def _config_log(config_file):
     with open(config_file, 'rt') as f:
         config = yaml.load(f.read())
     logging.config.dictConfig(config)
 
 
-_config_log()
+log_file = os.getenv('POSTMON_LOGGING', 'log.yaml')
+_config_log(log_file)
 
 import PostmonServer
 
