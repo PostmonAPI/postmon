@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from datetime import datetime, timedelta
 import os
 import bottle
 import json
@@ -39,16 +40,13 @@ def validate_format(callback):
 def expired(record_date):
     _meta = record_date.get('_meta', {})
     v_date = _meta.get('v_date') or record_date.get('v_date')
-    if 'v_date' not in record_date:
+    if not v_date:
         return True
-
-    from datetime import datetime, timedelta
 
     # 6 months
     WEEKS = 26
 
     now = datetime.now()
-
     return (now - v_date >= timedelta(weeks=WEEKS))
 
 

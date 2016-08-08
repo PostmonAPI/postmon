@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 import re
 import unittest
@@ -11,7 +11,7 @@ import bottle
 from requests import RequestException
 
 import CepTracker
-import PostmonServer
+from PostmonServer import expired, jsonp_query_key
 from database import MongoDb
 
 bottle.DEBUG = True
@@ -178,7 +178,7 @@ class PostmonWebJSONPTest(PostmonWebTest):
     '''
 
     def setUp(self):
-        self.jsonp_query_key = PostmonServer.jsonp_query_key
+        self.jsonp_query_key = jsonp_query_key
         self.jsonp_func_name = 'func_name'
         super(PostmonWebJSONPTest, self).setUp()
 
@@ -350,3 +350,29 @@ class PostmonV1Errors(PostmonErrors):
     def get_cep(self, cep, format='json', expect_errors=False, use_v1=True):
         return super(PostmonV1Errors, self).get_cep(cep, format,
                                                     expect_errors, use_v1)
+
+
+class TestExpired(unittest.TestCase):
+
+    def test_empty(self):
+        self.assertTrue(expired({}))
+
+    def test_v_date_backward_compatibility(self):
+        dt = datetime.now() - timedelta(weeks=5)
+        obj = {'v_date': dt}
+        self.assertFalse(expired(obj))
+
+    def test_v_date_expired_backward_compatibility(self):
+        dt = datetime.now() - timedelta(weeks=54)
+        obj = {'v_date': dt}
+        self.assertTrue(expired(obj))
+
+    def test_meta_v_date(self):
+        dt = datetime.now() - timedelta(weeks=5)
+        obj = {'_meta': {'v_date': dt}}
+        self.assertFalse(expired(obj))
+
+    def test_meta_v_date_expired(self):
+        dt = datetime.now() - timedelta(weeks=54)
+        obj = {'_meta': {'v_date': dt}}
+        self.assertTrue(expired(obj))
