@@ -55,9 +55,6 @@ class PostmonBaseTest(object):
             'cidade': 'Rio Branco',
             'estado': 'AC'
         }],
-        '99999999': [{
-            '__notfound__': True,
-        }],
     }
 
     def test_cep_com_rua(self):
@@ -88,7 +85,11 @@ class CepTrackerTest(unittest.TestCase, PostmonBaseTest):
     def assertCep(self, cep):
 
         result = self.get_cep(cep)
-        expected = self.expected.get(cep, [])
+        expected = self.expected.get(cep)
+
+        if not expected:
+            self.assertTrue(result[0]['_meta']['__notfound__'])
+            return
 
         self.assertEqual(len(expected), len(result))
 
@@ -96,8 +97,8 @@ class CepTrackerTest(unittest.TestCase, PostmonBaseTest):
             for key, value in e.items():
                 self.assertIn(key, r)
                 self.assertEqual(value, r[key])
-
-            self.assertIn('v_date', r)
+            self.assertIn('_meta', r)
+            self.assertIn('v_date', r['_meta'])
 
 
 class CepTracker2Test(CepTrackerTest):
@@ -156,18 +157,18 @@ class PostmonWebTest(unittest.TestCase, PostmonBaseTest):
         return response.json
 
     def assertCep(self, cep):
-        expected = self.expected.get(cep, None)
+        expected = self.expected.get(cep)
         try:
             result = self.get_cep(cep)
         except webtest.AppError as ex:
-            if '__notfound__' in expected[0] and '404' in ex.message \
-                    and cep in ex.message:
+            if not expected and '404' in ex.message and cep in ex.message:
                 return
             raise ex
 
         for k, v in expected[0].items():
             self.assertEqual(v, result[k])
 
+        self.assertNotIn('_meta', result)
         self.assertNotIn('v_date', result)
 
 
@@ -228,7 +229,6 @@ class PostmonV1WebTest(PostmonWebTest):
         self.assertEqual({'campo': 'valor'}, jr)
 
     def test_uf_404(self):
-        self.db = MongoDb()
         response = self.app.get('/v1/uf/xx', expect_errors=True)
         self.assertEqual('404 Estado xx nao encontrado', response.status)
 

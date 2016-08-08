@@ -51,7 +51,9 @@ class CepTracker():
 
         for item in itens:
             data = {
-                "v_date": now,
+                "_meta": {
+                    "v_date": now,
+                }
             }
 
             for label, value in zip(item[0::2], item[1::2]):
@@ -81,8 +83,10 @@ class CepTracker():
         if not found:
             result.append({
                 'cep': cep,
-                "v_date": now,
-                '__notfound__': True,
+                '_meta': {
+                    "v_date": now,
+                    '__notfound__': True,
+                },
             })
         return result
 
@@ -132,7 +136,9 @@ class CepTracker2(object):
 
         for item in resultado:
             data = {
-                "v_date": now,
+                "_meta": {
+                    "v_date": now,
+                }
             }
 
             for label, value in zip(header, item):
@@ -172,7 +178,9 @@ class CepTracker2(object):
         if not found:
             result.append({
                 'cep': cep,
-                "v_date": now,
-                '__notfound__': True,
+                '_meta': {
+                    "v_date": now,
+                    '__notfound__': True,
+                },
             })
         return result

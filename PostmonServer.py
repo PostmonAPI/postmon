@@ -37,6 +37,8 @@ def validate_format(callback):
 
 
 def expired(record_date):
+    _meta = record_date.get('_meta', {})
+    v_date = _meta.get('v_date') or record_date.get('v_date')
     if 'v_date' not in record_date:
         return True
 
@@ -47,7 +49,7 @@ def expired(record_date):
 
     now = datetime.now()
 
-    return (now - record_date['v_date'] >= timedelta(weeks=WEEKS))
+    return (now - v_date >= timedelta(weeks=WEEKS))
 
 
 def _get_info_from_source(cep):
@@ -125,9 +127,17 @@ def verifica_cep(cep):
         else:
             for item in info:
                 db.insert_or_update(item)
-            result = db.get_one(cep, fields={'_id': False, 'v_date': False})
+            result = db.get_one(cep, fields={
+                '_id': False, 'v_date': False})
 
-    if not result or '__notfound__' in result:
+    if result:
+        _meta = result.pop('_meta', {})
+        key = '__notfound__'
+        notfound = key in _meta or key in result
+    else:
+        notfound = True
+
+    if notfound:
         message = '404 CEP %s nao encontrado' % cep
         return make_error(message)
 
