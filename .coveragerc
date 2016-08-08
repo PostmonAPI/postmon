@@ -5,3 +5,4 @@ omit =
     */packtrack/*
     */bottle.py
     */bottle/*
+    */test/*
