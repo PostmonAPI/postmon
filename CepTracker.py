@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from datetime import datetime
-
-import requests
-import re
 import logging
+import re
+
+from lxml.html import fromstring
+import requests
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +30,6 @@ class CepTracker():
         return response.text
 
     def _get_infos_(self, cep):
-        from lxml.html import fromstring
         response = self._request(cep)
         html = fromstring(response)
         registro_csspattern = '.caixacampobranco, .caixacampoazul'
@@ -108,10 +108,12 @@ class CepTracker2(object):
         return response.text
 
     def _get_infos_(self, cep):
-        from lxml.html import fromstring
         response = self._request(cep)
         html = fromstring(response)
         registros = html.cssselect('.tmptabela tr')
+
+        if not registros:
+            return None, []
 
         header = [h.text.strip(':') for h in registros[0].cssselect('th')]
         registros = registros[1:]

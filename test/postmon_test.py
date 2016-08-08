@@ -99,6 +99,12 @@ class CepTrackerTest(unittest.TestCase, PostmonBaseTest):
             self.assertIn('v_date', r)
 
 
+class CepTracker2Test(CepTrackerTest):
+
+    def setUp(self):
+        self.tracker = CepTracker.CepTracker2()
+
+
 class CepTrackerMockTest(CepTrackerTest):
 
     '''
@@ -114,6 +120,24 @@ class CepTrackerMockTest(CepTrackerTest):
 
     def _request_mock(self, cep):
         with open('test/assets/' + cep + '.html') as f:
+            return f.read().decode('latin-1')
+
+
+class CepTracker2MockTest(CepTrackerTest):
+
+    '''
+    O CepTrackerMockTest usa arquivos locais com os resultados
+    obtidos nos Correios. Assim é possível saber se os testes do
+    CepTrackerTest quebraram por problemas no código ou por alteração
+    nos Correios.
+    '''
+
+    def setUp(self):
+        self.tracker = CepTracker.CepTracker2()
+        self.tracker._request = self._request_mock
+
+    def _request_mock(self, cep):
+        with open('test/assets/buscacep/' + cep + '.html') as f:
             return f.read().decode('latin-1')
 
 
