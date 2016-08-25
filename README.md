@@ -1,4 +1,4 @@
-Postmon [<img src="https://api.travis-ci.org/PostmonAPI/postmon.svg?branch=master" />](http://travis-ci.org/PostmonAPI/postmon)
+Postmon [<img src="https://api.travis-ci.org/PostmonAPI/postmon.svg?branch=master" />](http://travis-ci.org/PostmonAPI/postmon) [![Coverage Status](https://coveralls.io/repos/github/PostmonAPI/postmon/badge.svg?branch=master)](https://coveralls.io/github/PostmonAPI/postmon?branch=master)
 ==========
 API para consulta de CEP's e relacionados
 
