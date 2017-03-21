@@ -4,6 +4,7 @@ from datetime import timedelta
 from celery import Celery
 from celery.utils.log import get_task_logger
 from IbgeTracker import IbgeTracker
+import PackTracker
 from database import MongoDb as Database
 import os
 
@@ -30,7 +31,12 @@ app.conf.update(
             'task': 'PostmonTaskScheduler.track_ibge',
             'schedule': timedelta(days=1)  # útil para
                                            # testes: timedelta(minutes=1)
+        },
+        'track_packs': {
+            'task': 'PostmonTaskScheduler.track_packs',
+            'schedule': timedelta(hours=1),
         }
+
     }
 )
 
@@ -44,3 +50,17 @@ def track_ibge():
     ibge = IbgeTracker()
     ibge.track(db)
     logger.info('Finalizou o tracking do IBGE')
+
+
+@app.task
+def track_packs():
+    logger.info('Iniciando tracking de pacotes...')
+    db = Database()
+    for obj in db.packtrack.get_all():
+        provider = obj['servico']
+        track = obj['codigo']
+        changed = PackTracker.run(provider, track)
+        if changed:
+            PackTracker.report(provider, track)
+
+    logger.info('Finalizou o tracking de pacotes')

@@ -201,10 +201,45 @@ def track_pack(provider, track):
     return make_error(message)
 
 
+@app_v1.route('/rastreio/<token>')
+def track_pack_token(token):
+    return make_error('404 NOT IMPLEMENTED')
+
+
+@app_v1.route('/rastreio/<provider>/<track>', method='POST')
+def track_pack_register(provider, track):
+    """
+    Registra o rastreamento do pacote. O `callback` é parâmetro obrigatório,
+    qualquer outra informação passada será devolvida quando o `callback` for
+    chamado.
+
+    {
+        "callback": "http://httpbin.org/post",
+        "myid": 1,
+        "other": "thing"
+    }
+    """
+    if "callback" not in request.json:
+        message = "400 callback obrigatorio"
+        return make_error(message)
+
+    try:
+        result = PackTracker.register(provider, track, request.json)
+    except (AttributeError, ValueError):
+        message = "400 Falha no registro do %s/%s" % (provider, track)
+        logger.exception(message)
+        return make_error(message)
+    else:
+        return format_result({
+            'token': result,
+        })
+
+
 @app.route('/crossdomain.xml')
 def crossdomain():
     response.content_type = 'application/xml'
     return template('crossdomain')
+
 
 app.install(validate_format)
 app_v1.install(validate_format)

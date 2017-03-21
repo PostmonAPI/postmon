@@ -8,9 +8,11 @@ import mock
 
 import webtest
 import bottle
+from bson.objectid import ObjectId
 from requests import RequestException
 
 import CepTracker
+import PackTracker
 from PostmonServer import expired, jsonp_query_key
 from database import MongoDb
 
@@ -376,3 +378,133 @@ class TestExpired(unittest.TestCase):
         dt = datetime.now() - timedelta(weeks=54)
         obj = {'_meta': {'v_date': dt}}
         self.assertTrue(expired(obj))
+
+
+class PackTrackTest(unittest.TestCase):
+
+    def setUp(self):
+        db = MongoDb()
+        self.collection = db.packtrack._collection
+        self.app = webtest.TestApp(bottle.app())
+
+    def tearDown(self):
+        self.collection.remove()
+
+    def _post(self, track, data):
+        url = '/v1/rastreio/ect/' + track
+        response = self.app.post(url, json.dumps(data),
+                                 headers={'Content-Type': 'application/json'})
+        jr = json.loads(response.body)
+        return jr
+
+    def test_register_packtrack(self):
+        data = {
+            'callback': 'http://example.com',
+        }
+        response = self._post('test', data)
+        self.assertTrue(response['token'])
+
+    def test_register_same_packtrack(self):
+        data = [{
+            'callback': 'http://example.com',
+            'something': 'XXX',
+        }, {
+            'callback': 'http://example.com',
+            'something': 'YYY',
+        }]
+        response = self._post('test', data[0])
+        token = response['token']
+
+        response = self._post('test', data[1])
+        self.assertEqual(token, response['token'])
+
+        obj = self.collection.find_one(ObjectId(token))
+        self.assertEqual(data, obj['_meta']['callbacks'])
+
+    def test_register_same_callback(self):
+        data = {
+            'callback': 'http://example.com',
+            'something': 'XXX',
+        }
+        response = self._post('test', data)
+        token = response['token']
+        response = self._post('test', data)
+
+        obj = self.collection.find_one(ObjectId(token))
+        self.assertEqual([data], obj['_meta']['callbacks'])
+
+    @mock.patch('PackTracker.correios')
+    def test_run(self, _mock):
+        _mock.return_value = {
+            "codigo": "test",
+            "servico": "ect",
+            "historico": [
+                {
+                    "detalhes": None,
+                    "local": "AGF SAO PATRICIO - Sao Paulo/SP",
+                    "data": "19/07/2016 11:37",
+                    "situacao": "Postado"
+                }
+            ]
+        }
+        data = {
+            'callback': 'http://example.com',
+            'something': 'XXX',
+        }
+        self._post('test', data)
+        changed = PackTracker.run('ect', 'test')
+        self.assertTrue(changed)
+
+        self._post('test', data)
+        changed = PackTracker.run('ect', 'test')
+        self.assertFalse(changed)
+
+        _mock.return_value["historico"].append({
+            "detalhes": "Encaminhado para UNIDADE DE CORREIOS/BR",
+            "local": "AGF SAO PATRICIO - Sao Paulo/SP",
+            "data": "20/07/2016 08:46",
+            "situacao": "Encaminhado"
+        })
+        self._post('test', data)
+        changed = PackTracker.run('ect', 'test')
+        self.assertTrue(changed)
+
+        self._post('test', data)
+        changed = PackTracker.run('ect', 'test')
+        self.assertFalse(changed)
+
+    @mock.patch('PackTracker.requests.post')
+    @mock.patch('PackTracker.correios')
+    def test_report(self, _mock_correios, _mock_requests):
+        _mock_correios.return_value = {
+            "codigo": "test",
+            "servico": "ect",
+            "historico": [
+                {
+                    "local": "AGF SAO PATRICIO - Sao Paulo/SP",
+                    "data": "19/07/2016 11:37",
+                    "situacao": "Postado"
+                }
+            ]
+        }
+        input_data = {
+            'callback': 'http://example.com',
+            'something': 'XXX',
+        }
+        response = self._post('test', input_data)
+        token = response['token']
+        changed = PackTracker.run('ect', 'test')
+        self.assertTrue(changed)
+
+        PackTracker.report('ect', 'test')
+
+        call = _mock_requests.call_args
+        self.assertEqual(('http://example.com',), call[0])
+
+        data = json.loads(call[1]['data'])
+
+        self.assertEqual(input_data, data['input'])
+        self.assertEqual(token, data['token'])
+
+        for k, v in _mock_correios.return_value.items():
+            self.assertEqual(v, data[k])

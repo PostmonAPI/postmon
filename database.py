@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from datetime import datetime
 import os
+
 import pymongo
 
 
@@ -21,6 +23,7 @@ class MongoDb(object):
         if all((USERNAME, PASSWORD)):
             self._client.postmon.authenticate(USERNAME, PASSWORD)
         self._db = self._client.postmon
+        self.packtrack = PackTrack(self._db.packtrack)
 
     def get_one(self, cep, **kwargs):
         r = self._db.ceps.find_one({'cep': cep}, **kwargs)
@@ -60,3 +63,62 @@ class MongoDb(object):
 
     def remove(self, cep):
         self._db.ceps.remove({'cep': cep})
+
+
+class PackTrack(object):
+
+    def __init__(self, collection):
+        self._collection = collection
+
+    def _patch(self, obj):
+        try:
+            _id = obj.pop('_id')
+        except KeyError:
+            return
+        else:
+            obj['token'] = str(_id)
+
+    def get_one(self, provider, track):
+        spec = {'servico': provider, 'codigo': track}
+        obj = self._collection.find_one(spec)
+        self._patch(obj)
+        return obj
+
+    def get_all(self):
+        objs = list(self._collection.find())
+        for obj in objs:
+            self._patch(obj)
+        return objs
+
+    def register(self, provider, track, callback):
+        key = {'servico': provider, 'codigo': track}
+        data = {
+            '$addToSet': {
+                '_meta.callbacks': callback,
+            },
+            '$setOnInsert': {
+                '_meta.created_at': datetime.utcnow(),
+                '_meta.changed_at': None,
+                '_meta.checked_at': None,
+            },
+        }
+        self._collection.find_and_modify(key, data, upsert=True)
+        obj = self._collection.find_one(key)
+        self._patch(obj)
+        return obj['token']
+
+    def update(self, provider, track, data, changed):
+        key = {'servico': provider, 'codigo': track}
+        now = datetime.utcnow()
+
+        set_ = {
+            "_meta.checked_at": now
+        }
+        if changed:
+            set_.update({
+                '_meta.changed_at': now,
+                'historico': data['historico'],
+            })
+
+        query = {"$set": set_}
+        self._collection.update(key, query)
