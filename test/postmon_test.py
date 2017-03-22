@@ -476,17 +476,13 @@ class PackTrackTest(unittest.TestCase):
     @mock.patch('PackTracker.requests.post')
     @mock.patch('PackTracker.correios')
     def test_report(self, _mock_correios, _mock_requests):
-        _mock_correios.return_value = {
-            "codigo": "test",
-            "servico": "ect",
-            "historico": [
-                {
-                    "local": "AGF SAO PATRICIO - Sao Paulo/SP",
-                    "data": "19/07/2016 11:37",
-                    "situacao": "Postado"
-                }
-            ]
-        }
+        _mock_correios.return_value = [
+            {
+                "local": "AGF SAO PATRICIO - Sao Paulo/SP",
+                "data": "19/07/2016 11:37",
+                "situacao": "Postado"
+            }
+        ]
         input_data = {
             'callback': 'http://example.com',
             'something': 'XXX',
@@ -505,6 +501,4 @@ class PackTrackTest(unittest.TestCase):
 
         self.assertEqual(input_data, data['input'])
         self.assertEqual(token, data['token'])
-
-        for k, v in _mock_correios.return_value.items():
-            self.assertEqual(v, data[k])
+        self.assertEqual(_mock_correios.return_value, data['historico'])
