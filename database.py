@@ -117,7 +117,7 @@ class PackTrack(object):
         if changed:
             set_.update({
                 '_meta.changed_at': now,
-                'historico': data['historico'],
+                'historico': data,
             })
 
         query = {"$set": set_}

@@ -49,7 +49,7 @@ def run(provider, track):
     except ValueError:
         return False
 
-    changed = obj.get('historico') != data.get('historico')
+    changed = obj.get('historico') != data
     db.packtrack.update(provider, track, data, changed=changed)
     return changed
 
