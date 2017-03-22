@@ -9,6 +9,7 @@ import mock
 import webtest
 import bottle
 from bson.objectid import ObjectId
+from packtrack import correios
 from requests import RequestException
 
 import CepTracker
@@ -474,22 +475,24 @@ class PackTrackTest(unittest.TestCase):
         self.assertFalse(changed)
 
     @mock.patch('PackTracker.requests.post')
-    @mock.patch('PackTracker.correios')
-    def test_report(self, _mock_correios, _mock_requests):
-        _mock_correios.return_value = [
-            {
-                "local": "AGF SAO PATRICIO - Sao Paulo/SP",
-                "data": "19/07/2016 11:37",
-                "situacao": "Postado"
-            }
-        ]
+    def test_report(self, _mock_requests):
+
         input_data = {
             'callback': 'http://example.com',
             'something': 'XXX',
         }
         response = self._post('test', input_data)
         token = response['token']
-        changed = PackTracker.run('ect', 'test')
+
+        encomenda = correios.Encomenda('track')
+        encomenda.adicionar_status(correios.Status(
+            local="AGF SAO PATRICIO - Sao Paulo/SP",
+            data="19/07/2016 11:37",
+            situacao="Postado",
+        ))
+        with mock.patch('PackTracker.packtrack') as _mock_correios:
+            _mock_correios.Correios.track.return_value = encomenda
+            changed = PackTracker.run('ect', 'test')
         self.assertTrue(changed)
 
         PackTracker.report('ect', 'test')
@@ -501,4 +504,9 @@ class PackTrackTest(unittest.TestCase):
 
         self.assertEqual(input_data, data['input'])
         self.assertEqual(token, data['token'])
-        self.assertEqual(_mock_correios.return_value, data['historico'])
+        self.assertEqual([{
+            u'detalhes': None,
+            u'local': u'AGF SAO PATRICIO - Sao Paulo/SP',
+            u'situacao': u'Postado',
+            u'data': u'19/07/2016 11:37'
+        }], data['historico'])
