@@ -485,11 +485,12 @@ class PackTrackTest(unittest.TestCase):
         token = response['token']
 
         encomenda = correios.Encomenda('track')
-        encomenda.adicionar_status(correios.Status(
+        status = correios.Status(
             local="AGF SAO PATRICIO - Sao Paulo/SP",
             data="19/07/2016 11:37",
             situacao="Postado",
-        ))
+        )
+        encomenda.adicionar_status(status)
         with mock.patch('PackTracker.packtrack') as _mock_correios:
             _mock_correios.Correios.track.return_value = encomenda
             changed = PackTracker.run('ect', 'test')
@@ -505,8 +506,8 @@ class PackTrackTest(unittest.TestCase):
         self.assertEqual(input_data, data['input'])
         self.assertEqual(token, data['token'])
         self.assertEqual([{
-            u'detalhes': None,
-            u'local': u'AGF SAO PATRICIO - Sao Paulo/SP',
-            u'situacao': u'Postado',
-            u'data': u'19/07/2016 11:37'
+            u'detalhes': status.detalhes,
+            u'local': status.local,
+            u'situacao': status.situacao,
+            u'data': status.data,
         }], data['historico'])
