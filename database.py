@@ -25,6 +25,9 @@ class MongoDb(object):
         self._db = self._client.postmon
         self.packtrack = PackTrack(self._db.packtrack)
 
+    def create_indexes(self):
+        self._db.ceps.ensure_index('cep')
+
     def get_one(self, cep, **kwargs):
         r = self._db.ceps.find_one({'cep': cep}, **kwargs)
         if r and u'endereço' in r and 'endereco' not in r:

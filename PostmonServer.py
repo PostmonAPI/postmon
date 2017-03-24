@@ -25,6 +25,9 @@ app_v1 = bottle.Bottle()
 app_v1.catchall = False
 jsonp_query_key = 'callback'
 
+db = Database()
+db.create_indexes()
+
 
 def validate_format(callback):
     def wrapper(*args, **kwargs):
