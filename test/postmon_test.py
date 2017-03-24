@@ -391,6 +391,30 @@ class TestExpired(unittest.TestCase):
         self.assertTrue(expired(obj))
 
 
+class TestDatabase(unittest.TestCase):
+    def test_insert_notfound(self):
+        db = MongoDb()
+        cep = u'11111111'
+        db.remove(cep)
+        db.insert_or_update({
+            u'cep': cep,
+            u'_meta': {
+                u'v_date': 'v_date',
+                CepTracker._notfound_key: True,
+            }
+        })
+        expected = {
+            u'cep': cep,
+            u'estado': u'SP',
+            u'_meta': {
+                u'v_date': 'v_date',
+            }
+        }
+        db.insert_or_update(expected)
+        result = db.get_one(cep, fields={'_id': False})
+        self.assertEqual(expected, result)
+
+
 class PackTrackTest(unittest.TestCase):
 
     def setUp(self):
