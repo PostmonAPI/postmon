@@ -8,6 +8,7 @@ from lxml.html import fromstring
 import requests
 
 logger = logging.getLogger(__name__)
+_notfound_key = '__notfound__'
 
 
 class CepTracker():
@@ -85,7 +86,7 @@ class CepTracker():
                 'cep': cep,
                 '_meta': {
                     "v_date": now,
-                    '__notfound__': True,
+                    _notfound_key: True,
                 },
             })
         return result
@@ -180,7 +181,7 @@ class CepTracker2(object):
                 'cep': cep,
                 '_meta': {
                     "v_date": now,
-                    '__notfound__': True,
+                    _notfound_key: True,
                 },
             })
         return result

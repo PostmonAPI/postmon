@@ -11,11 +11,10 @@ from bottle.ext.healthcheck import HealthCheck
 from raven import Client
 from raven.contrib.bottle import Sentry
 
-from CepTracker import CepTracker
+from CepTracker import CepTracker, _notfound_key
 import PackTracker
 import requests
 from database import MongoDb as Database
-
 
 logger = logging.getLogger(__name__)
 HealthCheck(bottle, "/__health__")
@@ -37,14 +36,23 @@ def validate_format(callback):
     return wrapper
 
 
+def _notfound(record):
+    _meta = record.get('_meta', {})
+    return _notfound_key in _meta or _notfound_key in record
+
+
 def expired(record_date):
     _meta = record_date.get('_meta', {})
     v_date = _meta.get('v_date') or record_date.get('v_date')
     if not v_date:
         return True
 
-    # 6 months
-    WEEKS = 26
+    if _notfound(record_date):
+        # 1 month
+        WEEKS = 4
+    else:
+        # 6 months
+        WEEKS = 26
 
     now = datetime.now()
     return (now - v_date >= timedelta(weeks=WEEKS))
@@ -129,9 +137,7 @@ def verifica_cep(cep):
                 '_id': False, 'v_date': False})
 
     if result:
-        _meta = result.pop('_meta', {})
-        key = '__notfound__'
-        notfound = key in _meta or key in result
+        notfound = _notfound(result)
     else:
         notfound = True
 
@@ -140,6 +146,8 @@ def verifica_cep(cep):
         return make_error(message)
 
     result.pop('v_date', None)
+    result.pop('_meta', None)
+
     response.headers['Cache-Control'] = 'public, max-age=2592000'
     sigla_uf = result['estado']
     estado_info = _get_estado_info(db, sigla_uf)

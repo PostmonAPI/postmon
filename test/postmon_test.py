@@ -91,7 +91,7 @@ class CepTrackerTest(unittest.TestCase, PostmonBaseTest):
         expected = self.expected.get(cep)
 
         if not expected:
-            self.assertTrue(result[0]['_meta']['__notfound__'])
+            self.assertTrue(result[0]['_meta'][CepTracker._notfound_key])
             return
 
         self.assertEqual(len(expected), len(result))
@@ -337,7 +337,7 @@ class PostmonErrors(unittest.TestCase):
         _db.return_value = _db_instance
         _db_instance.get_one.return_value = {
             'cep': cep,
-            '__notfound__': True,
+            CepTracker._notfound_key: True,
             'v_date': datetime.now(),
         }
         response = self.get_cep(cep, expect_errors=True)
@@ -378,6 +378,16 @@ class TestExpired(unittest.TestCase):
     def test_meta_v_date_expired(self):
         dt = datetime.now() - timedelta(weeks=54)
         obj = {'_meta': {'v_date': dt}}
+        self.assertTrue(expired(obj))
+
+    def test_notfound(self):
+        dt = datetime.now() - timedelta(weeks=2)
+        obj = {'_meta': {'v_date': dt, CepTracker._notfound_key: True}}
+        self.assertFalse(expired(obj))
+
+    def test_notfound_expired_early(self):
+        dt = datetime.now() - timedelta(weeks=5)
+        obj = {'_meta': {'v_date': dt, CepTracker._notfound_key: True}}
         self.assertTrue(expired(obj))
 
 
