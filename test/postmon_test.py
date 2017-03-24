@@ -269,6 +269,17 @@ class PostmonXMLTest(unittest.TestCase):
         self.assertEqual(result['logradouro'], u'Avenida Eid Mansur')
 
 
+class PostmonOtherRoutesTest(unittest.TestCase):
+
+    def setUp(self):
+        self.app = webtest.TestApp(bottle.app())
+
+    def test_crossdomain(self):
+        expected = bottle.template('crossdomain')
+        response = self.app.get('/crossdomain.xml')
+        self.assertMultiLineEqual(expected, response.body)
+
+
 class PostmonErrors(unittest.TestCase):
 
     def setUp(self):
@@ -425,12 +436,47 @@ class PackTrackTest(unittest.TestCase):
     def tearDown(self):
         self.collection.remove()
 
+    def _get(self, track, provider='ect', expect_errors=False):
+        url = '/v1/rastreio/{}/{}'.format(provider, track)
+        response = self.app.get(url, expect_errors=expect_errors)
+        if expect_errors:
+            return response
+
+        jr = json.loads(response.body)
+        return jr
+
     def _post(self, track, data):
         url = '/v1/rastreio/ect/' + track
         response = self.app.post(url, json.dumps(data),
                                  headers={'Content-Type': 'application/json'})
         jr = json.loads(response.body)
         return jr
+
+    @mock.patch('PackTracker.correios')
+    def test_get(self, _mock):
+        data = [{
+            "codigo": "test",
+            "servico": "ect",
+            "historico": [{
+                "detalhes": None,
+                "local": "AGF SAO PATRICIO - Sao Paulo/SP",
+                "data": "19/07/2016 11:37",
+                "situacao": "Postado"
+            }]
+        }]
+        _mock.return_value = data[0]["historico"]
+        response = self._get("test")
+        self.assertEqual(data[0], response)
+
+    @mock.patch('PackTracker.correios')
+    def test_get_404(self, _mock):
+        _mock.side_effect = AttributeError
+        response = self._get("test", expect_errors=True)
+        self.assertEqual('404 Pacote test nao encontrado', response.status)
+
+    def test_get_another_provider(self):
+        response = self._get("test", provider="google", expect_errors=True)
+        self.assertEqual('404 Servico google nao encontrado', response.status)
 
     def test_register_packtrack(self):
         data = {
@@ -470,18 +516,12 @@ class PackTrackTest(unittest.TestCase):
 
     @mock.patch('PackTracker.correios')
     def test_run(self, _mock):
-        _mock.return_value = {
-            "codigo": "test",
-            "servico": "ect",
-            "historico": [
-                {
-                    "detalhes": None,
-                    "local": "AGF SAO PATRICIO - Sao Paulo/SP",
-                    "data": "19/07/2016 11:37",
-                    "situacao": "Postado"
-                }
-            ]
-        }
+        _mock.return_value = [{
+            "detalhes": None,
+            "local": "AGF SAO PATRICIO - Sao Paulo/SP",
+            "data": "19/07/2016 11:37",
+            "situacao": "Postado"
+        }]
         data = {
             'callback': 'http://example.com',
             'something': 'XXX',
@@ -494,7 +534,7 @@ class PackTrackTest(unittest.TestCase):
         changed = PackTracker.run('ect', 'test')
         self.assertFalse(changed)
 
-        _mock.return_value["historico"].append({
+        _mock.return_value.append({
             "detalhes": "Encaminhado para UNIDADE DE CORREIOS/BR",
             "local": "AGF SAO PATRICIO - Sao Paulo/SP",
             "data": "20/07/2016 08:46",
