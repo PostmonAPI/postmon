@@ -44,7 +44,8 @@ class MongoDb(object):
         return self._db.ufs.find_one({'sigla': sigla}, **kwargs)
 
     def get_one_cidade(self, sigla_uf, nome_cidade, **kwargs):
-        key_func = lambda u, c: u'{}_{}'.format(slug(u), slug(c))
+        def key_func(_uf, _cidade):
+            return u'{}_{}'.format(slug(_uf), slug(_cidade))
         sigla_uf_nome_cidade = key_func(sigla_uf, nome_cidade)
         spec = {'sigla_uf_nome_cidade': sigla_uf_nome_cidade}
 
