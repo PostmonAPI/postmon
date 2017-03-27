@@ -89,6 +89,10 @@ class CidadeTest(unittest.TestCase):
         for key, expected in self.cidade_sp.items():
             self.assertEqual(expected, result[key])
 
+    def test_get_alt(self):
+        result = self.db.get_one_cidade(u'SP', u'Outro lugar (São Paulo)')
+        self.assertEqual('1099', result['area_km2'])
+
     def test_update(self):
         self.db.insert_or_update_cidade({
             'sigla_uf_nome_cidade': u'SP_SAO PAULO',

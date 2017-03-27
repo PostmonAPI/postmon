@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 import os
+import re
 
 import pymongo
 
@@ -20,11 +21,12 @@ class MongoDb(object):
 
     def __init__(self, address='localhost'):
         self._client = pymongo.MongoClient(address)
+        DATABASE = os.environ.get('POSTMON_DB_NAME', 'postmon')
         USERNAME = os.environ.get('POSTMON_DB_USER')
         PASSWORD = os.environ.get('POSTMON_DB_PASSWORD')
+        self._db = self._client[DATABASE]
         if all((USERNAME, PASSWORD)):
-            self._client.postmon.authenticate(USERNAME, PASSWORD)
-        self._db = self._client.postmon
+            self._db.authenticate(USERNAME, PASSWORD)
         self.packtrack = PackTrack(self._db.packtrack)
 
     def create_indexes(self):
@@ -42,10 +44,18 @@ class MongoDb(object):
         return self._db.ufs.find_one({'sigla': sigla}, **kwargs)
 
     def get_one_cidade(self, sigla_uf, nome_cidade, **kwargs):
-        sigla_uf = slug(sigla_uf)
-        nome_cidade = slug(nome_cidade)
-        sigla_uf_nome_cidade = u'{}_{}'.format(sigla_uf, nome_cidade)
+        key_func = lambda u, c: u'{}_{}'.format(slug(u), slug(c))
+        sigla_uf_nome_cidade = key_func(sigla_uf, nome_cidade)
         spec = {'sigla_uf_nome_cidade': sigla_uf_nome_cidade}
+
+        search = re.search(r'\((.+)\)', nome_cidade)
+        if search:
+            nome_cidade_alternativa = search.group(1)
+            spec_alternativa = {
+                'sigla_uf_nome_cidade': key_func(
+                    sigla_uf, nome_cidade_alternativa)
+            }
+            spec = {'$or': [spec, spec_alternativa]}
         return self._db.cidades.find_one(spec, **kwargs)
 
     def get_one_uf_by_nome(self, nome, **kwargs):
