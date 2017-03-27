@@ -10,3 +10,4 @@ PyYAML==3.10
 requests==0.14.2
 raven==5.11.1
 newrelic==2.66.0.49
+unicode_slugify==0.1.3

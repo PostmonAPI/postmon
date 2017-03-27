@@ -210,7 +210,7 @@ class PostmonV1WebTest(PostmonWebTest):
             'campo': 'valor',
         })
         cls.db.insert_or_update_cidade({
-            'sigla_uf_nome_cidade': u'SP_SÃO PAULO',
+            'sigla_uf_nome_cidade': u'SP_SAO PAULO',
             'area_km2': '1099',
         })
 
@@ -236,7 +236,7 @@ class PostmonV1WebTest(PostmonWebTest):
         self.assertEqual('404 Estado xx nao encontrado', response.status)
 
     def test_cidade(self):
-        response = self.app.get('/v1/cidade/SP/SÃO PAULO')
+        response = self.app.get('/v1/cidade/SP/S%C3%83O PAULO')
         jr = json.loads(response.body)
         self.assertEqual({'area_km2': '1099'}, jr)
 

@@ -4,15 +4,15 @@ import requests
 
 from lxml.html import fromstring
 from database import MongoDb as Database
+from utils import slug
 
 
 class IbgeTracker():
 
     def __init__(self):
-        self.url_ufs = 'http://www.ibge.gov.br/home/geociencias' + \
-                       '/areaterritorial/principal.shtm'
-        self.url_cidades = 'http://www.ibge.gov.br/home/geociencias' + \
-                           '/areaterritorial/area.php?nome=%'
+        base_url = 'http://www.ibge.gov.br/home/geociencias/areaterritorial'
+        self.url_ufs = base_url + '/principal.shtm'
+        self.url_cidades = base_url + '/area.php?nome=%'
 
     def _request(self, url):
         response = requests.post(url)
@@ -89,7 +89,7 @@ class IbgeTracker():
             # pode ser só o nome, pois
             # existem cidades com mesmo nome
             # em estados diferentes
-            info['sigla_uf_nome_cidade'] = '%s_%s' % (sigla_uf, nome)
+            info['sigla_uf_nome_cidade'] = slug('%s_%s' % (sigla_uf, nome))
 
             db.insert_or_update_cidade(info)
 

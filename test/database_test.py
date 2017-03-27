@@ -73,7 +73,7 @@ class UFTest(unittest.TestCase):
 
 class CidadeTest(unittest.TestCase):
     cidade_sp = {
-        'sigla_uf_nome_cidade': u'SP/São Paulo',
+        'sigla_uf_nome_cidade': u'SP_SAO PAULO',
         'area_km2': '1099',
     }
 
@@ -85,15 +85,15 @@ class CidadeTest(unittest.TestCase):
         self.db._db.ufs.remove()
 
     def test_get(self):
-        result = self.db.get_one_cidade(u'SP/São Paulo')
+        result = self.db.get_one_cidade(u'SP', u'São Paulo')
         for key, expected in self.cidade_sp.items():
             self.assertEqual(expected, result[key])
 
     def test_update(self):
         self.db.insert_or_update_cidade({
-            'sigla_uf_nome_cidade': u'SP/São Paulo',
+            'sigla_uf_nome_cidade': u'SP_SAO PAULO',
             'area_km2': '2000',
         })
 
-        result = self.db.get_one_cidade(u'SP/São Paulo')
+        result = self.db.get_one_cidade(u'SP', u'São Paulo')
         self.assertEqual('2000', result['area_km2'])

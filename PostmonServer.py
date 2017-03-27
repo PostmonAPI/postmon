@@ -104,9 +104,6 @@ def _get_estado_info(db, sigla):
 
 
 def _get_cidade_info(db, sigla_uf, nome_cidade):
-    sigla_uf = sigla_uf.upper()
-    nome_cidade = nome_cidade.upper()
-    sigla_uf_nome_cidade = '%s_%s' % (sigla_uf, nome_cidade)
     fields = {
         '_id': False,
         'sigla_uf': False,
@@ -114,7 +111,7 @@ def _get_cidade_info(db, sigla_uf, nome_cidade):
         'sigla_uf_nome_cidade': False,
         'nome': False
     }
-    return db.get_one_cidade(sigla_uf_nome_cidade, fields=fields)
+    return db.get_one_cidade(sigla_uf, nome_cidade, fields=fields)
 
 
 @app.route('/cep/<cep:re:\d{5}-?\d{3}>')
@@ -181,7 +178,7 @@ def uf(sigla):
 def cidade(sigla_uf, nome):
     response.headers['Access-Control-Allow-Origin'] = '*'
     db = Database()
-    result = _get_cidade_info(db, sigla_uf, nome)
+    result = _get_cidade_info(db, sigla_uf, nome.decode('utf-8'))
     if result:
         response.headers['Cache-Control'] = 'public, max-age=2592000'
         return format_result(result)

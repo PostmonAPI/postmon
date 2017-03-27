@@ -5,6 +5,8 @@ import os
 
 import pymongo
 
+from utils import slug
+
 
 class MongoDb(object):
 
@@ -39,7 +41,10 @@ class MongoDb(object):
     def get_one_uf(self, sigla, **kwargs):
         return self._db.ufs.find_one({'sigla': sigla}, **kwargs)
 
-    def get_one_cidade(self, sigla_uf_nome_cidade, **kwargs):
+    def get_one_cidade(self, sigla_uf, nome_cidade, **kwargs):
+        sigla_uf = slug(sigla_uf)
+        nome_cidade = slug(nome_cidade)
+        sigla_uf_nome_cidade = u'{}_{}'.format(sigla_uf, nome_cidade)
         spec = {'sigla_uf_nome_cidade': sigla_uf_nome_cidade}
         return self._db.cidades.find_one(spec, **kwargs)
 
