@@ -8,10 +8,11 @@ import requests
 from database import MongoDb as Database
 
 
-def correios(track, backend=None):
+def correios(track, backend=None, auth=None):
     if backend is None:
         backend = os.getenv('ECT_BACKEND')
-    encomenda = packtrack.Correios.track(track, backend=backend)
+    encomenda = packtrack.Correios.track(track, backend=backend, auth=auth)
+
     if not encomenda:
         raise ValueError(u"Encomenda nao encontrada.")
     if not encomenda.status:

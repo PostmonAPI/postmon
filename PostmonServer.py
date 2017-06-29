@@ -192,8 +192,15 @@ def cidade(sigla_uf, nome):
 def track_pack(provider, track):
     response.headers['Access-Control-Allow-Origin'] = '*'
     if provider == 'ect':
+        auth = (
+            request.headers.get('x-correios-usuario'),
+            request.headers.get('x-correios-senha'),
+        )
+        if auth == (None, None):
+            auth = None
+
         try:
-            historico = PackTracker.correios(track)
+            historico = PackTracker.correios(track, auth=auth)
         except (AttributeError, ValueError):
             message = "404 Pacote %s nao encontrado" % track
             logger.exception(message)
