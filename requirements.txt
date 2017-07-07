@@ -5,7 +5,7 @@ pymongo==2.4
 packtrack==1.2
 xmltodict
 flake8
-celery[mongodb]
+celery[mongodb]<4.0
 PyYAML==3.10
 requests==2.18.1
 raven==5.11.1
