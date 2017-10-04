@@ -11,7 +11,7 @@ from bottle.ext.healthcheck import HealthCheck
 from raven import Client
 from raven.contrib.bottle import Sentry
 
-from CepTracker import CepTracker, _notfound_key
+from CepTracker import CepTracker2, _notfound_key
 import PackTracker
 import requests
 from database import MongoDb as Database
@@ -62,7 +62,7 @@ def expired(record_date):
 
 
 def _get_info_from_source(cep):
-    tracker = CepTracker()
+    tracker = CepTracker2()
     return tracker.track(cep)
 
 
