@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 import logging
+import os
 import re
 
 from lxml.html import fromstring
@@ -12,8 +13,10 @@ _notfound_key = '__notfound__'
 
 
 class CepTracker(object):
-    def __init__(self):
-        self.url = "http://www.buscacep.correios.com.br/sistemas/buscacep/resultadoBuscaCepEndereco.cfm?t"  # NOQA
+    url = os.getenv(
+        "CORREIOS_CEP_URL",
+        "http://www.buscacep.correios.com.br/sistemas/buscacep/resultadoBuscaCepEndereco.cfm?t"  # NOQA
+    )
 
     def _request(self, cep):
         response = requests.post(self.url, data={
@@ -22,7 +25,7 @@ class CepTracker(object):
             "TipoConsulta": "relaxation",
             "StartRow": 1,
             "EndRow": 10,
-        }, timeout=10)
+        }, timeout=10, headers={"Accept-Encoding": "identity"})
         try:
             response.raise_for_status()
         except requests.exceptions.HTTPError as ex:
