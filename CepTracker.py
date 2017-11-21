@@ -12,7 +12,6 @@ _notfound_key = '__notfound__'
 
 
 class CepTracker(object):
-
     def __init__(self):
         self.url = "http://www.buscacep.correios.com.br/sistemas/buscacep/resultadoBuscaCepEndereco.cfm?t"  # NOQA
 
@@ -43,8 +42,16 @@ class CepTracker(object):
         registros = registros[1:]
         resultado = []
         for item in registros:
-            resultado.append([a.text for a in item.cssselect('td')])
-
+            td = item.cssselect('td')
+            line = []
+            for a in td:
+                link = a.cssselect('a')
+                if link:
+                    text = link[0].text
+                else:
+                    text = a.text
+                line.append(text)
+            resultado.append(line)
         return header, resultado
 
     def track(self, cep):
