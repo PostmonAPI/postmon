@@ -11,7 +11,8 @@ RUN apt-get -y update && \
         mongodb \
         python2.7 \
         python2.7-dev \
-        python-pip
+        libyaml-dev \
+        libpython2.7-dev
 
 ENV APP_DIR /srv/postmon
 
@@ -19,7 +20,9 @@ RUN mkdir -p $APP_DIR
 ADD . $APP_DIR
 WORKDIR $APP_DIR
 
-RUN /usr/bin/pip install -r requirements.txt
+RUN python get-pip.py
+
+RUN pip install -r requirements.txt
 RUN mkdir -p data/db
 
 EXPOSE 9876
