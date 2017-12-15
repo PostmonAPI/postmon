@@ -10,9 +10,10 @@ import os
 
 USERNAME = os.environ.get('POSTMON_DB_USER')
 PASSWORD = os.environ.get('POSTMON_DB_PASSWORD')
-if all((USERNAME, PASSWORD)):
-    broker_conn_string = 'mongodb://%s:%s@localhost:27017' \
-        % (USERNAME, PASSWORD)
+HOST = os.environ.get('POSTMON_DB_HOST', 'localhost')
+if all((USERNAME, PASSWORD, HOST)):
+    broker_conn_string = 'mongodb://%s:%s@%s:27017' \
+        % (USERNAME, PASSWORD, HOST)
 else:
     broker_conn_string = 'mongodb://localhost:27017'
 
