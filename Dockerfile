@@ -1,8 +1,10 @@
-FROM ubuntu:14.04
+FROM ubuntu:xenial
 MAINTAINER Bluesoft Fire <devops@bluesoft.com.br>
 
-RUN apt-get -y update && \
-    apt-get -y --no-install-recommends install \
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get -y update -qq&& \
+    apt-get -y install \
         gcc \
         ipython \
         libz-dev \
@@ -11,13 +13,18 @@ RUN apt-get -y update && \
         mongodb \
         python2.7 \
         python2.7-dev \
-        python-pip
+        libyaml-dev \
+	libpython2.7-dev \
+	python-pip
+
+RUN /usr/bin/pip install --upgrade pip setuptools wheel
 
 ENV APP_DIR /srv/postmon
 
 RUN mkdir -p $APP_DIR
 ADD . $APP_DIR
 WORKDIR $APP_DIR
+
 
 RUN /usr/bin/pip install -r requirements.txt
 RUN mkdir -p data/db
