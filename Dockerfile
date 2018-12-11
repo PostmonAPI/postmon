@@ -17,7 +17,7 @@ RUN apt-get -y update -qq&& \
 	libpython2.7-dev \
 	python-pip
 
-RUN /usr/bin/pip install --upgrade pip setuptools wheel
+RUN pip install --upgrade pip==18.0 setuptools wheel
 
 ENV APP_DIR /srv/postmon
 
@@ -25,8 +25,7 @@ RUN mkdir -p $APP_DIR
 ADD . $APP_DIR
 WORKDIR $APP_DIR
 
-
-RUN /usr/bin/pip install -r requirements.txt
+RUN pip install -r requirements.txt
 RUN mkdir -p data/db
 
 EXPOSE 9876
