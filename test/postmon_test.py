@@ -167,7 +167,7 @@ class PostmonWebJSONPTest(PostmonWebTest):
                                self.jsonp_query_key,
                                self.jsonp_func_name))
 
-        regexp = re.compile('^%s\((.*)\);$' % self.jsonp_func_name)
+        regexp = re.compile(r'^%s\((.*)\);$' % self.jsonp_func_name)
         json_data = re.findall(regexp, response.body)[0]
 
         return json.loads(json_data)

@@ -74,7 +74,7 @@ class CepTracker(object):
             for label, value in zip(header, item):
 
                 label = label.lower().strip()
-                value = re.sub('\s+', ' ', value.strip())
+                value = re.sub(r'\s+', ' ', value.strip())
 
                 if 'localidade' in label:
                     cidade, estado = value.split('/', 1)

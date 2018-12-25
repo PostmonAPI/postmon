@@ -114,8 +114,8 @@ def _get_cidade_info(db, sigla_uf, nome_cidade):
     return db.get_one_cidade(sigla_uf, nome_cidade, fields=fields)
 
 
-@app.route('/cep/<cep:re:\d{5}-?\d{3}>')
-@app_v1.route('/cep/<cep:re:\d{5}-?\d{3}>')
+@app.route(r'/cep/<cep:re:\d{5}-?\d{3}>')
+@app_v1.route(r'/cep/<cep:re:\d{5}-?\d{3}>')
 def verifica_cep(cep):
     cep = cep.replace('-', '')
     db = Database()
