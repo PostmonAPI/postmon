@@ -1,12 +1,12 @@
 bottle==0.12.7
 bottle-healthcheck==0.2.1
-lxml==2.3.5
+lxml==3.1.0
 pymongo==2.4
 packtrack==1.5
 xmltodict
 flake8
 celery[mongodb]<4.0
-PyYAML==3.10
+PyYAML==4.2b1
 requests==2.20.0
 raven==5.11.1
 newrelic==2.66.0.49
