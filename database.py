@@ -22,10 +22,11 @@ class MongoDb(object):
     def __init__(self):
         DATABASE = os.environ.get('POSTMON_DB_NAME', 'postmon')
         HOST = os.environ.get('POSTMON_DB_HOST', 'localhost')
+        PORT = int(os.environ.get('POSTMON_DB_PORT', 27017))
         USERNAME = os.environ.get('POSTMON_DB_USER')
         PASSWORD = os.environ.get('POSTMON_DB_PASSWORD')
 
-        self._client = pymongo.MongoClient(HOST)
+        self._client = pymongo.MongoClient(HOST, PORT)
         self._db = self._client[DATABASE]
         if all((USERNAME, PASSWORD)):
             self._db.authenticate(USERNAME, PASSWORD)
