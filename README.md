@@ -50,7 +50,7 @@ Para rodar o [Scheduler](#scheduler):
 Recomenda-se a utilização do [Supervisord](http://supervisord.org/) para manter o Celery rodando. Exemplo de configuração para o _supervisord.conf_:
 
 	[program:celeryd]
-	command=celery worker -B -A PostmonTaskScheduler -l info 
+	command=celery worker -B -A PostmonTaskScheduler -l info
 	directory=POSTMON_HOME/repositorio
 	stdout_logfile=POSTMON_LOG_DIR/celeryd.log
 	stderr_logfile=POSTMON_LOG_DIR/celeryd_err.log
@@ -89,6 +89,11 @@ Agora que seu Mongo está com password exporte as variaveis de ambiente.
 ```bash
 export POSTMON_DB_USER=admin
 export POSTMON_DB_PASSWORD=123456
+```
+
+Para conectar em um banco remoto exporte a variável de ambiente:
+```bash
+export POSTMON_DB_HOST=<IP_DO_SERVIDOR>
 ```
 
 Scheduler
