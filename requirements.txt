@@ -3,7 +3,7 @@ bottle-healthcheck==0.2.1
 cssselect==1.0.3
 lxml==3.1.0
 pymongo==2.4
-packtrack==1.5
+packtrack==1.6
 xmltodict
 flake8
 celery[mongodb]<4.0
