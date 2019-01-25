@@ -29,6 +29,12 @@ db = Database()
 db.create_indexes()
 
 
+def add_cors_headers():
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = ', '.join(request.headers.keys())
+
+
 def validate_format(callback):
     def wrapper(*args, **kwargs):
         output_format = request.query.format
@@ -254,6 +260,17 @@ def track_pack_register(provider, track):
 def crossdomain():
     response.content_type = 'application/xml'
     return template('crossdomain')
+
+
+@app.route('/<:re:.*>', method='OPTIONS')
+@app_v1.route('/<:re:.*>', method='OPTIONS')
+def enable_cors_generic_route():
+    add_cors_headers()
+
+
+@bottle.hook('after_request')
+def enable_cors_after_request_hook():
+    add_cors_headers()
 
 
 app.install(validate_format)

@@ -25,7 +25,7 @@ class CepTracker(object):
             "TipoConsulta": "relaxation",
             "StartRow": 1,
             "EndRow": 10,
-        }, timeout=10, headers={"Accept-Encoding": "identity"})
+        }, timeout=10)
         try:
             response.raise_for_status()
         except requests.exceptions.HTTPError as ex:
