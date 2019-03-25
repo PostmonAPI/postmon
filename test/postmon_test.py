@@ -30,17 +30,17 @@ class PostmonBaseTest(object):
             'estado': 'SP'
         }],
         '85100000': [{
-            'cidade': u'Jordão (Guarapuava)',
+            'cidade': u'Guarapuava',
             'estado': 'PR'
         }],
         '75064590': [{
             'logradouro': 'Rua A',
-            'bairro': 'Vila Jaiara',
+            'bairro': 'Vila Jayara',
             'cidade': u'Anápolis',
             'estado': 'GO'
         }, {
             'logradouro': 'Rua A',
-            'bairro': 'Vila Jaiara Setor Leste',
+            'bairro': 'Vila Jayara',
             'cidade': u'Anápolis',
             'estado': 'GO'
         }],
@@ -167,7 +167,7 @@ class PostmonWebJSONPTest(PostmonWebTest):
                                self.jsonp_query_key,
                                self.jsonp_func_name))
 
-        regexp = re.compile('^%s\((.*)\);$' % self.jsonp_func_name)
+        regexp = re.compile(r'^%s\((.*)\);$' % self.jsonp_func_name)
         json_data = re.findall(regexp, response.body)[0]
 
         return json.loads(json_data)

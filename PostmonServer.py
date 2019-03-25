@@ -31,8 +31,11 @@ db.create_indexes()
 
 def add_cors_headers():
     response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, OPTIONS'
-    response.headers['Access-Control-Allow-Headers'] = ', '.join(request.headers.keys())
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, \
+                                                       OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = ', '.join(
+                                                       request.
+                                                       headers.keys())
 
 
 def validate_format(callback):
@@ -120,8 +123,8 @@ def _get_cidade_info(db, sigla_uf, nome_cidade):
     return db.get_one_cidade(sigla_uf, nome_cidade, fields=fields)
 
 
-@app.route('/cep/<cep:re:\d{5}-?\d{3}>')
-@app_v1.route('/cep/<cep:re:\d{5}-?\d{3}>')
+@app.route('/cep/<cep:re:'r'\d{5}-?'r'\d{3}>')
+@app_v1.route('/cep/<cep:re:'r'\d{5}-?'r'\d{3}>')
 def verifica_cep(cep):
     cep = cep.replace('-', '')
     db = Database()
