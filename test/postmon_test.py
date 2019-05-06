@@ -29,9 +29,9 @@ class PostmonBaseTest(object):
             'cidade': u'São Paulo',
             'estado': 'SP'
         }],
-        '85100000': [{
-            'cidade': u'Guarapuava',
-            'estado': 'PR'
+        '65930000': [{
+            'cidade': u'Açailândia',
+            'estado': 'MA'
         }],
         '75064590': [{
             'logradouro': 'Rua A',
@@ -64,7 +64,7 @@ class PostmonBaseTest(object):
         self.assertCep('01330000')
 
     def test_cep_sem_rua(self):
-        self.assertCep('85100000')
+        self.assertCep('65930000')
 
     def test_cep_inexistente(self):
         self.assertCep('99999999')

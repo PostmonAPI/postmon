@@ -10,64 +10,37 @@
 <title>resultadoBuscaCepEndereco</title><meta name="description" content="[page]" /><meta name="keywords" content="" />
 <!-- AppInternalsXpert BMX Integration Begin -->
 <script>
-
-if(!OPNET_ARXS){
-
-   var OPNET_ARXS={startJS:Number(new Date()),
-
-   clientId:'A6510A31E51D7243',appId:100041,
-
-   collector:'performanceapm.correios.com.br',
-
-   collectorHttpPort:80, collectorHttpsPort:80,
-
-   sv:'0302',
-
+if(!RVBD_EUE){
+   var RVBD_EUE={startJS:Number(new Date()),
+   clientId:'',appId:1,
+   collector:'apmperformance.correios.com.br',
+   collectorHttpPort:80, collectorHttpsPort:443,
+   sv:'0401',
    ajax:true, sync:true,
-
    ajaxResponseTime:true};
-
    (function(){
-
       var w=window,l=w.addEventListener,m=w.attachEvent,
-
-      d=document,s='script',t='load',o=OPNET_ARXS,
-
+      d=document,s='script',t='load',o=RVBD_EUE,
       r=(('https:'===d.location.protocol)?
-
-      'https://performanceapm.correios.com.br':
-
-      'http://performanceapm.correios.com.br')+
-
-      '/opnet_browsermetrix.c.'+
-
+      'https://apmperformance.correios.com.br:443':
+      'http://apmperformance.correios.com.br:80')+
+      '/jsi/riverbed_appinternals.d.'+
       (o.ajax?'ajax.js':'js'),p=('onpagehide' in w),e=p?'pageshow':t,
-
       j=d.createElement(s),x=d.getElementsByTagName(s)[0],
-
-      h=function(y){o.ldJS=new Date();o.per=y?y.persisted:null;},
-
+      h=function(y){o.ldJS=o.ldJS||new Date();o.per=y?y.persisted:null;},
       i=function(){o.ld=1;};o.cookie=d.cookie;d.cookie=
-
       '_op_aixPageId=0; path=/; expires='+(new Date(0)).toGMTString();
-
       o.cookieAfterDelete=d.cookie;j.async=1;j.src=r;
-
       if(l){l(e,h,false);if(p){l(t,i,false);}}else if(m)
-
       {m('on'+e,h);if(p){m('on'+t,i);}}
-
       if(o.sync){d.write('<'+s+' src=\''+r+'\'></'+s+'>');}
-
       else{x.parentNode.insertBefore(j,x);}
-
    })();}
-
 </script>
-<script>if(!OPNET_ARXS_PARAM){var OPNET_ARXS_PARAM={};} OPNET_ARXS_PARAM.pageId = 'a2_40dcd181-52b4-4aa6-8bc1-217e4f8515d2';</script>             
+<script>if(!RVBD_EUE_PARAM){var RVBD_EUE_PARAM={};} RVBD_EUE_PARAM.pageId = 'a2_158b0773-6ce4-4872-a45c-179a5bc51c3f';</script>             
 <!-- AppInternalsXpert BMX Integration End -->
 <script type="text/javascript"> pageid = 'B7A1CE69-03C5-E340-A7A58A0F9F301DD7'; </script><noscript>
-<p>identificador da p&Atilde;¡gina</p>
+<p>identificador da página</p>
 </noscript>
 <base href="http://www.buscacep.correios.com.br/">
 <link rel="icon" href="home2014/img/icon.png" type="image/gif"/>
@@ -79,7 +52,7 @@ if(!OPNET_ARXS){
   <script type="text/javascript" src="home2014/js/jtabber.js"></script>
     <noscript><p>Biblioteca de efeitos colorbox</p></noscript> 
   <script type="text/javascript" src="home2014/js/jquery.colorbox-min.js"></script>
-   <noscript><p>Biblioteca de valida&ccedil;&atilde;o de formul&aacute;rios</p></noscript> 
+   <noscript><p>Biblioteca de validação de formulários</p></noscript> 
   <script type="text/javascript" src="home2014/js/validations.js"></script>
 
   <noscript><p>Script Javascript</p></noscript>
@@ -89,7 +62,7 @@ if(!OPNET_ARXS){
     <noscript><p></p>Script Javascript</noscript>   
 <script type="text/javascript">document.documentElement.className += " js";</script>
   <noscript><p>Controle de abas</p></noscript>
- <noscript><p>Biblioteca de anima&ccedil;&otilde;es</p></noscript> 
+ <noscript><p>Biblioteca de animações</p></noscript> 
   <script type="text/javascript" src="home2014/js/jquery-ui-1.8.16.custom.min.js">
   </script>  
    <script type="text/javascript">
@@ -162,102 +135,80 @@ if(!OPNET_ARXS){
 <div class="back"><div class="acessibilidade">
   <div class="wrap">
     <ul>
-      <li class="tocontent"> <span class="separator-bar">&nbsp;</span> <a href="javascript:void(0);" onClick="document.location.hash='ancora';" title="Ir para o conte&uacute;do principal da p&aacute;gina">Ir ao  conte&uacute;do</a> </li>
-      <li class="font-plus" id="biggerFont"> <a href="javascript:void(0);" title="Aumentar o tamanho da fonte do texto">A</a> </li>
-      <li id="defaultFont"> <span class="separator-dot">&nbsp;</span> <a href="javascript:void(0);" title="Retornar a fonte do texto para tamanho padr&atilde;o">Tamanho padr&atilde;o</a> <span class="separator-dot">&nbsp;</span> </li>
-      <li class="font-minus" id="smallerFont"> <a href="javascript:void(0);" title="Diminuir o tamanho da fonte do texto">A</a> </li>
-      <li class="contrast" id="contrast"> <span class="separator-bar">&nbsp;</span> <a href="javascript:void(0);" title="Modificar para o modo de alto contraste">Contraste</a> <span class="separator-bar">&nbsp;</span> </li>
-      <li> <span class="separator-bar">&nbsp;</span> <a href="http://www.correios.com.br/sobre-correios/sustentabilidade/vertente-social/headmouse-e-teclado-virtual/">Teclado Virtual</a> </li>
-      <li> <a href="http://www.correios.com.br/sobre-correios/sustentabilidade/vertente-social/headmouse-e-teclado-virtual/" id="txt-headmouse">Headmouse</a></li>
+	
+        <li class="tocontent"> <span class="separator-bar">&nbsp;</span> <a href="javascript:void(0);" onClick="document.location.hash='ancora';" title="Ir para o conte&uacute;do principal da p&aacute;gina">Ir ao  conte&uacute;do</a> </li>
+        <li class="font-plus" id="biggerFont"> <a href="javascript:void(0);" title="Aumentar o tamanho da fonte do texto">A</a> </li>
+        <li id="defaultFont"> <span class="separator-dot">&nbsp;</span> <a href="javascript:void(0);" title="Retornar a fonte do texto para tamanho padr&atilde;o">Tamanho padr&atilde;o</a> <span class="separator-dot">&nbsp;</span> </li>
+        <li class="font-minus" id="smallerFont"> <a href="javascript:void(0);" title="Diminuir o tamanho da fonte do texto">A</a> </li>
+        <li class="contrast" id="contrast"> <span class="separator-bar">&nbsp;</span> <a href="javascript:void(0);" title="Modificar para o modo de alto contraste">Contraste</a> <span class="separator-bar">&nbsp;</span> </li>
+        <li> <span class="separator-bar">&nbsp;</span> <a href="http://www.correios.com.br/sobre-correios/sustentabilidade/vertente-social/headmouse-e-teclado-virtual/">Teclado Virtual</a> </li>
+        <li> <a href="http://www.correios.com.br/sobre-correios/sustentabilidade/vertente-social/headmouse-e-teclado-virtual/" id="txt-headmouse">Headmouse</a></li>
+        
     </ul>
   </div>
-</div> <!-- header --->
-<div class="header">
-  <h1 class="logo float-left"> <a href="http://www.correios.com.br" title="Ir para a p&aacute;gina incial" alt="Logo Correios"><img src="home2014/img/layout/logo.png" alt="Ir para a p&aacute;gina inicial" title="Ir para a p&aacute;gina incial"/></a> </h1>
-  <div class="acesso_rapido">
-
-	<div class="text-right">
-    	
-    	<a href="http://www.correios.com.br/sobre-correios/fale-com-os-correios/fc">Fale com os Correios</a><br/>
-    </div>
-
-	<div class="produtosaz float-right">
-      <div class="expo">Outros sites</div>
-
-	  <span class="dados abaaz">
-		  <div class="dadosaz">
-			<span class="dica"> Acesse a outros sites dos Correios</span><br/>
-			<a href="http://www.correios.com.br/para-voce"><b>Correios para voc&ecirc;</b></a><br/>
-			<a href="http://www.correios.com.br/para-sua-empresa"><b>Correios para sua empresa</b></a><br/>
-			<a href="http://www.correios.com.br/sobre-correios"><b>Sobre Correios</b></a><br/>
-			<a href="produtosaz/default.cfm?filtro=R/Z"><b>Espa&ccedil;o da Filatelia</b></a><br/>
-			<a href="http://blog.correios.com.br/correios"><b>Blog Institucional do Correios</b></a><br/>
-			<a href="http://m.correios.com.br"><b>Correios mobile</b></a><br/>
-		  </div>
-      </span>
-
-	</div>
-
-	<div class="produtosaz float-right">
-      <div class="expo" >Correios de A a Z</div>
-
-	  <span class="dados abaaz">
-		  <div class="dadosaz">
-			<span class="dica"> Escolha pela letra inicial dos nossos produtos, servi&ccedil;os e assuntos.<br/></span><br/>
-			<a href="http://www.correios.com.br/para-voce/correios-de-a-a-z-1"><b>Todos os itens</b></a><br/>
-			<a href="http://www.correios.com.br/para-voce/correios-de-a-a-z?filtro=abc"><b>Correios de A-C</b></a><br/>
-			<a href="http://www.correios.com.br/para-voce/correios-de-a-a-z-1?filtro=def"><b>Correios de D-F</b></a><br/>
-			<a href="http://www.correios.com.br/para-voce/correios-de-a-a-z-1?filtro=ghijklmnopq"><b>Correios de G-Q</b></a><br/>
-			<a href="http://www.correios.com.br/para-voce/correios-de-a-a-z-1?filtro=rstuvwxyz"><b>Correios de R-Z</b></a>
-		  </div>
-      </span>
-
-	</div>
-
-
-  </div>
-  <!-- acesso r&aacute;pido -->
-  <br class="clr"/>
-
 </div>
+ <!-- header --->
 
-	<div class="tabs">
-      <div class="wrap"> 
-		  <ul class="tabs-list">
-			<li> 
-				<a href="http://www.correios.com.br/para-voce"><h2>Voc&ecirc;</h2></a> 
-			</li>
-			<li>
-				<a href="http://www.correios.com.br/para-sua-empresa"><h2>Sua Empresa</h2></a>
-			</li>
-			<li> 
-				<a href="http://www.correios.com.br/Para-governo"><h2>Governo</h2></a>
-			</li>
-			<li>
-				<a href="http://www.correios.com.br/sobre-correios"><h2>Sobre Correios</h2></a>
-			</li>
-			<li> 
-				<a href="http://www.correios.com.br/correios-online"><h2>Correios On-line</h2></a>
-			</li>
-			<li class="current"> 
-				<a href="default.cfm"><h2>Sistemas</h2></a>
-			</li>
-		  </ul>
-	  </div>  <!-- /header ---><div class="wrap">   <div class="content"><div class="laminas" style="display: block;"><div class="column1"><span class="mver"> <span class="dominio"></span>
+<div class="header">
+<h1 class="logo float-left"> <a href="http://www.correios.com.br" title="Ir para a página incial" alt="Logo Correios"><img src="home2014/img/layout/logo.png" alt="Ir para a página inicial" title="Ir para a página incial"/></a> </h1>
+<div class="acesso_rapido">
+
+  <div class="text-right">
+    
+    <a href="http://apps2.correios.com.br/faleconosco/app/index.php">Fale com os Correios</a><br/>
+  </div>
+  <div class="produtosaz float-right">
+    <div class="expo">Outros sites</div>
+    <span class="dados abaaz">
+    <div class="dadosaz"> <span class="dica"> Acesse a outros sites dos Correios</span><br/>
+      <a href="http://www.correios.com.br/para-voce"><b>Correios para você</b></a><br/>
+      <a href="http://www.correios.com.br/para-sua-empresa"><b>Correios para sua empresa</b></a><br/>
+      <a href="http://www.correios.com.br/sobre-correios"><b>Sobre Correios</b></a><br/>
+      <a href="produtosaz/default.cfm?filtro=R/Z"><b>Espaço da Filatelia</b></a><br/>
+      <a href="http://blog.correios.com.br/correios"><b>Blog Institucional do Correios</b></a><br/>
+      <a href="http://m.correios.com.br"><b>Correios mobile</b></a><br/>
+    </div>
+    </span> </div>
+  <div class="produtosaz float-right">
+    <div class="expo" >Correios de A a Z</div>
+    <span class="dados abaaz">
+    <div class="dadosaz"> <span class="dica"> Escolha pela letra inicial dos nossos produtos, serviços e assuntos.<br/>
+      </span><br/>
+      <a href="http://www.correios.com.br/a-a-z/"><b>Todos os itens</b></a><br/>
+      <a href="http://www.correios.com.br/a-a-z/?filtro=abc"><b>Correios de A-C</b></a><br/>
+      <a href="http://www.correios.com.br/a-a-z/?filtro=def"><b>Correios de D-F</b></a><br/>
+      <a href="http://www.correios.com.br/a-a-z/?filtro=ghijklmnopq"><b>Correios de G-Q</b></a><br/>
+      <a href="http://www.correios.com.br/a-a-z/?filtro=rstuvwxyz"><b>Correios de R-Z</b></a> </div>
+    </span> </div>
+  </div>
+  <!-- acesso rápido -->
+  <br class="clr"/>
+  </div>
+  <div class="tabs">
+  
+  <div class="wrap">
+    <ul class="tabs-list">
+      
+      <li class="current"> <a href="default.cfm">
+        <h2>Sistemas</h2>
+        </a> </li>
+    </ul>
+  </div>
+   <!-- /header ---><div class="wrap">   <div class="content"><div class="laminas" style="display: block;"><div class="column1"><span class="mver"> <span class="dominio"></span>
 
 <h3>Busca CEP<br>
-	<font size="-5">&nbsp;Vers&atilde;o DNE: 1607 </font>
+	<font size="-5">&nbsp;Versão DNE: 1904 </font>
 </h3>
 
 <ul>
 	<li>
-		<a href="sistemas/buscacep/buscaCepEndereco.cfm">CEP ou Endere&ccedil;o</a>
+		<a href="sistemas/buscacep/buscaCepEndereco.cfm">CEP ou Endereço</a>
 	</li>
 	<li>
 		<a href="sistemas/buscacep/buscaCep.cfm">CEP por Localidade | Logradouro</a>
 	</li>	
 	<li>
-		<a href="sistemas/buscacep/buscaEndereco.cfm">Endere&ccedil;o por CEP</a>
+		<a href="sistemas/buscacep/buscaEndereco.cfm">Endereço por CEP</a>
 	</li>	
 	<li>
 		<a href="sistemas/buscacep/buscaLogBairro.cfm">CEP de Logradouro por Bairro</a>
@@ -273,94 +224,90 @@ if(!OPNET_ARXS){
 	</li>
 	
 	<li>
-		<a href="http://www.correios.com.br/para-voce/precisa-de-ajuda/o-que-e-cep-e-por-que-usa-lo">Por que usar o CEP?</a>
+		<a href="http://www.correios.com.br/precisa-de-ajuda/o-que-e-cep-e-por-que-usa-lo/o-que-e-cep">Por que usar o CEP?</a>
 	</li>	
 	<li>
-		<a href="http://www.correios.com.br/para-voce/precisa-de-ajuda/o-que-e-cep-e-por-que-usa-lo/estrutura-do-cep">Estrutura do CEP</a>
+		<a href="http://www.correios.com.br/precisa-de-ajuda/o-que-e-cep-e-por-que-usa-lo/estrutura-do-cep">Estrutura do CEP</a>
 	</li>	
 	<li>
-		<a href="sistemas/buscacep/cepFormas.cfm">Formas de Endere&ccedil;amento</a>
+		<a href="sistemas/buscacep/cepFormas.cfm">Formas de Endereçamento</a>
 	</li>	
 	<li>
-		<a href="sistemas/buscacep/cepFormasDF.cfm">Formas de Endere&ccedil;amento para Regi&otilde;es Administrativas do DF</a></li>
+		<a href="sistemas/buscacep/cepFormasDF.cfm">Formas de Endereçamento para Regiões Administrativas do DF</a></li>
 	<li>
-		<a href="http://www.correios.com.br/para-voce/consultas-e-solicitacoes/busca-cep/novas-cidades-codificadas-por-logradouros">Cidades Codificadas por Logradouros</a>
+		<a href="http://www.correios.com.br/precisa-de-ajuda/busca-cep/novas-cidades-codificadas-por-logradouros">Cidades Codificadas por Logradouros</a>
 	</li>		
 	<li>
-		<a href="http://www.correios.com.br/para-voce/consultas-e-solicitacoes/busca-cep/alteracao-de-faixas-de-cep">Altera&ccedil;&atilde;o de CEP/Faixas de CEP</a>
+		<a href="http://www.correios.com.br/precisa-de-ajuda/busca-cep/alteracao-de-faixas-de-cep">Alteração de CEP/Faixas de CEP</a>
 	</li>	
 	<li>
-		<a href="http://www.correios.com.br/para-voce/precisa-de-ajuda/o-que-e-cep-e-por-que-usa-lo/cep-para-areas-rurais ">CEP para &Aacute;reas Rurais</a>
+		<a href="http://www.correios.com.br/precisa-de-ajuda/o-que-e-cep-e-por-que-usa-lo/cep-para-areas-rurais">CEP para Áreas Rurais</a>
 	</li>
 	<li>
-		<a href="http://www.correios.com.br/para-voce/consultas-e-solicitacoes/busca-cep/cep-de-outros-paises">CEP de outros Pa&iacute;ses</a>
+		<a href="https://www.correios.com.br/precisa-de-ajuda/busca-cep/cep-de-outros-paises/">CEP de outros Países</a>
 	</li>	
-</ul> </span><!-- Fim Menu vertical --></div><!-- column1 --><div class="column2"><div class="breadcrumb"></div><div class="content "><a name="ancora"></a><div class="tituloimagem"><h3>Busca CEP - Endere&ccedil;o</h3></div><div class="ctrlcontent"><script language="JavaScript" type="text/javascript">function detalhaCep(CEP){   document.Geral.CEP.value = CEP;document.Geral.action='sistemas/buscacep/detalhaCEP.cfm';document.Geral.submit();}</script><p>DADOS ENCONTRADOS COM SUCESSO.</p>   				<div style="float:left">[ Anterior ]		</div><div style="float:left">				[ Pr&oacute;xima ]</div><div style="float:left"><a href="sistemas/buscacep/BuscaCepEndereco.cfm">[ Nova Consulta ]</a>							</div>	&nbsp;&nbsp;1 a 1 de 1<br><br>  <form name="Geral" id="Geral" action="&#x2f;sistemas&#x2f;buscacep&#x2f;resultadoBuscaCepEndereco.cfm" method="post" onsubmit="return _CF_checkGeral(this)"><input type="hidden" name="CEP" value=""></form>
- <table class="tmptabela"><tr ><th width="150">Logradouro/Nome:</th><th width="90">Bairro/Distrito:</th><th width="80">Localidade/UF:</th><th width="50">CEP:</th></tr><tr><td width="150">&nbsp;</td><td width="90">&nbsp;</td><td width="80">Guarapuava/PR  - Povoado</td><td width="55">85100-000</td></tr>							</table><div style="float:left">  [ Anterior ]	</div><div style="float:left">					[ Pr&oacute;xima ]</div><div style="float:left"><a href="sistemas/buscacep/BuscaCepEndereco.cfm">[ Nova Consulta ]</a></div>				 </div></div></div><br class="clr" /></div></div></div></div><!-- class="wrap" --><!-- laminas --><div class="footer">
-	<div class="wrap">
-		<div class="column-footer">
-			<h3><a href="sistemas/falecomoscorreios">Fale com os Correios</a></h3>
-			<ul>
-				<li class="node"><a href="sistemas/falecomoscorreios">Manifesta&ccedil;&atilde;o via Internet</a>
-					<ul>
-						<li><a href="sistemas/falecomoscorreios">Fale Conosco pelo site</a></li>
-
-					</ul>
-				</li>
-				
-				<li class="node">
-					<a href="sistemas/falecomoscorreios">Atendimento telef&ocirc;nico</a>
-					<ul>
-						<li>3003 0100 (Capitais e Regi&atilde;o Metropolitanas)</li>
-						<li>0800 725 7282 (Demais localidades)</li>
-						<li>0800 725 0100 (Sugest&otilde;es ou reclama&ccedil;&otilde;es)</li>
-					</ul>
-				</li>
-
-				<li class="node">
-					<a href="sistemas/agencias/">Rede de atendimento</a>
-					<ul>
-						<li><a href="sistemas/agencias">Consulte endere&ccedil;os e hor&aacute;rios de atendimentos <br />das ag&ecirc;ncias dos Correios</a></li>
-
-					</ul>
-				</li>
-				<li class="node">
-					<a href="http://www.correios.com.br/sobre-correios/fale-com-os-correios/ouvidoria">Ouvidoria</a>
-
-				</li>
-			</ul>
-		</div>
-		<div class="column-footer">
-			<h3><a href="">Portal Correios</a></h3>
-			<ul>
-				<li><a href="http://www.correios.com.br/sitemap">Mapa do site</a></li>
-				<li><a href="sistemas/rastreamento/default.cfm">Rastreamento de objetos</a></li>
-				<li><a href="http://www.correios.com.br/correios/sobre-correios/sala-de-imprensa/fale-com-a-assessoria-de-comunicacao">Sala de Imprensa</a></li>
-				<li><a href="institucional/concursos/correios/default.cfm">Concursos</a></li>
-				<li><a href="http://www.correios.com.br/correios/sobre-correios/patrocinio/patrocinio">Patroc&iacute;nios</a></li>
-				<li><a href="http://www.correios.com.br/correios/sobre-correios/fale-com-os-correios/contatos-comerciais">Contatos comerciais</a></li>
-				<li><a href="http://www.correios.com.br/correios/sobre-correios/a-empresa/carta-de-servicos-ao-cidadao">Carta de servi&ccedil;os ao cidad&atilde;o</a></li>
-				<li><a href="http://www.correios.com.br/sobre-correios/fale-com-os-correios/denuncias/denuncias/">Den&uacute;ncia</a></li>
-				<li><a href="http://www.mc.gov.br/">Minist&eacute;rio das Comunica&ccedil;&otilde;es</a></li>
-			</ul>
-		</div>
-		<div class="column-footer">
-			<h3><a href="">Outros sites dos Correios</a></h3>
-			<ul>
-				<li><a href="http://www.correios.com.br/para-voce">Correios para voc&ecirc;</a></li>
-				<li><a href="http://www.correios.com.br/para-sua-empresa">Correios para sua empresa</a></li>
-				<li><a href="http://www.correios.com.br/sobre-correios">Sobre Correios</a></li>
-				<li><a href="http://shopping.correios.com.br/correiosonline">Loja virtual dos Correios</a></li>
-				<li><a href="http://blog.correios.com.br/correios">Blog dos Correios</a></li>
-				<li><a href="http://blog.correios.com.br/filatelia">Espa&ccedil;o da Filatelia</a></li>
-				<li><a href="http://m.correios.com.br/">Correios Mobile</a></li>
-				<li><a href="http://www2.correios.com.br/">Sistemas dos Correios</a></li>
-			</ul>
-		</div>
-		<div class="copy">
-			<a href="http://www.correios.com.br/sobre-correios/fale-com-os-correios/politica-de-privacidade-e-notas-legais/">Pol&iacute;tica de Privacidade e notas legais</a> -  © Copyright  2014 Correios - Todos os direitos reservados.
-		</div>
-	</div>
+</ul> </span><!-- Fim Menu vertical --></div><!-- column1 --><div class="column2"><div class="breadcrumb"></div><div class="content "><a name="ancora"></a><div class="tituloimagem"><h3>Busca CEP - Endereço</h3></div><div class="ctrlcontent"><script language="JavaScript" type="text/javascript">function detalhaCep(CEP){   document.Geral.CEP.value = CEP;document.Geral.action='sistemas/buscacep/detalhaCEP.cfm';document.Geral.submit();}</script><p>DADOS ENCONTRADOS COM SUCESSO.</p>   				<div style="float:left">[ Anterior ]		</div><div style="float:left">				[ Próxima ]</div><div style="float:left"><a href="sistemas/buscacep/BuscaCepEndereco.cfm">[ Nova Consulta ]</a>							</div>	&nbsp;&nbsp;1 a 1 de 1<br><br>  <form name="Geral" id="Geral" action="&#x2f;sistemas&#x2f;buscacep&#x2f;resultadoBuscaCepEndereco.cfm" method="post" onsubmit="return _CF_checkGeral(this)"><input type="hidden" name="CEP" value=""></form>
+ <table class="tmptabela"><tr ><th width="150">Logradouro/Nome:</th><th width="90">Bairro/Distrito:</th><th width="80">Localidade/UF:</th><th width="50">CEP:</th></tr><tr><td width="150">&nbsp;</td><td>&nbsp;</td><td>Açailândia/MA&nbsp;</td><td width="55">65930-000</td></tr>							</table><div style="float:left">  [ Anterior ]	</div><div style="float:left">					[ Próxima ]</div><div style="float:left"><a href="sistemas/buscacep/BuscaCepEndereco.cfm">[ Nova Consulta ]</a></div>				 </div></div></div><br class="clr" /></div></div></div></div><!-- class="wrap" --><!-- laminas --><div class="footer">
+  <div class="wrap">
+	
+      <div class="column-footer">
+        <h3><a href="sistemas/falecomoscorreios">Fale com os Correios</a></h3>
+        <ul>
+          <li class="node"><a href="sistemas/falecomoscorreios">Manifestação via Internet</a>
+            <ul>
+              <li><a href="sistemas/falecomoscorreios">Fale Conosco pelo site</a></li>
+            </ul>
+          </li>
+          <li class="node"> <a href="sistemas/falecomoscorreios">Atendimento telef&ocirc;nico</a>
+            <ul>
+              <li>3003 0100 (Capitais e Regi&atilde;o Metropolitanas)</li>
+              <li>0800 725 7282 (Demais localidades)</li>
+              <li>0800 725 0100 (Sugest&otilde;es ou reclama&ccedil;&otilde;es)</li>
+              <li>0800 725 0898 (exclusivo para portadores <br/>
+                de deficiência auditiva) </li>
+              <li>3003 1383 (Informações Banco Postal)</li>
+            </ul>
+          </li>
+          <li class="node"> <a href="sistemas/agencias/">Rede de atendimento</a>
+            <ul>
+              <li><a href="sistemas/agencias">Consulte endereços e horários de atendimentos <br />
+                das agências dos Correios</a></li>
+            </ul>
+          </li>
+          <li class="node"> <a href="http://www.correios.com.br/sobre-correios/fale-com-os-correios/ouvidoria">Ouvidoria</a> </li>
+        </ul>
+      </div>
+      <div class="column-footer">
+        <h3><a href="">Portal Correios</a></h3>
+        <ul>
+          <li><a href="http://www.correios.com.br/sitemap">Mapa do site</a></li>
+          <li><a href="sistemas/rastreamento/default.cfm">Rastreamento de objetos</a></li>
+          <li><a href="http://www.correios.com.br/correios/sobre-correios/sala-de-imprensa/fale-com-a-assessoria-de-comunicacao">Sala de Imprensa</a></li>
+          <li><a href="institucional/concursos/correios/default.cfm">Concursos</a></li>
+          <li><a href="http://www.correios.com.br/correios/sobre-correios/patrocinio/patrocinio">Patroc&iacute;nios</a></li>
+          <li><a href="http://www.correios.com.br/para-voce/correios-de-a-a-z/contatos-comerciais">Contatos comerciais</a></li>
+          <li><a href="http://www.correios.com.br/correios/sobre-correios/a-empresa/carta-de-servicos-ao-cidadao">Carta de servi&ccedil;os ao cidad&atilde;o</a></li>
+          <li><a href="http://www.correios.com.br/sobre-correios/fale-com-os-correios/denuncias/denuncias/">Denúncia</a></li>
+          <li><a href="http://www.mc.gov.br/">Minist&eacute;rio das Comunica&ccedil;&otilde;es</a></li>
+        </ul>
+      </div>
+      <div class="column-footer">
+        <h3><a href="">Outros sites dos Correios</a></h3>
+        <ul>
+          <li><a href="http://www.correios.com.br/para-voce">Correios para voc&ecirc;</a></li>
+          <li><a href="http://www.correios.com.br/para-sua-empresa">Correios para sua empresa</a></li>
+          <li><a href="http://www.correios.com.br/sobre-correios">Sobre Correios</a></li>
+          <li><a href="http://shopping.correios.com.br/correiosonline">Loja virtual dos Correios</a></li>
+          <li><a href="http://blog.correios.com.br/correios">Blog dos Correios</a></li>
+          <li><a href="http://blog.correios.com.br/filatelia">Espa&ccedil;o da Filatelia</a></li>
+          <li><a href="http://m.correios.com.br/">Correios Mobile</a></li>
+          <li><a href="http://www2.correios.com.br/">Sistemas dos Correios</a></li>
+        </ul>
+      </div>
+      <div class="copy"> <a href="http://www.correios.com.br/sobre-correios/fale-com-os-correios/politica-de-privacidade-e-notas-legais/">Pol&iacute;tica de Privacidade e notas legais</a> -  © Copyright  2018 Correios - Todos os direitos reservados. </div>
+      
+  </div>
+  
 </div>
  </div>
 <!-- class="back" -->
@@ -536,6 +483,7 @@ $(document).ready(function(){
 				$(".iframe").colorbox({iframe:true, width:"80%", height:"80%"});
 				$(".inline").colorbox({inline:true, width:"50%"});
 				$(".inline2").colorbox({inline:true, width:"340px"});
+				$(".inline3").colorbox({inline:true, width:"70%"});
 				$(".callbacks").colorbox({
 					onOpen:function(){ alert('onOpen: colorbox is about to open'); },
 					onLoad:function(){ alert('onLoad: colorbox has started to load the targeted content'); },
@@ -552,4 +500,4 @@ $(document).ready(function(){
 			});
 		</script>  
 
-<!-- contentobjects: page generated at 2016-07-28 01:38 PM -->
+<!-- contentobjects: page generated at 2019-03-20 04:06 PM -->
