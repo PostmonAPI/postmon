@@ -15,6 +15,7 @@ from CepTracker import CepTracker, _notfound_key
 import PackTracker
 import requests
 from database import MongoDb as Database
+from utils import EnableCORS
 
 logger = logging.getLogger(__name__)
 HealthCheck(bottle, "/__health__")
@@ -27,15 +28,6 @@ jsonp_query_key = 'callback'
 
 db = Database()
 db.create_indexes()
-
-
-def add_cors_headers():
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, \
-                                                       OPTIONS'
-    response.headers['Access-Control-Allow-Headers'] = ', '.join(
-                                                       request.
-                                                       headers.keys())
 
 
 def validate_format(callback):
@@ -265,19 +257,10 @@ def crossdomain():
     return template('crossdomain')
 
 
-@app.route('/<:re:.*>', method='OPTIONS')
-@app_v1.route('/<:re:.*>', method='OPTIONS')
-def enable_cors_generic_route():
-    add_cors_headers()
-
-
-@bottle.hook('after_request')
-def enable_cors_after_request_hook():
-    add_cors_headers()
-
-
 app.install(validate_format)
 app_v1.install(validate_format)
+app.install(EnableCORS())
+app_v1.install(EnableCORS())
 app.mount('/v1', app_v1)
 
 SENTRY_DSN = os.getenv('SENTRY_DSN')

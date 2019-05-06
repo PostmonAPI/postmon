@@ -334,6 +334,10 @@ class PostmonErrors(unittest.TestCase):
         self.assertEqual('', response.body)
         _db_instance.get_one.assert_called_with(cep, fields={'_id': False})
 
+    def test_404_hard(self):
+        response = self.get_cep("LETTERS", expect_errors=True)
+        self.assertEqual('404 Not Found', response.status)
+
 
 class PostmonV1Errors(PostmonErrors):
 
