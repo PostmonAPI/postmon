@@ -1,0 +1,105 @@
+{
+    "openapi" : "3.0.2",
+    "info" : {
+        "title" : "Postmon",
+        "description" : "Uma API para consultar CEP",
+        "version" : "1.0.0"
+    },
+    "servers" : [ {
+        "url" : "https://api.postmon.com.br/v1/"
+    } ],
+    "paths" : {
+        "/cep" : {
+            "get" : {
+                "summary" : "Retorna os dados do endereço para o CEP passado",
+                "description" : "Retorna os dados do endereço para o CEP passado. CEP deve ser enviado no formato de 8 dígitos.",
+                "operationId" : "getCEPData",
+                "parameters" : [ {
+                    "name" : "cep",
+                    "in" : "path",
+                    "description" : "Valor do CEP com apenas os 8 digitos.",
+                    "required" : true,
+                    "style" : "simple",
+                    "explode" : false,
+                    "schema" : {
+                        "type" : "string"
+                    }
+                } ],
+                "responses" : {
+                    "200" : {
+                        "description" : "encontrado",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "$ref" : "#/components/schemas/CEPResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components" : {
+        "schemas" : {
+            "CEPResponse" : {
+                "required" : [ "estado", "logradouro" ],
+                "type" : "object",
+                "properties" : {
+                    "estado" : {
+                        "type" : "string",
+                        "example" : "RJ"
+                    },
+                    "logradouro" : {
+                        "type" : "string",
+                        "example" : "Rua do Bispo"
+                    },
+                    "cidade" : {
+                        "type" : "string",
+                        "example" : "Rio de Janeiro"
+                    },
+                    "bairro" : {
+                        "type" : "string",
+                        "example" : "Tijuca"
+                    },
+                    "estadoInfo" : {
+                        "$ref" : "#/components/schemas/EstadoInfo"
+                    },
+                    "cidadeInfo" : {
+                        "$ref" : "#/components/schemas/CidadeInfo"
+                    }
+                }
+            },
+            "EstadoInfo" : {
+                "type" : "object",
+                "properties" : {
+                    "area_km2" : {
+                        "type" : "string",
+                        "example" : "43.781,566"
+                    },
+                    "codigo_ibge" : {
+                        "type" : "string",
+                        "example" : "33"
+                    },
+                    "nome" : {
+                        "type" : "string",
+                        "example" : "Rio de Janeiro"
+                    }
+                }
+            },
+            "CidadeInfo" : {
+                "type" : "object",
+                "properties" : {
+                    "area_km2" : {
+                        "type" : "string",
+                        "example" : "1200,179"
+                    },
+                    "codigo_ibge" : {
+                        "type" : "string",
+                        "example" : "3304557"
+                    }
+                }
+            }
+        }
+    }
+}
