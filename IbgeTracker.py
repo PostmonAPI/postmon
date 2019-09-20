@@ -9,7 +9,7 @@ from utils import slug
 class IbgeTracker():
 
     def __init__(self):
-        base_url = 'https://raw.githubusercontent.com/PostmonAPI/ibge-parser/master/data/postmon'
+        base_url = 'https://raw.githubusercontent.com/PostmonAPI/ibge-parser/master/data/postmon'  # noqa
         self.url_ufs = base_url + '/ufs.json'
         self.url_cidades = base_url + '/cidades.json'
 
