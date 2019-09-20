@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import requests
 
-from lxml.html import fromstring
 from database import MongoDb as Database
 from utils import slug
 
@@ -10,65 +9,20 @@ from utils import slug
 class IbgeTracker():
 
     def __init__(self):
-        base_url = 'http://www.ibge.gov.br/home/geociencias/areaterritorial'
-        self.url_ufs = base_url + '/principal.shtm'
-        self.url_cidades = base_url + '/area.php?nome=%'
+        base_url = 'https://raw.githubusercontent.com/PostmonAPI/ibge-parser/master/data/postmon'
+        self.url_ufs = base_url + '/ufs.json'
+        self.url_cidades = base_url + '/cidades.json'
 
     def _request(self, url):
-        response = requests.post(url)
+        response = requests.get(url)
         response.raise_for_status()
-        return response.text
+        return response.json()
 
     def _get_info_ufs(self, siglas):
-        texto = self._request(self.url_ufs)
-        html = fromstring(texto)
-        seletorcss_linhas = "div#miolo_interno > table > tr"
-        linhas = html.cssselect(seletorcss_linhas)
-        try:
-            linhas.pop(0)  # a primeira é o cabeçalho
-        except IndexError:
-            pass
-        infos = []
-        for linha in linhas:
-            seletorcss_celulas = "td"
-            celulas = linha.cssselect(seletorcss_celulas)
-            codigo_ibge = celulas[0].text_content()
-            if codigo_ibge in siglas:
-                sigla = siglas[codigo_ibge]
-                infos.append({
-                    'sigla': sigla,
-                    'codigo_ibge': codigo_ibge,
-                    'nome': celulas[1].text_content().strip(' (*)'),
-                    'area_km2': celulas[2].text_content()
-                })
-
-        #  neste ponto, após a carga
-        #  das cidades, a lista
-        #  'infos' deve estar populada
-
-        return infos
+        return self._request(self.url_ufs)
 
     def _get_info_cidades(self):
-        texto = self._request(self.url_cidades)
-        html = fromstring(texto)
-        seletorcss_linhas = "div#miolo_interno > table > tr"
-        linhas = html.cssselect(seletorcss_linhas)
-        try:
-            linhas.pop(0)  # a primeira é o cabeçalho
-        except IndexError:
-            pass
-        infos = []
-        for linha in linhas:
-            seletorcss_celulas = "td"
-            celulas = linha.cssselect(seletorcss_celulas)
-            infos.append({
-                'codigo_ibge_uf': celulas[0].text_content(),
-                'sigla_uf': celulas[1].text_content(),
-                'codigo_ibge': celulas[2].text_content(),
-                'nome': celulas[3].text_content(),
-                'area_km2': celulas[4].text_content()
-            })
-        return infos
+        return self._request(self.url_cidades)
 
     def _track_ufs(self, db, siglas):
         infos = self._get_info_ufs(siglas)
