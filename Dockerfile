@@ -17,7 +17,9 @@ RUN apt-get -y update -qq&& \
 	libpython2.7-dev \
 	python-pip
 
-RUN pip install --upgrade pip==18.0 setuptools wheel
+RUN pip install --upgrade pip
+
+RUN pip install --upgrade setuptools wheel
 
 ENV APP_DIR /srv/postmon
 
