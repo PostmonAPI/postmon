@@ -52,8 +52,8 @@ def expired(record_date):
         return True
 
     if _notfound(record_date):
-        # 1 month
-        WEEKS = 4
+        # 1 week
+        WEEKS = 1
     else:
         # 6 months
         WEEKS = 26
