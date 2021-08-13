@@ -1,0 +1,26 @@
+{
+  "dados": [
+    {
+      "bairro": "", 
+      "numeroLocalidade": "", 
+      "situacao": "", 
+      "locNu": "", 
+      "localidadeSubordinada": "", 
+      "cep": "65930000", 
+      "logradouroDNEC": "", 
+      "locNoSem": "", 
+      "tipoCep": "1", 
+      "faixasCaixaPostal": [], 
+      "logradouroTextoAdicional": "", 
+      "logradouroTexto": "", 
+      "nomeUnidade": "", 
+      "uf": "MA", 
+      "localidade": "A\u00e7ail\u00e2ndia", 
+      "baiNu": "", 
+      "faixasCep": []
+    }
+  ], 
+  "total": 1, 
+  "erro": false, 
+  "mensagem": "DADOS ENCONTRADOS COM SUCESSO."
+}

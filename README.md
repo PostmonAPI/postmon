@@ -15,7 +15,6 @@ Requisitos do ambiente Python
 As dependências estão listadas no arquivo requirements.txt.
 
 * requests
-* lxml
 * pymongo
 * bottle
 * nosetests
