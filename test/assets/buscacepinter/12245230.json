@@ -1,0 +1,26 @@
+{
+  "dados": [
+    {
+      "bairro": "Vila Bet\u00e2nia", 
+      "numeroLocalidade": "", 
+      "situacao": "", 
+      "locNu": "", 
+      "localidadeSubordinada": "", 
+      "cep": "12245230", 
+      "logradouroDNEC": "Avenida Tivoli - lado \u00edmpar", 
+      "locNoSem": "", 
+      "tipoCep": "2", 
+      "faixasCaixaPostal": [], 
+      "logradouroTextoAdicional": "", 
+      "logradouroTexto": "", 
+      "nomeUnidade": "", 
+      "uf": "SP", 
+      "localidade": "S\u00e3o Jos\u00e9 dos Campos", 
+      "baiNu": "", 
+      "faixasCep": []
+    }
+  ], 
+  "total": 1, 
+  "erro": false, 
+  "mensagem": "DADOS ENCONTRADOS COM SUCESSO."
+}

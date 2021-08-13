@@ -1,0 +1,45 @@
+{
+  "dados": [
+    {
+      "bairro": "Vila Jayara", 
+      "numeroLocalidade": "", 
+      "situacao": "", 
+      "locNu": "", 
+      "localidadeSubordinada": "", 
+      "cep": "75064590", 
+      "logradouroDNEC": "Rua A - at\u00e9 69/70", 
+      "locNoSem": "", 
+      "tipoCep": "2", 
+      "faixasCaixaPostal": [], 
+      "logradouroTextoAdicional": "", 
+      "logradouroTexto": "", 
+      "nomeUnidade": "", 
+      "uf": "GO", 
+      "localidade": "An\u00e1polis", 
+      "baiNu": "", 
+      "faixasCep": []
+    }, 
+    {
+      "bairro": "Vila Jayara", 
+      "numeroLocalidade": "", 
+      "situacao": "", 
+      "locNu": "", 
+      "localidadeSubordinada": "", 
+      "cep": "75064379", 
+      "logradouroDNEC": "Rua A - de 109/110 ao fim", 
+      "locNoSem": "", 
+      "tipoCep": "2", 
+      "faixasCaixaPostal": [], 
+      "logradouroTextoAdicional": "", 
+      "logradouroTexto": "", 
+      "nomeUnidade": "", 
+      "uf": "GO", 
+      "localidade": "An\u00e1polis", 
+      "baiNu": "", 
+      "faixasCep": []
+    }
+  ], 
+  "total": 2, 
+  "erro": false, 
+  "mensagem": "ATEN\u00c7\u00c3O! O CEP 75064-590 FOI DESMEMBRADO CONFORME ABAIXO."
+}

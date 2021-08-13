@@ -1,0 +1,26 @@
+{
+    "erro": false,
+    "mensagem": "DADOS ENCONTRADOS COM SUCESSO.",
+    "total": 1,
+    "dados": [
+        {
+            "uf": "AC",
+            "localidade": "Rio Branco",
+            "locNoSem": "",
+            "locNu": "",
+            "localidadeSubordinada": "",
+            "logradouroDNEC": "Rodovia BR-364 (Rio Branco-Porto Velho) - at\u00e9 5014 - lado par",
+            "logradouroTextoAdicional": "",
+            "logradouroTexto": "",
+            "bairro": "Loteamento Santa Helena",
+            "baiNu": "",
+            "nomeUnidade": "",
+            "cep": "69908768",
+            "tipoCep": "2",
+            "numeroLocalidade": "",
+            "situacao": "",
+            "faixasCaixaPostal": [],
+            "faixasCep": []
+        }
+    ]
+}

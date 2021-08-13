@@ -118,8 +118,8 @@ class CepTrackerMockTest(CepTrackerTest):
         self.tracker._request = self._request_mock
 
     def _request_mock(self, cep):
-        with open('test/assets/buscacep/' + cep + '.html') as f:
-            return f.read().decode('latin-1')
+        with open('test/assets/buscacepinter/' + cep + '.json') as f:
+            return json.load(f)
 
 
 class PostmonWebTest(unittest.TestCase, PostmonBaseTest):
