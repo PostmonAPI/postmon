@@ -24,6 +24,8 @@ class CepTracker(object):
             "mensagem_alerta": "",
             "endereco": cep,
             "tipoCEP": "ALL",
+        }, headers={
+            "Referer": "https://buscacepinter.correios.com.br/app/endereco/index.php?t",
         }, timeout=10)
         try:
             response.raise_for_status()
