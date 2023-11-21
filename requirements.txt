@@ -1,4 +1,4 @@
-bottle==0.12.19
+bottle==0.12.20
 bottle-healthcheck==0.2.1
 cssselect==1.0.3
 pymongo<3
